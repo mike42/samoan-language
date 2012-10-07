@@ -1,0 +1,16 @@
+<?php
+
+$config['core']['webroot']					= 'http://'.$_SERVER['HTTP_HOST'].'/samoan/';
+$config['core']['default']['controller']	= 'page';
+$config['core']['default']['action']		= 'view';
+$config['core']['default']['arg']			= array('home');
+$config['core']['default']['format']		= 'html';
+
+/* Database */
+$config['database']['user'] = '';
+$config['database']['password'] = '';
+$config['database']['host'] = 'localhost';
+$config['database']['name'] = '';
+$config['database']['prefix'] = 'sm_';
+
+?>

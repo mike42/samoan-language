@@ -1,0 +1,27 @@
+<h2><a link="environ">Environment</a></h2>
+<p>The purpose of this file is to help you set up a local copy of the language database
+for testing changes. This is not a general-purpose web app, so we mainly have our own set-up in mind.</p>
+<p>Software required &mdash; versions are ones which are currently used somewhere:</p>
+<ul>
+<li>MySQL (5.5.24)</li>
+<li>Apache with <tt>mod_rewrite</tt> enabled (2.2.22)</li>
+<li>PHP (5.3.10)</li>
+</ul>
+
+<h2><a link="install">Installation steps</a></h2>
+<ol>
+	<li>Copy your files to the webroot of the server</li>
+	<li>Import the schema:</li>
+		<dd>The schema is in this file: <a href="files/samoan-schema.sql">samoan-schema.sql</a>. If you have the latest version of the software, then </dd>
+	<li>Make your config.php:</li>
+		<dd>Fill in the database section in the <a href="files/config.php.txt">blank configuration file</a>, and copy it to <tt>/sm/config.php</tt>.</dd>
+	<li>Set up a <tt>.htaccess</tt> file in the webroot:
+		<dd>If you have put the scripts in the <tt>/sm</tt> folder, and want to access
+		them as <tt>/samoan</tt>, then <a href="files/example.htaccess.txt">this example</a>
+		will do it.</dd> 
+	</li>
+</ol>
+
+<h2><a link="contact">Bugs</a></h2>
+<p>You can find a link to the bug tracker on the <a href="http://mike.bitrevision.com/samoan/dev">developer page</a>.</p>
+<p>For other queries, see the <a href="http://mike.bitrevision.com/samoan/contact">contact</a> page.</p>
