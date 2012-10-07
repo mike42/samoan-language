@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Oct 07, 2012 at 02:40 PM
+-- Generation Time: Oct 07, 2012 at 09:24 PM
 -- Server version: 5.5.24
 -- PHP Version: 5.3.10-1ubuntu3.4
 
@@ -188,13 +188,14 @@ CREATE TABLE IF NOT EXISTS `sm_user` (
   `user_name` text NOT NULL,
   `user_pass` varchar(256) NOT NULL,
   `user_salt` varchar(256) NOT NULL,
+  `user_token` varchar(256) NOT NULL,
   `user_email` varchar(256) NOT NULL,
   `user_email_confirmed` int(1) NOT NULL DEFAULT '0',
   `user_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `user_role` varchar(256) NOT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `user_email` (`user_email`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='User accounts' AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='User accounts' AUTO_INCREMENT=2 ;
 
 -- --------------------------------------------------------
 
