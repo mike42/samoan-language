@@ -1,0 +1,6 @@
+# Eclipse files
+.buildpath
+.settings/*
+
+# The site config file
+api/config.php
