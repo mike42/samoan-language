@@ -570,27 +570,6 @@ h1 a,h2 a,h3 a,h4 a,h5 a,h6 a {
 	padding: 0;
 }
 
-#content table {
-	border: 1px solid #ccc;
-	border-collapse: collapse;
-	margin: 5px 0 10px 5px;
-}
-
-#content th,#content td {
-	border: 1px solid #ccc;
-	padding: 3px 10px;
-	text-align: left;
-	vertical-align: top;
-}
-
-#content tr.even td {
-	background: #f7f7f7;
-}
-
-#content th {
-	background: #edeff0;
-}
-
 #content code {
 	background: #333;
 	color: #ddd;
@@ -1116,11 +1095,36 @@ img#wpstats {
 	clear: both;
 }
 
-.example-sm{
+.example-sm {
 	font-style:italic; 
 	border-bottom: 1px dotted;
 }
 
+.plaintable td, .plaintable tr, .plaintable table, .plaintable th {
+	border: 0px none;
+	border-collapse: collapse;
+}
+
+.neattable table {
+	border: 1px solid #ccc;
+	border-collapse: collapse;
+	margin: 5px 0 10px 5px;
+}
+
+.neattable th, .neattable td {
+	border: 1px solid #ccc;
+	padding: 3px 10px;
+	text-align: left;
+	vertical-align: top;
+}
+
+.neattable tr.even td {
+	background: #f7f7f7;
+}
+
+.neattable th {
+	background: #edeff0;
+}
 
 @media print {
 	body,pre,ins {

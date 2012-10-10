@@ -37,6 +37,13 @@ class word_model {
 			'rel_type_long_label'	=> '');
 	}
 	
+	/**
+	 * 
+	 * Get a word by ID
+	 * @param int $id		ID of the word to fetch
+	 * @param int $depth	Recursive counter to prevent resolving of cyclical redirects
+	 * @return The word, or false if no such word exists
+	 */
 	public static function getByID($id, $depth = 0) {
 		$query = "SELECT * FROM {TABLE}word " .
 					"JOIN {TABLE}spelling ON word_spelling = spelling_id " .
@@ -57,6 +64,28 @@ class word_model {
 			return (int)$text;
 		}
 		
+		$part = self::getSpellingAndNumberFromStr($text);
+		return self::getWordIDfromSpellingAndWordNum($part['spelling'], $part['number']);
+	}
+	
+	/**
+	 * Get a word by the string representing its spelling and number (eg abc1, foo, cat3)
+	 * 
+	 * @param string $string
+	 */
+	public static function getByStr($string) {
+		$part = self::getSpellingAndNumberFromStr($string);
+		return self::getWordBySpellingAndWordNum($part['spelling'], $part['number']);
+	}
+	
+	/**
+	 * Split word into string and number parts.
+	 * Eg "foo4" becomes array([spelling] => foo [number] => 4)
+	 * 
+	 * @param string $text
+	 * @return multitype:number string The 
+	 */
+	public static function getSpellingAndNumberFromStr($text) {
 		$len = strlen($text);
 		$part_string = "";
 		$part_number = "";
@@ -69,16 +98,41 @@ class word_model {
 				$part_string .= $c;
 			}
 		}
-		
-		return self::getWordIDfromSpellingAndWordNum($part_string, $part_number);
+		return array('spelling' => $part_string, 'number' => (int)$part_number);
 	}
 	
+	/**
+	 * Get ID of a word based on spelling and number. Eg "Apa", 1 might return 25.
+	 * 
+	 * @param string $spelling
+	 * @param number $word_num
+	 * @return number|boolean The ID of the word, or false if it does not exist
+	 */
 	private static function getWordIDfromSpellingAndWordNum($spelling, $word_num) {
 		$query = "SELECT word_id FROM {TABLE}word " .
 					"JOIN {TABLE}spelling ON word_spelling = spelling_id " .
 					"WHERE spelling_t_style='%s' and word_num='%d'";
 		if($row = database::retrieve($query, 1, $spelling, (int)$word_num)) {
-				return $row['word_id'];
+				return (int)$row['word_id'];
+		}
+		return false;
+	}
+	
+	/**
+	 * Get word based on spelling and number.
+	 * Use getWordIDfromSpellingAndWordNum() if you are just checking if a word exists as it avoids the extra processing.
+	 *
+	 * @param string $spelling
+	 * @param number $word_num
+	 * @return unknown The word, or false if it does not exist
+	 */
+	private static function getWordBySpellingAndWordNum($spelling, $word_num) {
+		$query = "SELECT * FROM {TABLE}word " .
+					"JOIN {TABLE}spelling ON word_spelling = spelling_id " .
+					"LEFT JOIN {TABLE}listlang ON word_origin_lang = lang_id " .
+					"WHERE spelling_t_style='%s' and word_num='%d'";
+		if($row = database::retrieve($query, 1, $spelling, (int)$word_num)) {
+			return self::fromRow($row);
 		}
 		return false;
 	}

@@ -17,7 +17,20 @@ class example_model {
 				'example_uploaded'			=> '',
 				'example_audio_tag'			=> '');
 	}
-		
+
+	/**
+	 * Get a single example using example_id
+	 * 
+	 * @param number $id ID to fetch
+	 */
+	public static function getById($def_id) {
+		$sql = "SELECT * FROM {TABLE}example WHERE example_id ='%d';";
+		if($row = database::retrieve($query, 1, (int)$def_id)) {
+			return database::row_from_template($row, self::$template);
+		}
+		return false;
+	}
+	
 	/**
 	 * Get all examples associated with a given definition
 	 */
