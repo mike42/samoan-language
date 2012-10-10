@@ -49,7 +49,7 @@ class page_model {
 	}
 	
 	public static function render($page) {
-		core::loadClass('WikitextParser');
-		return WikitextParser::parse($page['page_rel_revision']['revision_text']);
+		core::loadClass('parser');
+		return wikitextParser::parse($page['page_rel_revision']['revision_text']);
 	}
 } ?>
