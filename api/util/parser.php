@@ -42,8 +42,12 @@ class SmParserBackend extends DefaultParserBackend {
 					if($word = word_model::getByStr($part[1])) {
 						return word_view::linkToWord($word, true, false, true);
 					}
+					break;
 				case 'ex':
-					
+					if($example = example_model::getById($part[1])) {
+						return example_view::toHTML($example, false);
+					}
+					break;
 			}
 		}
 		/* If it's not one of the above, try loading it */
@@ -64,6 +68,7 @@ class Parser {
 		core::loadClass("word_model");
 		core::loadClass("word_view");
 		core::loadClass("example_model");
+		core::loadClass("example_view");
 		
 		WikitextParser::init();
 		WikitextParser::$backend = new SmParserBackend;

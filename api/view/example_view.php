@@ -1,7 +1,7 @@
 <?php
 class example_view {
 	
-	public static function toHTML($example) {
+	public static function toHTML($example, $show_en = true) {
 		$inp = $example['example_str'];
 		$str = '';
 	

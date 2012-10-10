@@ -23,9 +23,9 @@ class example_model {
 	 * 
 	 * @param number $id ID to fetch
 	 */
-	public static function getById($def_id) {
-		$sql = "SELECT * FROM {TABLE}example WHERE example_id ='%d';";
-		if($row = database::retrieve($query, 1, (int)$def_id)) {
+	public static function getById($example_id) {
+		$sql = "SELECT * FROM {TABLE}example WHERE example_id ='%s';";
+		if($row = database::retrieve($sql, 1, (int)$example_id)) {
 			return database::row_from_template($row, self::$template);
 		}
 		return false;
