@@ -116,14 +116,9 @@ class core {
 	}
 	
 	public static function getPermissions($area) {
-		$permission = array();
-		$permission['page']['edit'] = true;
-		$permission['page']['create'] = true;
-		$permission['page']['delete'] = true;
-		$permission['word']['edit'] = true;
-		$permission['word']['create'] = true;
-		$permission['word']['delete'] = true;
-		return $permission[$area];
+		core::loadClass('session');
+		$permission = core::getConfig('session');		
+		return $permission[session::getRole()][$area];
 	}
 }
 ?>

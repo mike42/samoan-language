@@ -105,9 +105,16 @@
 		</div>
 		<div id="footer">
 			<div>
-				<a href="#wrapper" id="top-link">↑ Top</a> <a href="about">about
-					this project</a> | <a href="http://bitrevision.com">bitrevision
-					home</a>
+				<a href="#wrapper" id="top-link">↑ Top</a> <a href="<?php  echo core::constructURL('page', 'view', array('about'), 'html'); ?>">about
+					this project</a> | <a href="http://bitrevision.com">bitrevision</a> | <?php 
+					if($user = session::getUser()) {
+						echo "logged in as ".core::escapeHTML($user['user_name']) . " (<a href=\"" . core::constructURL('user', 'logout', array(''), 'html') . "\">logout</a>)";
+					} else {
+						echo "<a href=\"" . core::constructURL('user', 'login', array(''), 'html') . "\">log in</a>";
+					}
+					
+					
+					?>
 			</div>
 		</div>
 

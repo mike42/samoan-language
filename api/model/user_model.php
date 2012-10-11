@@ -6,7 +6,7 @@ class user_model {
 		core::loadClass('database');
 		
 		self::$template = array(
-			'user_id',
+			'user_id'   => '',
 			'user_name' => '',
 			'user_pass' => '',
 			'user_salt' => '',
@@ -15,6 +15,17 @@ class user_model {
 			'user_email_confirmed' => '',
 			'user_created' => '',
 			'user_role' => '');
+	}
+	
+	/**
+	 * Get user by ID
+	 */
+	public static function getById($user_id) {
+		$query = "SELECT * FROM {TABLE}user WHERE user_id = '%d';";
+		if($row = database::retrieve($query, 1, $user_id)) {
+			return database::row_from_template($row, user_model::$template);
+		}
+		return false;
 	}
 	
 	/**
@@ -60,10 +71,16 @@ class user_model {
 		return database::retrieve($sql, 2, $user['user_name'], $user['user_pass'], $user['user_salt'], $user['user_email']);
 	}
 
+	/**
+	 * Get a user by login details. Returns false if the details don't check out.
+	 * 
+	 * @param string $user_name The user name
+	 * @param string $password	The user's claimed password
+	 */
 	public static function verifyLogin($user_name, $password) {
 		if($user = self::getByNameOrEmail($user_name)) {
 			if($user['user_pass'] == self::gen_password_encoded($password, $user['user_salt'])) {
-				return true;
+				return $user;
 			}
 		}
 		/* No such user or wrong password*/

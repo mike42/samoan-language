@@ -10,9 +10,13 @@ class user_view {
 		$data['title'] = "Log in";
 		$view_template = dirname(__FILE__)."/template/user/login.inc";
 		include(dirname(__FILE__)."/template/htmlLayout.php");
-	}	
+	}
 	
-	
+	public function logout_html($data) {
+		$data['title'] = "Logged out";
+		$view_template = dirname(__FILE__)."/template/user/logout.inc";
+		include(dirname(__FILE__)."/template/htmlLayout.php");
+	}
 	
 	
 	
