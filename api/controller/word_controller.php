@@ -61,11 +61,6 @@ class word_controller {
 			$search = $_REQUEST['s'];
 		}
 		
-		//if($id = word_model::getWordIDfromStr($search)) {
-		//	/* An exact match exists for this word. Redirect to it */
-		//	return array('redirect' => core::constructURL("word", "view", array($search), "html"));
-		//}
-		
 		$searchKey = spelling_model::calcSearchkey($search);
 		$words = word_model::getBySpellingSearchKey($searchKey);
 

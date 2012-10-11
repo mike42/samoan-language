@@ -54,10 +54,9 @@ class example_model {
 	 */
 	public static function listByWordMention($spelling_t_style, $word_num) {
 		$id = word_model::getIdStrBySpellingNum($spelling_t_style, $word_num);
-		$sql = "SELECT * FROM {TABLE}example WHERE example_str like '%%[%s|%%' or example_str like '%%[%s]%%';";
-		
+		$query = "SELECT * FROM {TABLE}example WHERE example_str like '%%[%s|%%' or example_str like '%%[%s]%%';";
 		$ret = array();
-		if($res = database::retrieve($query, 0, $id)) {
+		if($res = database::retrieve($query, 0, $id, $id)) {
 			while($row = database::get_row($res)) {
 				/* Load examples */
 				$example = database::row_from_template($row, self::$template);
@@ -65,6 +64,14 @@ class example_model {
 			}
 		}
 		return $ret;
+	}
+	
+	/**
+	 * Create a new example and return the ID
+	 */
+	public static function insert($example_sm, $example_en) {
+		// TODO: implement insert
+		die("insert not yet implemented in example_model.");
 	}
 }
 ?>

@@ -1,5 +1,40 @@
 <?php
 class example_view {
+	public static $config;
+	
+	public static function init() {
+		self::$config = core::getConfig('core');
+	}
+	
+	public static function view_html($data) {
+		self::useTemplate('view', $data);
+	}
+	
+	public static function edit_html($data) {
+		self::useTemplate('edit', $data);
+	}
+	
+	public static function search_html($data) {
+		self::useTemplate('search', $data);
+	}
+	
+	public static function error_html($data) {
+		if($data['error'] == "404") {
+			header("HTTP/1.0 404 Not Found");
+			$data['title'] = "Error &mdash; Example not found";
+		} else if($data['error'] == "403") {
+			header("HTTP/1.0 403 Forbidden");
+			$data['title'] = "Error &mdash; Forbidden";
+				
+		}
+		self::useTemplate('error', $data);
+	}
+	
+	private static function useTemplate($template, $data) {
+		$permissions = core::getPermissions('example');
+		$view_template = dirname(__FILE__)."/template/example/$template.inc";
+		include(dirname(__FILE__)."/template/htmlLayout.php");
+	}
 	
 	public static function toHTML($example, $show_en = true) {
 		$inp = $example['example_str'];
