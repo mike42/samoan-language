@@ -2,6 +2,15 @@ Samoan
 ======
 Web app for managing Samoan language resources.
 
+Setup
+-----
+First clone the repo with submodules:
+        git clone https://github.com/mike42/samoan
+	git submodule init
+	git submodule update
+
+Then follow the instructions in maintenance/help.html for the configuration steps. 
+
 Credit
 ------
 * Uses modified version of [zBench](http://wordpress.org/extend/themes/zbench/developers/) wordpress theme (GPL v2 or newer)
