@@ -3,7 +3,11 @@
 		<caption>Redirect a word</caption>
 		<tr>
 			<th>Word to refer to:</th>
-			<td><input type="text" name="word_redirect_to" value="" /></td>
+			<td><input type="text" name="word_redirect_to" value="<?php
+					$spelling_t_style	= $data['word']['rel_target']['rel_spelling']['spelling_t_style'];
+					$word_num			= $data['word']['rel_target']['word_num'];
+					echo core::escapeHTML(word_model::getIdStrBySpellingNum($spelling_t_style, $word_num));
+					?>" /></td>
 		</tr>
 		<tr>
 			<td colspan="2" style="text-align: right">
