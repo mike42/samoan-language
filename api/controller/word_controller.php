@@ -24,6 +24,24 @@ class word_controller {
 		return array('error' => '404');
 	}
 	
+	public function create($spelling_t_style = '') {
+		$permissions = core::getPermissions('word');
+		if(!$permissions['create']) {
+			/* No permission */
+			return array('error' => '403');
+		}
+		
+		if(isset($_POST['spelling_t_style'])) {
+			$spelling_t_style = $_POST['spelling_t_style'];
+		}
+		
+		if(isset($_POST['confirm'])) {
+			die("Creating new words not implemented");
+		}
+		
+		return array('title' => "Create new word", 'spelling_t_style' => $spelling_t_style);
+	}
+	
 	/**
 	 * Edit a word
 	 * 

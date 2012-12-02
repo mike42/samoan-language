@@ -29,6 +29,10 @@ class word_view {
 		self::useTemplate($template, $data);
 	}
 	
+	public static function create_html($data) {
+		self::useTemplate("create", $data);
+	}
+	
 	public static function letter_html($data) {
 		self::useTemplate("letter", $data);
 	}
