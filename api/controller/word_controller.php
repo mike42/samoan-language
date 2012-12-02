@@ -29,7 +29,7 @@ class word_controller {
 	 * 
 	 * @param string $id
 	 */
-	public function edit($id, $secondary, $target) {
+	public function edit($id, $secondary = '', $target = '') {
 		$permissions = core::getPermissions('word');
 		
 		/* Check edit permissions */
@@ -47,7 +47,7 @@ class word_controller {
 		/* Now go ahead and return view info */
 		switch($secondary) {
 			case 'delete';
-				$wordInfo['form'] = "redirect";
+				$wordInfo['form'] = "delete";
 				if(isset($_POST['confirm'])) {
 					die("Deleting words not implemented");					
 				}
@@ -56,24 +56,25 @@ class word_controller {
 			case 'redirect':
 				$wordInfo['form'] = "redirect";
 				if(isset($_POST['word_redirect_to'])) {
-					// Todo
-					die("Editing word origin unimplemented.");
+					// TODO
+					die("Editing word redirects unimplemented.");
 				}
 				break;
 				
 			case 'origin':
 				$wordInfo['form'] = "origin";
 				if(isset($_POST['word_spelling'])) {
-					// Todo
+					// TODO
 					die("Editing word origin unimplemented.");
 				}
+				$wordInfo['listlang'] = listlang_model::listAll();
 				
 				break;
 			
 			case 'move':
 				$wordInfo['form'] = "move";
-				if(isset($_POST['word_spelling'])) {
-					// Todo
+				if(isset($_POST['spelling_t_style'])) {
+					// TODO
 					die("Word move unimplemented.");
 				}
 				
@@ -84,11 +85,16 @@ class word_controller {
 					/* Add new def */
 					// TODO set $def here
 					die("Adding new def unimplemented");
-				} elseif(!$def = def_model::get($wordInfo['word']['word_id'], $target)) {
-					core::redirect($editPage);
+				} else {
+					if(!$def = def_model::get($wordInfo['word']['word_id'], $target)) {
+						core::redirect($editPage);
+					} elseif(isset($_POST['def_en']) && isset($_POST['type_id'])) {
+						die("Definition saving unimplemented.");
+					}
 				}
 				
 				$wordInfo['def'] = $def;
+				$wordInfo['listtype'] = listtype_model::listAll();
 				$wordInfo['form'] = "def";
 				break;
 			

@@ -9,6 +9,8 @@ class word_view {
 
 		core::loadClass('def_view');
 		core::loadClass('example_view');
+		core::loadClass('listtype_view');
+		core::loadClass('listlang_view');
 		
 		self::$config = core::getConfig('core');
 	}

@@ -27,8 +27,12 @@
 			<th>
 		 		Origin:
 		 	</th>
-		 	<td>
-		 		...
+		 	<td><?php 
+		 			if($data['word']['word_origin_lang'] != '') {
+		 				echo listlang_view::externalDef($data['word']['rel_lang'], $data['word']['word_origin_word']);
+		 			} else {
+		 				echo "(not borrowed)";
+		 			} ?>
 		 	</td>
 		 	<td>
 		 		<a href="<?php echo core::constructURL('word', 'edit', array($data['id'], 'origin'), 'html'); ?>">[edit]</a>
@@ -39,7 +43,12 @@
 		 		See:
 		 	</th>
 		 	<td>
-		 		...
+		 		<?php 
+		 			if($data['word']['word_redirect_to'] != '0') {
+		 				echo word_view::linkToWord($data['word']['rel_target'], false, false, true);
+		 			} else {
+		 				echo "(not a redirect)";
+		 			} ?>
 		 	</td>
 		 	<td>
 		 		<a href="<?php echo core::constructURL('word', 'edit', array($data['id'], 'redirect'), 'html'); ?>">[redirect]</a>

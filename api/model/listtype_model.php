@@ -12,6 +12,27 @@ class listtype_model {
 				'type_short'	=> '');
 	}
 	
+	/**
+	 * Return a list of all word types in the database
+	 */
+	public static function listAll() {
+		$query = "SELECT * FROM {TABLE}listtype ORDER BY type_name;";
+		if(!$res = database::retrieve($query, 0)) {
+			return false;
+		}
+		
+		$ret = array();
+		while($row = database::get_row($res)) {
+			$ret[] = self::fromRow($row);
+		}
+		return $ret;
+	}
+	
+	/**
+	 * Get details of a word type using its abbreviation
+	 * 
+	 * @param string $type_short
+	 */
 	public static function getByShort($type_short) {
 		$query = "SELECT * FROM {TABLE}listtype WHERE type_short ='%s'";
 		

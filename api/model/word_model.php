@@ -167,6 +167,7 @@ class word_model {
 			}
 			return $ret;
 		}
+		return false;
 	} 
 	
 	private static function getRelativesByID($id) {
@@ -176,24 +177,25 @@ class word_model {
 					"JOIN {TABLE}spelling ON word_spelling = spelling_id ".
 					"WHERE wordrel_word_id =%d " .
 					"ORDER BY wordrel_id";
-		if($res = database::retrieve($query, 0, (int)$id)) {
-			$ret = array();
-			while($row = database::get_row($res)) {
-				/* Target word */
-				$word = database::row_from_template($row, self::$template);
-				$word['rel_spelling'] = database::row_from_template($row, spelling_model::$template);
-				/* Relationship */
-				$wordrel = database::row_from_template($row, self::$rel_template);
-				$wordrel['word'] = $word;
-				if(isset($ret[$wordrel['wordrel_type']])) {
-					$ret[$wordrel['wordrel_type']][] = $wordrel;
-				} else {
-					$ret[$wordrel['wordrel_type']] = array($wordrel);
-				}
-			}
-			return $ret;
+		if(!$res = database::retrieve($query, 0, (int)$id)) {
+			return false;
 		}
-		return false;
+		
+		$ret = array();
+		while($row = database::get_row($res)) {
+			/* Target word */
+			$word = database::row_from_template($row, self::$template);
+			$word['rel_spelling'] = database::row_from_template($row, spelling_model::$template);
+			/* Relationship */
+			$wordrel = database::row_from_template($row, self::$rel_template);
+			$wordrel['word'] = $word;
+			if(isset($ret[$wordrel['wordrel_type']])) {
+				$ret[$wordrel['wordrel_type']][] = $wordrel;
+			} else {
+				$ret[$wordrel['wordrel_type']] = array($wordrel);
+			}
+		}
+		return $ret;
 	}
 	
 	private static function fromRow($row, $depth = 0) {
