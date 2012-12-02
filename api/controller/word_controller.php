@@ -82,9 +82,16 @@ class word_controller {
 		/* Now go ahead and return view info */
 		switch($secondary) {
 			case 'delete';
+				/* Check for delete permission */
+				if(!$permissions['delete']) {
+					return array('error' => "403");
+				}
+				
 				$wordInfo['form'] = "delete";
 				if(isset($_POST['confirm'])) {
-					die("Deleting words not implemented");					
+					/* Actually delete the word */
+					word_model::delete($wordInfo['word']['word_id']);
+					core::redirect(core::constructURL("word", "", array(), "html"));
 				}
 				break;
 			

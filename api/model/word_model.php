@@ -243,6 +243,12 @@ class word_model {
 		return true;
 	}
 	
+	/**
+	 * Insert a new word with the given spelling and number
+	 * 
+	 * @param int $spelling_id
+	 * @param int $word_num
+	 */
 	public static function add($spelling_id, $word_num) {
 		$word = self::$template;
 		$word['word_spelling'] = $spelling_id;
@@ -250,6 +256,34 @@ class word_model {
 		$query = "INSERT INTO {TABLE}word (word_id, word_spelling, word_num) VALUES (NULL, %d, %d);";
 		$word['word_id'] = database::retrieve($query, 2, (int)$spelling_id, (int)$word_num);
 		return word_model::getByID($word['word_id']);
+	}
+	
+	/**
+	 * Delete a word and remove all references to it
+	 * 
+	 * @param int $word_id
+	 */
+	public static function delete($word_id) {
+		/* Remove wordrel references */
+		$query = "DELETE FROM {TABLE}wordrel WHERE wordrel_word_id =%d OR wordrel_target =%d;";
+		database::retrieve($query, 0, (int)$word_id, (int)$word_id);
+		
+		/* Blank any redirects that pint here */
+		$query = "UPDATE {TABLE}word SET word_redirect_to =0 WHERE word_redirect_to =%d;";
+		database::retrieve($query, 0, (int)$word_id);
+		
+		/* Delete example links in definitions*/
+		$query = "DELETE {TABLE}examplerel FROM {TABLE}examplerel INNER JOIN {TABLE}def ON example_rel_def_id = def_id WHERE def_word_id =%d;";
+		database::retrieve($query, 0, (int)$word_id);
+		
+		/* Delete definitions themselves */
+		$query = "DELETE FROM {TABLE}def WHERE def_word_id =%d";
+		database::retrieve($query, 0, (int)$word_id);
+		
+		/* Remove the word */
+		$query = "DELETE FROM {TABLE}word WHERE word_id =%d;";
+		database::retrieve($query, 0, (int)$word_id);
+		return true;	
 	}
 }
 ?>
