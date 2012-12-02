@@ -1,0 +1,1 @@
+<p>Confirm deletion of a word</p>

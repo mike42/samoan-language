@@ -1,0 +1,1 @@
+<p>Change a word into a redirect.</p>

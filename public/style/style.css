@@ -1167,3 +1167,27 @@ img#wpstats {
 		text-align: center;
 	}
 }
+
+/* Customisations */
+.word-edit {
+	border-collapse: collapse;
+}
+
+.word-edit td {
+	padding-left: 1em;
+	padding-right: 1em;
+	border: 1px solid #ccc;	
+	text-align: center;'
+}
+
+.word-edit th {
+	padding-left: 1em;
+	padding-right: 1em;
+	border: 1px solid #ccc;	
+	text-align: left;
+}
+
+
+.word-edit caption {
+	font-weight: bold;
+}

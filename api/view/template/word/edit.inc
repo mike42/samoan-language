@@ -1,21 +1,21 @@
 <div class="editform">
-	<table>
+	<table class="word-edit">
 		<caption>Word properties</caption>
 		<tr>
-			<td>
+			<th>
 		 		Number:
-		 	</td>
+		 	</th>
 		 	<td>
 		 		<?php  echo $data['word']['word_id']; ?>
 		 	</td>
 		 	<td>
-		 		<a href="<?php echo core::constructURL('word', 'delete', array($data['id']), 'html'); ?>" style="color:#f00">[delete]</a>
+		 		<a href="<?php echo core::constructURL('word', 'edit', array($data['id'], 'delete'), 'html'); ?>" style="color:#f00">[delete]</a>
 		 	</td>
 		</tr>
 		<tr>
-			<td>
+			<th>
 		 		Spelling:
-		 	</td>
+		 	</th>
 		 	<td>
 		 		<a href="<?php echo core::constructURL('word', 'view', array($data['id']), 'html'); ?>"><? echo $data['id']; ?></a>
 		 	</td>
@@ -24,9 +24,9 @@
 		 	</td>
 		</tr>
 		<tr>
-			<td>
+			<th>
 		 		Origin:
-		 	</td>
+		 	</th>
 		 	<td>
 		 		...
 		 	</td>
@@ -35,25 +35,25 @@
 		 	</td>
 		</tr>
 		<tr>
-			<td>
+			<th>
 		 		See:
-		 	</td>
+		 	</th>
 		 	<td>
 		 		...
 		 	</td>
 		 	<td>
-		 		<a href="<?php echo core::constructURL('word', 'edit', array($data['id'], 'redirect'), 'html'); ?>">[move]</a>
+		 		<a href="<?php echo core::constructURL('word', 'edit', array($data['id'], 'redirect'), 'html'); ?>">[redirect]</a>
 		 	</td>
 		</tr>
 		
 	</table>
 	
-	<table>
+	<table class="word-edit">
 		<caption>Definitions</caption>
 		<?php 
 		foreach($data['word']['rel_def'] as $id => $def) {
 				echo "<tr>";
-				echo "<td>".self::$roman_numerals[$id].".</td>";
+				echo "<th>".self::$roman_numerals[$id].".</th>";
 				echo "<td><i>".$def['rel_type']['type_abbr']."</i> ".$def['def_en'].".</td>";
 				echo "<td><a href=\"".core::constructURL('word', 'edit', array($data['id'], 'def', $def['def_id']), 'html') ."\">[edit]</a></td>";
 				echo "</tr>\n";
@@ -67,7 +67,7 @@
 		</tr>
 	</table>
 	
-	<table>
+	<table class="word-edit">
 		<caption>Relatives</caption>
 		<?php 
 			foreach($data['word']['rel_words'] as $type => $rel) {

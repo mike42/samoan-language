@@ -19,8 +19,12 @@ class word_view {
 	}
 	
 	public static function edit_html($data) {
+		$template = "edit";
+		if(isset($data['form'])) {
+			$template = "edit_".$data['form'];
+		}
 		$data['title'] = "Editing " . $data['word']['rel_spelling']['spelling_t_style'];
-		self::useTemplate("edit", $data);
+		self::useTemplate($template, $data);
 	}
 	
 	public static function letter_html($data) {

@@ -16,10 +16,28 @@ class def_model {
 				'rel_example'	=> array());
 	}
 	
+	public static function get($word_id, $def_id) {
+		$query = "SELECT * FROM sm_def " .
+				"LEFT JOIN {TABLE}listtype ON def_type = type_id " .
+				"WHERE def_word_id =%d AND def_id =%d;";
+		if(!$res = database::retrieve($query, 0, (int)$word_id, (int)$def_id)) {
+			return false;
+		}
+		
+		if($row = database::get_row($res)) {
+			$def = database::row_from_template($row, self::$template);
+			$def['rel_type'] = database::row_from_template($row, listtype_model::$template);
+			$def['rel_example'] = example_model::listByDef($def['def_id']);
+			return $def;
+		}
+		
+		return false;
+	}
+	
 	public static function listByWord($word_id) {
 		$query = "SELECT * FROM sm_def " .
 					"LEFT JOIN {TABLE}listtype ON def_type = type_id " .
-					"WHERE def_word_id =%d";
+					"WHERE def_word_id =%d;";
 		
 		$ret = array();
 		if($res = database::retrieve($query, 0, (int)$word_id)) {
