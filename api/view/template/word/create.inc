@@ -5,7 +5,7 @@
 		<caption>Create</caption>
 		<tr>
 			<th>Spelling of new word:</th>
-			<td><input type="text" name="word_redirect_to" value="<?php echo core::escapeHTML($data['spelling_t_style']); ?>" /></td>
+			<td><input type="text" name="spelling_t_style" value="<?php echo core::escapeHTML($data['spelling_t_style']); ?>" /></td>
 		</tr>
 		
 		<tr>

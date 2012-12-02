@@ -126,7 +126,7 @@ class word_model {
 	 * @param number $word_num
 	 * @return unknown The word, or false if it does not exist
 	 */
-	private static function getWordBySpellingAndWordNum($spelling, $word_num) {
+	public static function getWordBySpellingAndWordNum($spelling, $word_num) {
 		$query = "SELECT * FROM {TABLE}word " .
 					"JOIN {TABLE}spelling ON word_spelling = spelling_id " .
 					"LEFT JOIN {TABLE}listlang ON word_origin_lang = lang_id " .
@@ -227,6 +227,29 @@ class word_model {
 	
 	public static function getIdStrBySpellingNum($spelling_t_style, $word_num) {
 		return $spelling_t_style.(($word_num != 0)? (int)$word_num : "");
+	}
+	
+	/**
+	 * Change a word number (used when shuffling to fill in gaps left by deleted words, for example).
+	 * You MUST check that the word exists before running this.
+	 * 
+	 * @param int $word_id
+	 * @param int $word_num
+	 * @return boolean True always
+	 */
+	public static function renumber($word_id, $word_num) {
+		$query = "UPDATE {TABLE}word SET word_num =%d WHERE word_id =%d;";
+		database::retrieve($query, 0, (int)$word_num, (int)$word_id);
+		return true;
+	}
+	
+	public static function add($spelling_id, $word_num) {
+		$word = self::$template;
+		$word['word_spelling'] = $spelling_id;
+		$word['word_num'] = $word_num;
+		$query = "INSERT INTO {TABLE}word (word_id, word_spelling, word_num) VALUES (NULL, %d, %d);";
+		$word['word_id'] = database::retrieve($query, 2, (int)$spelling_id, (int)$word_num);
+		return word_model::getByID($word['word_id']);
 	}
 }
 ?>

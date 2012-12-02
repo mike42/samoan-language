@@ -36,7 +36,24 @@ class word_controller {
 		}
 		
 		if(isset($_POST['confirm'])) {
-			die("Creating new words not implemented");
+			if(!$spelling = spelling_model::getBySpelling($spelling_t_style)) {
+				$spelling = spelling_model::add($spelling_t_style);
+			}
+			
+			$word_num = 0;
+			/* If there is already a word 'foo', change it to 'foo1' and make this 'foo2' */
+			if($word = word_model::getWordBySpellingAndWordNum($spelling_t_style, 0)) {
+				word_model::renumber($word['word_id'], 1);
+				$word_num = 2;
+			}
+			
+			/* Now search for the next spare location */
+			while($word = word_model::getWordBySpellingAndWordNum($spelling_t_style, $word_num)) {
+				$word_num++;
+			}
+			
+			$word = word_model::add($spelling['spelling_id'], $word_num);
+			core::redirect(core::constructURL("word", "edit", array(word_model::getIdStrBySpellingNum($spelling_t_style, $word_num)), "html"));
 		}
 		
 		return array('title' => "Create new word", 'spelling_t_style' => $spelling_t_style);
@@ -148,7 +165,7 @@ class word_controller {
 			$title = $type['type_title'];
 			return array('title' => $title, 'words' => $words, 'type' => $type);
 		}
-		return array('error' => '404');		return array('error' => '404');
+		return array('error' => '404');
 	}
 	
 	/**

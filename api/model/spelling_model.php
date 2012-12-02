@@ -45,15 +45,15 @@ class spelling_model {
 	public static function calcSortkeySm($name) {
 		/* Fun fact: This is the same algorithm you would use for a substitution cipher.
 		 see if you can figure out why I'm using one. */
-		$name = $this-> calcSortkey($name);
+		$name = self::calcSortkey($name);
 		$len = strlen($name);
 		$name2 = "";
 		for($i = 0; $i < $len; $i++) {
 			$c = substr($name,$i,1);
 			$j = 0;
-			foreach($this->alphabet_sm as $a) {
+			foreach(core::$alphabet_sm as $a) {
 				if($a == $c) {
-					$name2 .= $this->alphabet_en[$j];
+					$name2 .= core::$alphabet_en[$j];
 					break;
 				}
 				$j++;
@@ -75,7 +75,48 @@ class spelling_model {
 		$name = str_replace(" ","",$name);
 		return $name;
 	}
+
+	/**
+	 * Get spelling by its t-style representation
+	 */
+	public static function getBySpelling($spelling_t_style) {
+		$query = "SELECT * FROM {TABLE}spelling WHERE spelling_t_style ='%s';";
+		if($row = database::retrieve($query, 1, $spelling_t_style)) {
+			return self::fromRow($row);
+		}
+		return false;
+	}
 	
+	/**
+	 * Add a new spelling to the database
+	 * 
+	 * @param string $spelling_t_style
+	 */
+	public static function add($spelling_t_style) {
+		$spelling = self::$template;
+
+		/* All the fun derived fields */
+		$spelling['spelling_t_style']			= $spelling_t_style;
+		$spelling['spelling_t_style_recorded']	= '0';
+		$spelling['spelling_k_style']			= self::calcKStyle($spelling_t_style);
+		$spelling['spelling_k_style_recorded']	= '0';
+		$spelling['spelling_simple']			= self::calcSimple($spelling_t_style);
+		$spelling['spelling_sortkey']			= self::calcSortkey($spelling_t_style);
+		$spelling['spelling_searchkey']			= self::calcSearchkey($spelling_t_style);
+		$spelling['spelling_sortkey_sm']		= self::calcSortkeySm($spelling_t_style);
+		
+		$query = "INSERT INTO {TABLE}spelling (spelling_id, spelling_t_style, spelling_t_style_recorded, " . 
+			"spelling_k_style, spelling_k_style_recorded, spelling_simple, spelling_sortkey, spelling_searchkey, " . 
+			"spelling_sortkey_sm) VALUES (NULL, '%s', '0', '%s', '0', '%s', '%s', '%s', '%s');";
+		$spelling['spelling_id'] = database::retrieve($query, 2, $spelling['spelling_t_style'], $spelling['spelling_t_style_recorded'],
+				$spelling['spelling_k_style'], $spelling['spelling_k_style_recorded'], $spelling['spelling_simple'],
+				$spelling['spelling_sortkey'], $spelling['spelling_searchkey'], $spelling['spelling_sortkey_sm']);
+		return $spelling;
+	}
+	
+	private static function fromRow($row, $depth = 0) {
+		return database::row_from_template($row, self::$template);
+	}
 }
 
 

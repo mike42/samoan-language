@@ -41,7 +41,7 @@ class database {
 		return mysql_close(Database::$conn);
 	}
 	
-	function retrieve($query, $return_type = 0,
+	static function retrieve($query, $return_type = 0,
 			$a1  = null, $a2  = null, $a3  = null, $a4  = null, $a5  = null,
 			$a6  = null, $a7  = null, $a8  = null, $a9  = null, $a10 = null,
 			$a11 = null, $a12 = null, $a13 = null, $a14 = null, $a15 = null) {
