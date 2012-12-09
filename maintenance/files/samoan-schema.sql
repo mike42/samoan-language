@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 3.4.10.1deb1
+-- version 3.4.11.1deb1
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Oct 07, 2012 at 09:24 PM
--- Server version: 5.5.24
--- PHP Version: 5.3.10-1ubuntu3.4
+-- Generation Time: Dec 09, 2012 at 07:23 PM
+-- Server version: 5.5.28
+-- PHP Version: 5.4.4-9
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS `sm_def` (
   `def_type` int(11) NOT NULL,
   `def_en` varchar(256) NOT NULL COMMENT 'English definition',
   PRIMARY KEY (`def_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='Each definition of a word goes here. Eg. moe noun, moe verb.' AUTO_INCREMENT=1387 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='Each definition of a word goes here. Eg. moe noun, moe verb.' AUTO_INCREMENT=1398 ;
 
 -- --------------------------------------------------------
 
@@ -137,7 +137,7 @@ CREATE TABLE IF NOT EXISTS `sm_page` (
   `page_revision` int(11) DEFAULT NULL,
   `page_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`page_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=12 ;
 
 -- --------------------------------------------------------
 
@@ -156,7 +156,7 @@ CREATE TABLE IF NOT EXISTS `sm_revision` (
   `revision_parse_ts` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `revision_parse_valid` int(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`revision_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=194 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=248 ;
 
 -- --------------------------------------------------------
 
@@ -166,16 +166,17 @@ CREATE TABLE IF NOT EXISTS `sm_revision` (
 
 CREATE TABLE IF NOT EXISTS `sm_spelling` (
   `spelling_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Word ID',
-  `spelling_t_style` text NOT NULL COMMENT 'Standard way of writing the word',
+  `spelling_t_style` varchar(256) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT 'Standard way of writing the word',
   `spelling_t_style_recorded` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'True if a recording exists',
-  `spelling_k_style` text NOT NULL COMMENT 'Word as it is spoken in k-style',
+  `spelling_k_style` varchar(256) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT 'Word as it is spoken in k-style',
   `spelling_k_style_recorded` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'True if recording exists for k-style',
-  `spelling_simple` text NOT NULL COMMENT 'Non-unique version of the word without macrons or glottal stops, for searches',
-  `spelling_sortkey` text NOT NULL COMMENT 'Sortkey for the word',
-  `spelling_searchkey` text NOT NULL,
-  `spelling_sortkey_sm` text NOT NULL,
-  PRIMARY KEY (`spelling_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='Each word with unique pronunciation' AUTO_INCREMENT=1354 ;
+  `spelling_simple` varchar(256) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT 'Non-unique version of the word without macrons or glottal stops, for searches',
+  `spelling_sortkey` varchar(256) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT 'Sortkey for the word',
+  `spelling_searchkey` varchar(256) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `spelling_sortkey_sm` varchar(256) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  PRIMARY KEY (`spelling_id`),
+  UNIQUE KEY `spelling_t_style` (`spelling_t_style`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='Each word with unique pronunciation' AUTO_INCREMENT=1367 ;
 
 -- --------------------------------------------------------
 
@@ -195,7 +196,7 @@ CREATE TABLE IF NOT EXISTS `sm_user` (
   `user_role` varchar(256) NOT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `user_email` (`user_email`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='User accounts' AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='User accounts' AUTO_INCREMENT=5 ;
 
 -- --------------------------------------------------------
 
@@ -213,7 +214,7 @@ CREATE TABLE IF NOT EXISTS `sm_word` (
   `word_redirect` varchar(256) NOT NULL COMMENT 'Not-empty for a "see ..." word',
   `word_redirect_to` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`word_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1358 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1365 ;
 
 -- --------------------------------------------------------
 
