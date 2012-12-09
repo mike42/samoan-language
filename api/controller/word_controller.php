@@ -168,16 +168,19 @@ class word_controller {
 				if(!$def = def_model::get($word_id, $target)) {
 					/* Def not found. Return to edit page */
 					core::redirect($editPage);
-				} elseif(isset($_POST['def_en']) && isset($_POST['type_id'])) {
-					/* Check everything */
-					$def['def_en'] = $def_en;
-					$def['def_type'] = $_POST['type_id'];
-					if(!$type = listtype_model::get($def['def_type'])) {
-						core::redirect($defEdit);
+				} elseif(isset($_POST['def_en']) && isset($_POST['type_id']) && isset($_POST['action'])) {
+					if($_POST['action'] == 'delete') {
+						def_model::delete($def['def_id']);
+					} else {
+						/* Check everything */
+						$def['def_en'] = $_POST['def_en'];
+						$def['def_type'] = $_POST['type_id'];
+						if(!$type = listtype_model::get($def['def_type'])) {
+							core::redirect($defEdit);
+						}
+						def_model::update($def);
 					}
-					
-					/* Submit and navigate back to edit page*/
-					def_model::update($def);
+					/* Navigate back to edit page*/
 					core::redirect($editPage);
 				}
 				

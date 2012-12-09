@@ -62,9 +62,23 @@ class def_model {
 	}
 	
 	public static function update($def) {
-	//	$query = "UPDATE {TABLE}"
+		$query = "UPDATE {TABLE}def SET def_type =%d, def_en ='%s' WHERE def_id =%d;";
+		return database::retrieve($query, 0, (int)$def['def_type'], $def['def_en'], (int)$def['def_id']);
+	}
+	
+	/**
+	 * Delete the specified definition
+	 * 
+	 * @param int $def_id
+	 */
+	public static function delete($def_id) {
+		/* Delete linked examples */
+		$query = "DELETE FROM {TABLE}examplerel WHERE example_rel_def_id =%d;";
+		database::retrieve($query, 0, (int)$def_id);
 		
-		return true;
+		/* Delete definition itself */
+		$query = "DELETE FROM {TABLE}def WHERE def_id =%d;";
+		return database::retrieve($query, 0, (int)$def_id);
 	}
 }
 ?>

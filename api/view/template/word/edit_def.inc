@@ -1,4 +1,14 @@
-<form method="post" action="<? echo core::constructURL("word", "edit", array($data['id'], 'def', $data['def']['def_id']), 'html'); ?>">
+<script type="text/javascript">
+function delWord() {
+	if(confirm("foobar")) {
+		document.getElementById("action").value="delete";
+		document.getElementById("def-form").submit();
+	}
+}
+</script>
+
+<form method="post" id="def-form" action="<? echo core::constructURL("word", "edit", array($data['id'], 'def', $data['def']['def_id']), 'html'); ?>">
+	<input type="hidden" id="action" name="action" value="update" />
 	<table class="word-edit">
 		<caption>Definition details</caption>
 		<tr>
@@ -15,7 +25,7 @@
 			</td>
 		</tr>
 		<tr>
-			<td colspan="2" style="text-align: right"><a href="<?php echo core::constructURL('word', 'edit', array($data['id']), 'html'); ?>">[back to word]</a><input type="submit" value="Save"></td>
+			<td colspan="2" style="text-align: right"><a href="<?php echo core::constructURL('word', 'edit', array($data['id']), 'html'); ?>">[back to word]</a> <input style="color: #f00" type="button" value="Delete" onClick="delWord();"> <input type="submit" value="Save"></td>
 		</tr>
 	</table>
 </form>
