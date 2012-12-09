@@ -51,5 +51,20 @@ class def_model {
 		}
 		return $ret;
 	}
+	
+	/**
+	 * Return ID of a new (blank) definition for a given word
+	 * @param int $word_id
+	 */
+	public static function add($word_id) {
+		$query = "INSERT INTO  {TABLE}def (def_id, def_word_id, def_type, def_en) VALUES (NULL, %d,  '0',  '');";
+		return database::retrieve($query, 2, (int)$word_id);
+	}
+	
+	public static function update($def) {
+	//	$query = "UPDATE {TABLE}"
+		
+		return true;
+	}
 }
 ?>

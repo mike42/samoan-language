@@ -153,16 +153,32 @@ class word_controller {
 				break;
 				
 			case 'def':
-				if($target == "") {
+				/* Find definition or add a blank one as requested */
+				$word_id = $wordInfo['word']['word_id'];
+				$def_id = $target;
+				if($def_id == "") {
 					/* Add new def */
-					// TODO set $def here
-					die("Adding new def unimplemented");
-				} else {
-					if(!$def = def_model::get($wordInfo['word']['word_id'], $target)) {
-						core::redirect($editPage);
-					} elseif(isset($_POST['def_en']) && isset($_POST['type_id'])) {
-						die("Definition saving unimplemented.");
+					$def_id = def_model::add($word_id);
+					/* Navigate to new def */
+					$defEdit = core::constructURL("word", "edit", array($id, "def", (int)$def_id), "html");
+					core::redirect($defEdit);
+				}
+				
+				$defEdit = core::constructURL("word", "edit", array($id, "def", (int)$def_id), "html");
+				if(!$def = def_model::get($word_id, $target)) {
+					/* Def not found. Return to edit page */
+					core::redirect($editPage);
+				} elseif(isset($_POST['def_en']) && isset($_POST['type_id'])) {
+					/* Check everything */
+					$def['def_en'] = $def_en;
+					$def['def_type'] = $_POST['type_id'];
+					if(!$type = listtype_model::get($def['def_type'])) {
+						core::redirect($defEdit);
 					}
+					
+					/* Submit and navigate back to edit page*/
+					def_model::update($def);
+					core::redirect($editPage);
 				}
 				
 				$wordInfo['def'] = $def;

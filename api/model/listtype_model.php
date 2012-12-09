@@ -42,6 +42,19 @@ class listtype_model {
 		return false;
 	}
 	
+	/**
+	 * Get details of a word type using its ID
+	 * 
+	 * @param int $type_id
+	 */
+	public static function get($type_id) {
+		$query = "SELECT * FROM {TABLE}listtype WHERE type_id =%d";
+		if(!$row = database::retrieve($query, 1, $type_id)) {
+			return false;
+		}
+		return self::fromRow($row);
+	}
+	
 	private static function fromRow($row, $depth = 0) {
 		return database::row_from_template($row, self::$template);
 	}

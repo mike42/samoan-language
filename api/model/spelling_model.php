@@ -97,9 +97,7 @@ class spelling_model {
 
 		/* All the fun derived fields */
 		$spelling['spelling_t_style']			= $spelling_t_style;
-		$spelling['spelling_t_style_recorded']	= '0';
 		$spelling['spelling_k_style']			= self::calcKStyle($spelling_t_style);
-		$spelling['spelling_k_style_recorded']	= '0';
 		$spelling['spelling_simple']			= self::calcSimple($spelling_t_style);
 		$spelling['spelling_sortkey']			= self::calcSortkey($spelling_t_style);
 		$spelling['spelling_searchkey']			= self::calcSearchkey($spelling_t_style);
@@ -108,9 +106,8 @@ class spelling_model {
 		$query = "INSERT INTO {TABLE}spelling (spelling_id, spelling_t_style, spelling_t_style_recorded, " . 
 			"spelling_k_style, spelling_k_style_recorded, spelling_simple, spelling_sortkey, spelling_searchkey, " . 
 			"spelling_sortkey_sm) VALUES (NULL, '%s', '0', '%s', '0', '%s', '%s', '%s', '%s');";
-		$spelling['spelling_id'] = database::retrieve($query, 2, $spelling['spelling_t_style'], $spelling['spelling_t_style_recorded'],
-				$spelling['spelling_k_style'], $spelling['spelling_k_style_recorded'], $spelling['spelling_simple'],
-				$spelling['spelling_sortkey'], $spelling['spelling_searchkey'], $spelling['spelling_sortkey_sm']);
+		$spelling['spelling_id'] = database::retrieve($query, 2, $spelling['spelling_t_style'], $spelling['spelling_k_style'],
+				$spelling['spelling_simple'], $spelling['spelling_sortkey'], $spelling['spelling_searchkey'], $spelling['spelling_sortkey_sm']);
 		return $spelling;
 	}
 	
