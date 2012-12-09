@@ -105,7 +105,7 @@ class word_controller {
 				
 			case 'origin':
 				$wordInfo['form'] = "origin";
-				if(isset($_POST['word_spelling'])) {
+				if(isset($_POST['word_origin_word']) && isset($_POST['lang_id'])) {
 					// TODO
 					die("Editing word origin unimplemented.");
 				}
