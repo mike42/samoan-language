@@ -285,5 +285,31 @@ class word_model {
 		database::retrieve($query, 0, (int)$word_id);
 		return true;	
 	}
+	
+	/**
+	 * Set word origin for a given word
+	 */
+	public static function setOrigin($word) {
+		$query = "UPDATE {TABLE}word SET word_origin_lang ='%s', word_origin_word ='%s' WHERE word_id =%d;";
+		return database::retrieve($query, 0, $word['word_origin_lang'], $word['word_origin_word'], (int)$word['word_id']);
+	}
+	
+	/**
+	 * Set redirect destination for a given word
+	 */
+	public static function setRedirect($word) {
+		$query = "UPDATE {TABLE}word SET word_redirect_to =%d WHERE word_id =%d;";
+		return database::retrieve($query, 0, (int)$word['word_redirect_to'], (int)$word['word_id']);
+	}
+
+	/**
+	 * @param int $word_id
+	 * @param int $spelling_id
+	 * @param int $word_num
+	 */
+	public static function move($word_id, $spelling_id, $word_num) {
+		$query = "UPDATE {TABLE}word SET word_spelling =%d, word_num =%d WHERE word_id =%d;";
+		return database::retrieve($query, 0, (int)$spelling_id, (int)$word_num, (int)$word_id);
+	}
 }
 ?>

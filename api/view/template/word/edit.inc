@@ -6,7 +6,7 @@
 		 		Number:
 		 	</th>
 		 	<td>
-		 		<?php  echo $data['word']['word_id']; ?>
+		 		<?php echo (int)$data['word']['word_id']; ?>
 		 	</td>
 		 	<td>
 		 		<a href="<?php echo core::constructURL('word', 'edit', array($data['id'], 'delete'), 'html'); ?>" style="color:#f00">[delete]</a>
@@ -17,7 +17,7 @@
 		 		Spelling:
 		 	</th>
 		 	<td>
-		 		<a href="<?php echo core::constructURL('word', 'view', array($data['id']), 'html'); ?>"><? echo $data['id']; ?></a>
+		 		<a href="<?php echo core::constructURL('word', 'view', array($data['id']), 'html'); ?>"><? echo core::escapeHTML($data['id']); ?></a>
 		 	</td>
 		 	<td>
 		 		<a href="<?php echo core::constructURL('word', 'edit', array($data['id'], 'move'), 'html'); ?>">[move]</a>

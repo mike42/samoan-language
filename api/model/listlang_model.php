@@ -25,6 +25,17 @@ class listlang_model {
 		return $ret;
 	}
 	
+	/**
+	 * Get a single language from its ID
+	 */
+	public static function get($lang_id) {
+		$query = "SELECT * FROM {TABLE}listlang WHERE lang_id ='%s'";
+		if(!$row = database::retrieve($query, 1, $lang_id)) {
+			return false;
+		}
+		return self::fromRow($row);
+	}
+	
 	private static function fromRow($row, $depth = 0) {
 		return database::row_from_template($row, self::$template);
 	}

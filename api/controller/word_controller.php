@@ -36,22 +36,13 @@ class word_controller {
 		}
 		
 		if(isset($_POST['confirm'])) {
+			/* Make sure we have the spelling in the database */
 			if(!$spelling = spelling_model::getBySpelling($spelling_t_style)) {
 				$spelling = spelling_model::add($spelling_t_style);
 			}
+			$word_num = self::get_next_wordnum($spelling_t_style);
 			
-			$word_num = 0;
-			/* If there is already a word 'foo', change it to 'foo1' and make this 'foo2' */
-			if($word = word_model::getWordBySpellingAndWordNum($spelling_t_style, 0)) {
-				word_model::renumber($word['word_id'], 1);
-				$word_num = 2;
-			}
-			
-			/* Now search for the next spare location */
-			while($word = word_model::getWordBySpellingAndWordNum($spelling_t_style, $word_num)) {
-				$word_num++;
-			}
-			
+			/* Go ahead and create the word page */
 			$word = word_model::add($spelling['spelling_id'], $word_num);
 			core::redirect(core::constructURL("word", "edit", array(word_model::getIdStrBySpellingNum($spelling_t_style, $word_num)), "html"));
 		}
@@ -96,30 +87,69 @@ class word_controller {
 				break;
 			
 			case 'redirect':
+				/* Change a word into a redirect */
 				$wordInfo['form'] = "redirect";
 				if(isset($_POST['word_redirect_to'])) {
-					// TODO
-					die("Editing word redirects unimplemented.");
+					/* Check that the target word exists */
+					$redirect = $_POST['word_redirect_to'];
+					if($redirect == '') {
+						/* Clear redirect */
+						$word_id = '0';
+					} else if(!$word_id = word_model::getWordIDfromStr($_POST['word_redirect_to'])) {
+						$wordInfo['message'] = "That word does not exist";
+						return $wordInfo;
+					}
+					$wordInfo['word']['word_redirect_to'] = $word_id;
+
+					/* Update and redirect */
+					word_model::setRedirect($wordInfo['word']);
+					core::redirect($editPage);
 				}
 				break;
 				
 			case 'origin':
+				/* Edit word origin */
 				$wordInfo['form'] = "origin";
 				if(isset($_POST['word_origin_word']) && isset($_POST['lang_id'])) {
-					// TODO
-					die("Editing word origin unimplemented.");
+					$lang_id = $_POST['lang_id'];
+					$origin_word = $_POST['word_origin_word'];
+					if(!$lang = listlang_model::get($lang_id)) {
+						$lang_id ='';
+						$origin_word = '';
+					}
+					/* Set word origin */
+					$wordInfo['word']['word_origin_lang'] = $lang_id;
+					$wordInfo['word']['word_origin_word'] = $origin_word;
+					
+					/* Update and redirect */
+					word_model::setOrigin($wordInfo['word']);
+					core::redirect($editPage);
 				}
 				$wordInfo['listlang'] = listlang_model::listAll();
-				
+								
 				break;
 			
 			case 'move':
+				/* Change spelling of the word */
 				$wordInfo['form'] = "move";
 				if(isset($_POST['spelling_t_style'])) {
-					// TODO
-					die("Word move unimplemented.");
+					$word_id = $wordInfo['word']['word_id'];
+					$spelling_t_style = $_POST['spelling_t_style'];
+					if($wordInfo['word']['rel_spelling']['spelling_t_style'] != $spelling_t_style) {
+						/* Make sure we have the spelling in the database */
+						if(!$spelling = spelling_model::getBySpelling($spelling_t_style)) {
+							$spelling = spelling_model::add($spelling_t_style);
+						}
+						/* Get the next number and move */
+						$word_num = self::get_next_wordnum($spelling_t_style);
+						$spelling_id = $spelling['spelling_id'];
+						word_model::move($word_id, $spelling_id, $word_num);
+						/* Edit page has changed now */
+						$id = word_model::getIdStrBySpellingNum($spelling_t_style, $word_num);
+						$editPage = core::constructURL("word", "edit", array($id), "html");
+					}
+					core::redirect($editPage);
 				}
-				
 				break;
 				
 			case 'def':
@@ -208,6 +238,31 @@ class word_controller {
 		return array('search' => $search, 'words' => $words, 'title' => 'Search Vocabulary');
 	}
 
+	/**
+	 * Handle re-numberings of words as cleanly as possible
+	 * 
+	 * @param string $spelling_t_style
+	 * @return the next vacant number on this spelling, after moving around things as necessary
+	 */
+	private function get_next_wordnum($spelling_t_style) {
+		$word_num = 0;
+
+		/* If there is already a word 'foo0', change it to 'foo1' and make this 'foo2' */
+		if($word = word_model::getWordBySpellingAndWordNum($spelling_t_style, 0)) {
+			word_model::renumber($word['word_id'], 1);
+			$word_num = 2;
+		} else if($word = word_model::getWordBySpellingAndWordNum($spelling_t_style, 1)) {
+			/* If there is already a foo1, then don't try to make foo0! */
+			$word_num = 2;
+		}
+
+		/* Now search for the next spare location */
+		while($word = word_model::getWordBySpellingAndWordNum($spelling_t_style, $word_num)) {
+			$word_num++;
+		}
+		
+		return $word_num;
+	}
 }
 
 

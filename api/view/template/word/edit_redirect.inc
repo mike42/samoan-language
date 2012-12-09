@@ -7,7 +7,9 @@
 					$spelling_t_style	= $data['word']['rel_target']['rel_spelling']['spelling_t_style'];
 					$word_num			= $data['word']['rel_target']['word_num'];
 					echo core::escapeHTML(word_model::getIdStrBySpellingNum($spelling_t_style, $word_num));
-					?>" /></td>
+					?>" />
+			<?php  if(isset($data['message'])) { echo "<div style=\"color: #f00\">".core::escapeHTML($data['message'])."</div>"; }?>
+			</td>
 		</tr>
 		<tr>
 			<td colspan="2" style="text-align: right">

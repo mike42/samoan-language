@@ -52,7 +52,7 @@ class word_view {
 	public static function error_html($data) {
 		if($data['error'] == "404") {
 			header("HTTP/1.0 404 Not Found");
-			$data['title'] = "Error &mdash; Word not found";
+			$data['title'] = "Error - Word not found";
 		}
 		self::useTemplate("error", $data);
 	}

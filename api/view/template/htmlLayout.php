@@ -48,7 +48,7 @@
 				<h1>
 					<a href="<?php  echo self::$config['webroot']; ?>"><?php
 		if(isset($data['title'])) {
-			echo $data['title'];
+			echo core::escapeHTML($data['title']);
 		} else {
 			echo "Samoan Language Resources";
 		} ?></a>
