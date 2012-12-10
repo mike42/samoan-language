@@ -144,7 +144,7 @@ class word_model {
 		$query = "SELECT * FROM {TABLE}word " .
 					"JOIN {TABLE}spelling ON word_spelling = spelling_id " .
 					"LEFT JOIN {TABLE}listlang ON word_origin_lang = lang_id " .
-					"WHERE spelling_simple LIKE '%s%%' ORDER BY spelling_sortkey;";
+					"WHERE spelling_simple LIKE '%s%%' ORDER BY spelling_sortkey, word_num;";
 		if($res = database::retrieve($query, 0, $letter)) {
 			$ret = array();
 			while($row = database::get_row($res)) {
@@ -159,7 +159,7 @@ class word_model {
 		$query = "select * from (select distinct def_word_id from {TABLE}def " .
 					"join {TABLE}listtype on def_type = type_id where type_short ='%s') sm_def " .
 					"join {TABLE}word on def_word_id = word_id " .
-					"join {TABLE}spelling on word_spelling = spelling_id ORDER BY spelling_sortkey;";
+					"join {TABLE}spelling on word_spelling = spelling_id ORDER BY spelling_sortkey, word_num;";
 		if($res = database::retrieve($query, 0, $type_short)) {
 			$ret = array();
 			while($row = database::get_row($res)) {
@@ -214,7 +214,7 @@ class word_model {
 		$query = "SELECT * FROM {TABLE}word " .
 				"JOIN {TABLE}spelling ON word_spelling = spelling_id " .
 				"LEFT JOIN {TABLE}listlang ON word_origin_lang = lang_id " .
-				"WHERE spelling_searchkey = '%s' ORDER BY spelling_sortkey";
+				"WHERE spelling_searchkey = '%s' ORDER BY spelling_sortkey, word_num;";
 		if($res = database::retrieve($query, 0, $spelling_searchkey)) {
 			$ret = array();
 			while($row = database::get_row($res)) {

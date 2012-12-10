@@ -99,6 +99,9 @@ class word_view {
 			
 			$footerItems = array("from", "syn", "opp", "sals");
 			$inner = self::getInnerItems($footerItems, $word['rel_words'], true, false, true, 'rel_type_long');
+			if($word['word_origin_lang'] != '') {
+				$inner[] = "from " . listlang_view::externalDef($word['rel_lang'], $word['word_origin_word']);
+			}
 			if(count($inner) != 0) {
 				$str .= "(" . implode(", ", $inner) .") ";
 			}
@@ -147,11 +150,11 @@ class word_view {
 							"<source src=\"".core::escapeHTML($audioMP3)."\" type=\"audio/mp3\" />" .
 							"</audio>" .
 							"<a href=\"javascript:void(0);\" onclick=\"audio_play('".urlencode($spelling)."')\" title=\"".core::escapeHTML($spelling)."\">" . 
-							"<img src=\"".core::escapeHTML(self::$config['webroot'])."style/images/listen.png\" border=0/></a>";
+							"<img src=\"".core::escapeHTML(self::$config['webroot'])."style/images/listen.png\" border=0 /></a>";
 			} else {
 				/* Link to upload page */
 				$audioURL = core::constructURL("audio", "view", array($spelling), "html");
-				$audio = "<a href=\"".core::escapeHTML($audioURL)."\" title=\"".core::escapeHTML($spelling)."\"><img src=\"".core::escapeHTML(self::$config['webroot'])."style/images/no-sound.png\" border=0/></a>";
+				$audio = "<a href=\"".core::escapeHTML($audioURL)."\" title=\"".core::escapeHTML($spelling)."\"><img src=\"".core::escapeHTML(self::$config['webroot'])."style/images/no-sound.png\" border=0 /></a>";
 			}
 		} else {
 			/* No audio link at all */
