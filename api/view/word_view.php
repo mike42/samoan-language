@@ -117,7 +117,8 @@ class word_view {
 				foreach($relatives[$item] as $relative) {
 					$inner[] = self::linkToWord($relative['word'], $show_audio, $bold, $link_to);
 				}
-				$ret[] = (strlen($relatives[$item][0][$key]) > 0? core::escapeHTML($relative[$key]) . " " : "") . implode(", ", $inner);
+				$del = ($item == "from") ? " + " : ", ";
+				$ret[] = (strlen($relatives[$item][0][$key]) > 0? core::escapeHTML($relative[$key]) . " " : "") . implode($del, $inner);
 			}
 		}
 		return $ret;
