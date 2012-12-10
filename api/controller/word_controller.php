@@ -243,6 +243,10 @@ class word_controller {
 	 * @param unknown_type $search
 	 */
 	public function search($search) {
+		if($search == 'suggest') {
+			return self::suggest();
+		}
+		
 		if($search == '' && !isset($_REQUEST['s'])) {
 			return array('redirect' => core::constructURL("page", "view", array("home"), "html"));
 		}
@@ -254,6 +258,19 @@ class word_controller {
 		$searchKey = spelling_model::calcSearchkey($search);
 		$words = word_model::getBySpellingSearchKey($searchKey);
 
+		return array('search' => $search, 'words' => $words, 'title' => 'Search Vocabulary');
+	}
+
+	/**
+	 * Search for a word using the beginning only. (should be invoked using search/suggest.json)
+	 */
+	private function suggest() {
+		if(!isset($_POST['term'])) {
+			return array('redirect' => core::constructURL("page", "view", array("home"), "html"));
+		}
+		$search = $_POST['term'];
+		$searchKey = spelling_model::calcSearchkey($search);
+		$words = word_model::getBySpellingSearchKey($searchKey, true);
 		return array('search' => $search, 'words' => $words, 'title' => 'Search Vocabulary');
 	}
 

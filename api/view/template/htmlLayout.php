@@ -1,19 +1,22 @@
 <!DOCTYPE html>
 <html dir="ltr" lang="en">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=UTF-8">
-<meta charset="UTF-8">
-
-<title><?php if(isset($data['titlebar'])) {
-			echo $data['titlebar'];
-		} elseif(isset($data['title'])) {
-			echo $data['title'] . " - " . "Samoan Language Resources";
-		} else {
-			echo "Samoan Language Resources";
-		} ?></title>
-<link rel="stylesheet" type="text/css" media="all"
-	href="<?php  echo self::$config['webroot']; ?>style/style.css">
-
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<meta charset="UTF-8">
+	
+	<title><?php if(isset($data['titlebar'])) {
+				echo $data['titlebar'];
+			} elseif(isset($data['title'])) {
+				echo $data['title'] . " - " . "Samoan Language Resources";
+			} else {
+				echo "Samoan Language Resources";
+			} ?></title>
+	<link rel="stylesheet" type="text/css" media="all"
+		href="<?php echo self::$config['webroot']; ?>style/style.css">
+	<link rel="stylesheet" type="text/css" media="all"
+		href="<?php echo self::$config['webroot']; ?>style/ui-lightness/jquery-ui-1.9.2.custom.min.css">
+	<script type="text/javascript" src="<?php echo self::$config['webroot']; ?>js/jquery-1.8.3.js"></script>
+	<script type="text/javascript" src="<?php echo self::$config['webroot']; ?>js/jquery-ui-1.9.2.custom.min.js"></script>
 </head>
 
 <body class="two-column content-sidebar">

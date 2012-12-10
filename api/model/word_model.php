@@ -210,11 +210,11 @@ class word_model {
 		return $word;
 	}
 	
-	public static function getBySpellingSearchKey($spelling_searchkey) {
+	public static function getBySpellingSearchKey($spelling_searchkey, $prefix_only = false) {
 		$query = "SELECT * FROM {TABLE}word " .
 				"JOIN {TABLE}spelling ON word_spelling = spelling_id " .
 				"LEFT JOIN {TABLE}listlang ON word_origin_lang = lang_id " .
-				"WHERE spelling_searchkey = '%s' ORDER BY spelling_sortkey, word_num;";
+				"WHERE spelling_searchkey ".($prefix_only ? " LIKE '%s%%'" : " ='%s'")." ORDER BY spelling_sortkey, word_num;";
 		if($res = database::retrieve($query, 0, $spelling_searchkey)) {
 			$ret = array();
 			while($row = database::get_row($res)) {

@@ -3,6 +3,7 @@ RewriteEngine On
 RewriteCond %{DOCUMENT_ROOT}/%{REQUEST_FILENAME} !-f
 RewriteCond %{DOCUMENT_ROOT}/%{REQUEST_FILENAME} !-d
 RewriteRule ^/?samoan/style(.*)$ /sm/public/style/$1 [PT,L,QSA]
+RewriteRule ^/?samoan/js(.*)$ /sm/public/js/$1 [PT,L,QSA]
 RewriteRule /?samoan$ /samoan/ [R,L]
 RewriteRule ^/?samoan/(.*)$ /sm/index.php?p=$1 [PT,L,QSA]
 
