@@ -214,7 +214,7 @@ class word_model {
 		$query = "SELECT * FROM {TABLE}word " .
 				"JOIN {TABLE}spelling ON word_spelling = spelling_id " .
 				"LEFT JOIN {TABLE}listlang ON word_origin_lang = lang_id " .
-				"WHERE spelling_searchkey ".($prefix_only ? " LIKE '%s%%'" : " ='%s'")." ORDER BY spelling_sortkey, word_num;";
+				"WHERE spelling_searchkey ".($prefix_only ? " LIKE '%s%%'" : " ='%s'")." ORDER BY spelling_sortkey, word_num LIMIT 0,50";
 		if($res = database::retrieve($query, 0, $spelling_searchkey)) {
 			$ret = array();
 			while($row = database::get_row($res)) {
@@ -310,6 +310,65 @@ class word_model {
 	public static function move($word_id, $spelling_id, $word_num) {
 		$query = "UPDATE {TABLE}word SET word_spelling =%d, word_num =%d WHERE word_id =%d;";
 		return database::retrieve($query, 0, (int)$spelling_id, (int)$word_num, (int)$word_id);
+	}
+	
+	/**
+	 * Return a list of word-relation types for use in a form etc.
+	 */
+	public static function listRelType() {
+		$query = "SELECT * FROM {TABLE}listreltype;";
+		if(!$res = database::retrieve($query, 0)) {
+			return false;
+		}
+		
+		$ret = array();
+		while($row = database::get_row($res)) {
+			$ret[] = database::row_from_template($row, self::$rel_template);
+		}
+		return $ret;
+	}
+	
+	/**
+	 * Return true if a given rel_type_id exists, false otherwise
+	 * 
+	 * @param string $type_id
+	 * @return boolean
+	 */
+	public function relTypeExists($rel_type_id) {
+		$query = "SELECT * FROM {TABLE}listreltype where rel_type_id ='%s';";
+		if(!$row = database::retrieve($query, 1, $rel_type_id)) {
+			return false;
+		}
+		return true;
+	}
+	
+	/**
+	 * Relate two words
+	 */
+	public function relateWords($wordrel_word_id, $wordrel_type, $wordrel_target) {
+		$query = "INSERT INTO {TABLE}wordrel (wordrel_id, wordrel_word_id, wordrel_type, " .
+					"wordrel_target) VALUES (NULL, %d, '%s', %d);";
+		return database::retrieve($query, 2, (int)$wordrel_word_id, $wordrel_type, (int)$wordrel_target);
+	}
+	
+	/**
+	 * Un-relate two words
+	 */
+	public function unRelateWords($wordrel_word_id, $wordrel_type, $wordrel_target) {
+		$query = "DELETE FROM {TABLE}wordrel WHERE wordrel_word_id =%d AND wordrel_type ='%s' AND wordrel_target =%d;";
+		return database::retrieve($query, 0, (int)$wordrel_word_id, $wordrel_type, (int)$wordrel_target);
+	}
+	
+	/**
+	 * Return true if two words are already related a certain way
+	 * @return boolean
+	 */
+	public function isRelated($wordrel_word_id, $wordrel_type, $wordrel_target) {
+		$query = "SELECT * FROM {TABLE}wordrel WHERE wordrel_word_id =%d AND wordrel_type ='%s' AND wordrel_target =%d;";
+		if(!$row = database::retrieve($query, 1, (int)$wordrel_word_id, $wordrel_type, (int)$wordrel_target)) {
+			return false;
+		}
+		return true;
 	}
 }
 ?>

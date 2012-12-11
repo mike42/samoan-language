@@ -78,20 +78,20 @@
 	
 	<table class="word-edit">
 		<caption>Relatives</caption>
-		<?php 
-			foreach($data['word']['rel_words'] as $type => $rel) {
-				echo "<tr>";
-				echo "<td>".$rel[0]['rel_type_long_label']."</td>";
-				/* Get words in this relation */
-				$words = array();
-				foreach($rel as $word) {
-					$words[] = self::linkToWord($word['word'], false, false, true);
-				}
-
-				echo "<td>".implode(", ", $words)."</td>";
-				echo "<td><a href=\"".core::constructURL('word', 'edit', array($data['id'], 'rel', $type), 'html') ."\">[edit]</a></td>";
-				echo "</tr>\n";
+		<?php
+		foreach($data['word']['rel_words'] as $type => $rel) {
+			echo "<tr>";
+			echo "<td>".$rel[0]['rel_type_long_label']."</td>";
+			/* Get words in this relation */
+			$words = array();
+			foreach($rel as $word) {
+				$words[] = self::linkToWord($word['word'], false, false, true);
 			}
+
+			echo "<td>".implode(", ", $words)."</td>";
+			echo "<td><a href=\"".core::constructURL('word', 'edit', array($data['id'], 'rel', $type), 'html') ."\">[edit]</a></td>";
+			echo "</tr>\n";
+		}
 		?>
 	
 		<tr>

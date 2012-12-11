@@ -64,7 +64,7 @@ class word_view {
 				foreach($word['rel_def'] as $key => $def) {
 					$dl[] = $def['def_en'];
 				}
-				$defs = implode(", ", $dl);
+				$defs = implode("; ", $dl);
 			}
 			$ret[] = array('name' => $id, 'label' => $defs);
 		}
@@ -202,6 +202,21 @@ class word_view {
 		return self::$roman_numerals[$count];
 	}
 	
+	/**
+	 * Return a combo box for viewing word-relation types (eg opposite, compound word, etc)
+	 */
+	public static function makeWordRelComboBox($list, $key = 'rel_type_id', $selected_id = '') {
+		$str = "<select name=\"".core::escapeHTML($key)."\">\n";
+		$str .= "<option value=\"\">(relation type)</option>";
+		foreach($list as $listreltype) {
+			$selected = ($selected_id == $listreltype[$key])? " selected=\"selected\"" : "";
+			$str .= "\t<option value=\"".core::escapeHTML($listreltype[$key])."\"$selected>" . 
+					core::escapeHTML($listreltype['rel_type_long_label']) . "</option>\n";
+		}
+	
+		$str .= "</select>\n";
+		return $str;
+	}
 }
 
 

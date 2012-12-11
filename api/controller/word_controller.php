@@ -191,6 +191,75 @@ class word_controller {
 			
 			case 'rel':
 				$wordInfo['form'] = "rel";
+				$fail = false;
+				
+				if(isset($_POST['addRel'])  && isset($_POST['rel_type_id']) && isset($_POST['word']) ) {
+					$word_str = $_POST['word'];
+					$rel_type_id = $_POST['rel_type_id'];
+
+					if(!$word_id = word_model::getWordIDfromStr($word_str)) {
+						/* Verify word exists */
+						$wordInfo['message'] = "Word does not exist";
+						$fail = true;
+					}
+						
+					if(!$fail && !word_model::reltypeExists($rel_type_id)) {
+						/* Verify rel_type_id exists */
+						$wordInfo['message'] = "Please select a type first.";
+						$fail = true;
+					}
+					
+					if(!$fail && word_model::isRelated($wordInfo['word']['word_id'], $rel_type_id, $word_id)) {
+						/* Verify words aren't already related */
+						$wordInfo['message'] = "Already listed.";
+						$fail = true;
+					}
+					
+					if(!$fail && (int)$wordInfo['word']['word_id'] == $word_id) {
+						/* Just because this would be silly */
+						$wordInfo['message'] = "Cannot relate word to itself.";
+						$fail = true;
+					}
+							
+					if(!$fail) {
+						/* Ok. relate the words now */
+						word_model::relateWords($wordInfo['word']['word_id'], $rel_type_id, $word_id);
+						$url = core::constructURL("word", "edit", array($wordInfo['id'], 'rel', $rel_type_id), "html");
+						core::redirect($url);
+					}
+
+				} else if(isset($_POST['delRel']) && isset($_POST['rel_type_id'])  && isset($_POST['word_id'])) {
+					$word_id = $_POST['word_id'];
+					$rel_type_id = $_POST['rel_type_id'];
+					
+					if(!$word = word_model::getByID($word_id)) {
+						/* Check word exists */
+						$wordInfo['message'] = "Delete failed (word not found)";
+						$fail = true;	
+					}
+					
+					if(!$fail && !word_model::reltypeExists($rel_type_id)) {
+						/* Verify rel_type_id exists */
+						$wordInfo['message'] = "There was a problem deleting (reltype not found), please try again.";
+						$fail = true;
+					}
+
+					if(!$fail && !word_model::isRelated($wordInfo['word']['word_id'], $rel_type_id, $word_id)) {
+						/* Verify words aren't already related */
+						$wordInfo['message'] = "Delete failed (word not related).";
+						$fail = true;
+					}
+
+					if(!$fail) {
+						word_model::unRelateWords($wordInfo['word']['word_id'], $rel_type_id, $word_id);
+						$url = core::constructURL("word", "edit", array($wordInfo['id'], 'rel', $rel_type_id), "html");
+						core::redirect($url);
+					}
+				}
+				
+				$wordInfo['rel_type_id'] = $target;
+				$wordInfo['listreltype'] = word_model::listRelType();
+
 				break;
 				
 			case '':
