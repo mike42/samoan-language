@@ -268,6 +268,7 @@ class word_controller {
 		if(!isset($_POST['term'])) {
 			return array('redirect' => core::constructURL("page", "view", array("home"), "html"));
 		}
+
 		$search = $_POST['term'];
 		$searchKey = spelling_model::calcSearchkey($search);
 		$words = word_model::getBySpellingSearchKey($searchKey, true);

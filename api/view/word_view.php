@@ -49,6 +49,28 @@ class word_view {
 		self::useTemplate("search", $data);
 	}
 	
+	public static function search_json($data) {
+		header("content-type: application/json");
+		/* Construct heavily simplified key->val data structure for autocomplete use */
+		$ret = array();
+		foreach($data['words'] as $word) {
+			$id = word_model::getIdStrBySpellingNum($word['rel_spelling']['spelling_t_style'], $word['word_num']);
+			$defs = '';
+			if($word['rel_target']) {
+				$target_id = word_model::getIdStrBySpellingNum($word['rel_target']['rel_spelling']['spelling_t_style'], $word['rel_target']['word_num']);
+				$defs = "see $target_id";
+			} else {
+				$dl = array();
+				foreach($word['rel_def'] as $key => $def) {
+					$dl[] = $def['def_en'];
+				}
+				$defs = implode(", ", $dl);
+			}
+			$ret[] = array('name' => $id, 'label' => $defs);
+		}
+		echo json_encode(array("words" => $ret));
+	}
+	
 	public static function error_html($data) {
 		if($data['error'] == "404") {
 			header("HTTP/1.0 404 Not Found");
@@ -89,7 +111,7 @@ class word_view {
 				$count = 0;
 				/* Loop through definitions */
 				foreach($word['rel_def'] as $def) {
-					$str .= "<dd><small>" . strtoupper(self::$roman_numerals[$count]) . "</small>. " .def_view::toHTML($def) . "</dd>";
+					$str .= "<dd><small>" . strtoupper(self::roman_numeral($count)) . "</small>. " .def_view::toHTML($def) . "</dd>";
 					$count++;
 				}
 				$str .= "</dl>";
@@ -175,6 +197,11 @@ class word_view {
 		}
 		return implode($sep, $outp);
 	}
+	
+	static function roman_numeral($count) {
+		return self::$roman_numerals[$count];
+	}
+	
 }
 
 
