@@ -290,16 +290,30 @@ class word_model {
 	 * Set word origin for a given word
 	 */
 	public static function setOrigin($word) {
-		$query = "UPDATE {TABLE}word SET word_origin_lang ='%s', word_origin_word ='%s' WHERE word_id =%d;";
-		return database::retrieve($query, 0, $word['word_origin_lang'], $word['word_origin_word'], (int)$word['word_id']);
+		if($word['word_origin_lang'] == '') {
+			/* Clear origin */
+			$query = "UPDATE {TABLE}word SET word_origin_lang =NULL, word_origin_word ='' WHERE word_id =%d;";
+			return database::retrieve($query, 0, (int)$word['word_id']);
+		} else {
+			/* Set origin */
+			$query = "UPDATE {TABLE}word SET word_origin_lang ='%s', word_origin_word ='%s' WHERE word_id =%d;";
+			return database::retrieve($query, 0, $word['word_origin_lang'], $word['word_origin_word'], (int)$word['word_id']);
+		}
 	}
 	
 	/**
 	 * Set redirect destination for a given word
 	 */
 	public static function setRedirect($word) {
-		$query = "UPDATE {TABLE}word SET word_redirect_to =%d WHERE word_id =%d;";
-		return database::retrieve($query, 0, (int)$word['word_redirect_to'], (int)$word['word_id']);
+		if((int)$word['word_redirect_to'] == 0) {
+			/* Clear redirect */
+			$query = "UPDATE {TABLE}word SET word_redirect_to =NULL WHERE word_id =%d;";
+			return database::retrieve($query, 0, (int)$word['word_id']);
+		} else {
+			/* Set redirect */
+			$query = "UPDATE {TABLE}word SET word_redirect_to =%d WHERE word_id =%d;";
+			return database::retrieve($query, 0, (int)$word['word_redirect_to'], (int)$word['word_id']);
+		}
 	}
 
 	/**

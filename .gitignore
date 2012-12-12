@@ -8,3 +8,6 @@ api/config.php
 
 # Gedit files
 *~
+
+# Anything in data/
+data/
