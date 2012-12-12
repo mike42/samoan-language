@@ -3,7 +3,7 @@ class word_controller {
 	public function init() {
 		core::loadClass('word_model');
 		core::loadClass('def_model');
-		core::loadClass('audio_model');
+		core::loadClass('spellingaudio_model');
 	}
 
 	/**
@@ -43,15 +43,21 @@ class word_controller {
 		}
 		
 		if(isset($_POST['confirm'])) {
-			/* Make sure we have the spelling in the database */
-			if(!$spelling = spelling_model::getBySpelling($spelling_t_style)) {
-				$spelling = spelling_model::add($spelling_t_style);
-			}
-			$word_num = self::get_next_wordnum($spelling_t_style);
+			/* Ensure there are no numbers at the end of the name */
+			$newSpelling = word_model::getSpellingAndNumberFromStr($_POST['spelling_t_style']);
+			$spelling_t_style = trim($newSpelling['spelling']);
 			
-			/* Go ahead and create the word page */
-			$word = word_model::add($spelling['spelling_id'], $word_num);
-			core::redirect(core::constructURL("word", "edit", array(word_model::getIdStrBySpellingNum($spelling_t_style, $word_num)), "html"));
+			if($spelling_t_style != '') {
+				/* Make sure we have the spelling in the database */
+				if(!$spelling = spelling_model::getBySpelling($spelling_t_style)) {
+					$spelling = spelling_model::add($spelling_t_style);
+				}
+				$word_num = self::get_next_wordnum($spelling_t_style);
+				
+				/* Go ahead and create the word page */
+				$word = word_model::add($spelling['spelling_id'], $word_num);
+				core::redirect(core::constructURL("word", "edit", array(word_model::getIdStrBySpellingNum($spelling_t_style, $word_num)), "html"));
+			}
 		}
 		
 		return array('title' => "Create new word", 'spelling_t_style' => $spelling_t_style);
@@ -141,21 +147,24 @@ class word_controller {
 				$wordInfo['form'] = "move";
 				if(isset($_POST['spelling_t_style'])) {
 					$word_id = $wordInfo['word']['word_id'];
-					$spelling_t_style = $_POST['spelling_t_style'];
-					if($wordInfo['word']['rel_spelling']['spelling_t_style'] != $spelling_t_style) {
-						/* Make sure we have the spelling in the database */
-						if(!$spelling = spelling_model::getBySpelling($spelling_t_style)) {
-							$spelling = spelling_model::add($spelling_t_style);
+					$newSpelling = word_model::getSpellingAndNumberFromStr($_POST['spelling_t_style']);
+					$spelling_t_style = trim($newSpelling['spelling']);
+					if($spelling_t_style != '') {
+						if($wordInfo['word']['rel_spelling']['spelling_t_style'] != $spelling_t_style) {
+							/* Make sure we have the spelling in the database */
+							if(!$spelling = spelling_model::getBySpelling($spelling_t_style)) {
+								$spelling = spelling_model::add($spelling_t_style);
+							}
+							/* Get the next number and move */
+							$word_num = self::get_next_wordnum($spelling_t_style);
+							$spelling_id = $spelling['spelling_id'];
+							word_model::move($word_id, $spelling_id, $word_num);
+							/* Edit page has changed now */
+							$id = word_model::getIdStrBySpellingNum($spelling_t_style, $word_num);
+							$editPage = core::constructURL("word", "edit", array($id), "html");
 						}
-						/* Get the next number and move */
-						$word_num = self::get_next_wordnum($spelling_t_style);
-						$spelling_id = $spelling['spelling_id'];
-						word_model::move($word_id, $spelling_id, $word_num);
-						/* Edit page has changed now */
-						$id = word_model::getIdStrBySpellingNum($spelling_t_style, $word_num);
-						$editPage = core::constructURL("word", "edit", array($id), "html");
+						core::redirect($editPage);
 					}
-					core::redirect($editPage);
 				}
 				break;
 				
