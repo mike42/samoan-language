@@ -3,8 +3,9 @@ class word_controller {
 	public function init() {
 		core::loadClass('word_model');
 		core::loadClass('def_model');
+		core::loadClass('audio_model');
 	}
-	
+
 	/**
 	 * Show a single word
 	 * 
@@ -12,7 +13,13 @@ class word_controller {
 	 */
 	public function view($id) {
 		if($id == '') {
-			return array('title' => 'Samoan Language Vocabulary', 'view' => 'default');
+			$counts = array(
+				'word' => word_model::countWords(),
+				'example' => example_model::countExamples(),
+				'audio' => audio_model::countAudio());
+			return array(	'title'  => 'Samoan Language Vocabulary',
+							'view'   => 'default',
+							'counts' => $counts);
 		}
 		
 		if($id = word_model::getWordIDfromStr($id)) {
@@ -23,7 +30,7 @@ class word_controller {
 		}
 		return array('error' => '404');
 	}
-	
+
 	public function create($spelling_t_style = '') {
 		$permissions = core::getPermissions('word');
 		if(!$permissions['create']) {

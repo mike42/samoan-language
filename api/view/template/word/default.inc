@@ -1,7 +1,7 @@
 <p>
-	This is a non-exhaustive dictionary of Samoan words. I am collecting
-	examples, recordings, and English translations for each word. It
-	currently contains <b>... entries</b>, and <b>... recordings</b>.
+	This is a non-exhaustive vocabulary of Samoan words. This section
+	contains examples, recordings, and English translations for many of the words which appear on the site.
+	It currently contains <b><?php echo (int)$data['counts']['word']; ?> entries</b> with <b><?php echo (int)$data['counts']['audio']; ?> recordings</b> and <b><?php echo (int)$data['counts']['example']; ?> examples</b>.
 </p>
 <p>Browse alphabetically:</p>
 <ul>

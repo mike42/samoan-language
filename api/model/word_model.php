@@ -370,5 +370,16 @@ class word_model {
 		}
 		return true;
 	}
+	
+	/**
+	 * @return number Total number of words currently stored.
+	 */
+	public static function countWords() {
+		$query = "SELECT COUNT(word_id) FROM  {TABLE}word;";
+		if($row = database::retrieve($query, 1)) {
+			return (int)$row[0];
+		}
+		return 0;
+	}
 }
 ?>

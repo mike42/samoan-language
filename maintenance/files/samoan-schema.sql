@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Dec 09, 2012 at 07:23 PM
+-- Generation Time: Dec 12, 2012 at 06:32 PM
 -- Server version: 5.5.28
 -- PHP Version: 5.4.4-9
 
@@ -29,9 +29,9 @@ SET time_zone = "+00:00";
 CREATE TABLE IF NOT EXISTS `sm_audio` (
   `audio_id` int(11) NOT NULL AUTO_INCREMENT,
   `audio_spelling_id` int(11) NOT NULL DEFAULT '0',
-  `audio_example` int(11) NOT NULL DEFAULT '0',
+  `audio_example_id` int(11) NOT NULL DEFAULT '0',
   `audio_uploaded` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `audio_k_style` int(11) NOT NULL DEFAULT '0',
+  `audio_k_style` int(1) NOT NULL DEFAULT '0',
   `audio_speaker` varchar(256) NOT NULL,
   PRIMARY KEY (`audio_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=123 ;
@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS `sm_def` (
   `def_type` int(11) NOT NULL,
   `def_en` varchar(256) NOT NULL COMMENT 'English definition',
   PRIMARY KEY (`def_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='Each definition of a word goes here. Eg. moe noun, moe verb.' AUTO_INCREMENT=1398 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='Each definition of a word goes here. Eg. moe noun, moe verb.' AUTO_INCREMENT=1400 ;
 
 -- --------------------------------------------------------
 
@@ -176,7 +176,7 @@ CREATE TABLE IF NOT EXISTS `sm_spelling` (
   `spelling_sortkey_sm` varchar(256) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`spelling_id`),
   UNIQUE KEY `spelling_t_style` (`spelling_t_style`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='Each word with unique pronunciation' AUTO_INCREMENT=1367 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='Each word with unique pronunciation' AUTO_INCREMENT=1369 ;
 
 -- --------------------------------------------------------
 
@@ -214,7 +214,7 @@ CREATE TABLE IF NOT EXISTS `sm_word` (
   `word_redirect` varchar(256) NOT NULL COMMENT 'Not-empty for a "see ..." word',
   `word_redirect_to` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`word_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1365 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1368 ;
 
 -- --------------------------------------------------------
 
@@ -228,7 +228,7 @@ CREATE TABLE IF NOT EXISTS `sm_wordrel` (
   `wordrel_type` varchar(256) NOT NULL,
   `wordrel_target` int(11) NOT NULL,
   PRIMARY KEY (`wordrel_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1054 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1065 ;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
