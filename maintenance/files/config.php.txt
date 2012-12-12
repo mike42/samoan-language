@@ -13,6 +13,8 @@ $config['database']['host'] = 'localhost';
 $config['database']['name'] = '';
 $config['database']['prefix'] = 'sm_';
 
+$config['audio']['extern'] = isset($_SERVER['HTTP_HOST'])? 'http://'.$_SERVER['HTTP_HOST'].'/sm/data/audio/' : '';
+
 /* Permissions */
 $config['session'] = array(
 	'anon' => array(

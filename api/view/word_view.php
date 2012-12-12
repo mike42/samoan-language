@@ -165,17 +165,18 @@ class word_view {
 		if($show_audio) {
 			if($word['rel_spelling']['spelling_t_style_recorded']) {
 				/* Make link to audio */
-				$audioOGG = core::constructURL("audio", "listen", array($spelling), "ogg");
-				$audioMP3 = core::constructURL("audio", "listen", array($spelling), "mp3");
-				$audio = "<audio id=\"".urlencode($word['rel_spelling']['spelling_t_style'])."\" preload=\"none\">" .
+				$audioOGG = core::constructURL("audio", "listen", array('spelling', $spelling), "ogg");
+				$audioMP3 = core::constructURL("audio", "listen", array('spelling', $spelling), "mp3");
+				$id = "word".(int)$word['word_id']."-sp".(int)($word['rel_spelling']['spelling_id']);
+				$audio = "<audio id=\"$id\" preload=\"none\">" .
 							"<source src=\"".core::escapeHTML($audioOGG)."\" type=\"audio/ogg\" />" .
 							"<source src=\"".core::escapeHTML($audioMP3)."\" type=\"audio/mp3\" />" .
 							"</audio>" .
-							"<a href=\"javascript:void(0);\" onclick=\"audio_play('".urlencode($spelling)."')\" title=\"".core::escapeHTML($spelling)."\">" . 
+							"<a href=\"javascript:void(0);\" onclick=\"audio_play('$id')\" title=\"".core::escapeHTML($spelling)."\">" . 
 							"<img src=\"".core::escapeHTML(self::$config['webroot'])."style/images/listen.png\" border=0 /></a>";
 			} else {
 				/* Link to upload page */
-				$audioURL = core::constructURL("audio", "view", array($spelling), "html");
+				$audioURL = core::constructURL("audio", "view", array('spelling', $spelling), "html");
 				$audio = "<a href=\"".core::escapeHTML($audioURL)."\" title=\"".core::escapeHTML($spelling)."\"><img src=\"".core::escapeHTML(self::$config['webroot'])."style/images/no-sound.png\" border=0 /></a>";
 			}
 		} else {

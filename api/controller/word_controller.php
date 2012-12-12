@@ -16,7 +16,7 @@ class word_controller {
 			$counts = array(
 				'word' => word_model::countWords(),
 				'example' => example_model::countExamples(),
-				'audio' => audio_model::countAudio());
+				'audio' => spellingaudio_model::countAudio());
 			return array(	'title'  => 'Samoan Language Vocabulary',
 							'view'   => 'default',
 							'counts' => $counts);
