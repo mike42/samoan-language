@@ -7,12 +7,14 @@ class database {
 		/* Get configuration for this class and connect to the database */
 		database::$conf = core::getConfig(__CLASS__);
 		if(!database::connect()) {
-			core::fizzle("Failed to connect to database.");
+			core::fizzle("Failed to connect to database: " . mysql_error());
 		}
 	}
 	
 	private static function connect() {
-		database::$conn = mysql_connect(database::$conf['host'], database::$conf['user'], database::$conf['password']);
+		if(!database::$conn = mysql_connect(database::$conf['host'], database::$conf['user'], database::$conf['password'])) {
+			return false;
+		}
 		return mysql_select_db(database::$conf['name']);
 	}
 	
