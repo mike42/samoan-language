@@ -9,7 +9,10 @@
 		 		<?php echo (int)$data['word']['word_id']; ?>
 		 	</td>
 		 	<td>
-		 		<a href="<?php echo core::constructURL('word', 'edit', array($data['id'], 'delete'), 'html'); ?>" style="color:#f00">[delete]</a>
+				<?if($permissions['delete']) {
+					$dest = core::constructURL('word', 'edit', array($data['id'], 'delete'), 'html');
+		 			echo "<a href=\"$dest\" style=\"color:#f00\">[delete]</a>";
+				  }?>
 		 	</td>
 		</tr>
 		<tr>

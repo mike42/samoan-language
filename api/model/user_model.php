@@ -46,8 +46,9 @@ class user_model {
 	 * @param string $user_name		User's login name
 	 * @param string $user_email	Email address of this user
 	 * @param string $password		Password to use (will be hashed and salted)
+	 * @param string $role 			New role for user (probably 'user' or 'admin')
 	 */
-	public static function insert($user_name, $user_email, $password) {
+	public static function insert($user_name, $user_email, $password, $role = 'user') {
 		if($user = self::getByNameOrEmail($user_name) || $user = self::getByNameOrEmail($user_email)) {
 			/* Skip if a user already has this name or email */
 			return false;
@@ -57,6 +58,12 @@ class user_model {
 			/* Also skip if email is bad or username looks email-ish */
 			return false;
 		}
+
+		$config = core::getConfig('session');
+		if(!isset($config[$role])) {
+			/* Invalid role */
+			return false;
+		}
 		
 		/* Fill in user details */
 		$user = self::$template;
@@ -64,11 +71,12 @@ class user_model {
 		$user['user_email'] = $user_email;
 		$user['user_salt'] = self::gen_salt();
 		$user['user_pass'] = self::gen_password_encoded($password, $user['user_salt']);
+		$user['user_role'] = $role;
 
 		/* Insert */
 		$sql = "INSERT INTO {TABLE}user (user_id, user_name, user_pass, user_salt, user_token, user_email, user_email_confirmed, user_created, user_role) " .
-				"VALUES (NULL , '%s', '%s', '%s', '', '%s', '0', CURRENT_TIMESTAMP , 'user');";
-		return database::retrieve($sql, 2, $user['user_name'], $user['user_pass'], $user['user_salt'], $user['user_email']);
+				"VALUES (NULL , '%s', '%s', '%s', '', '%s', '0', CURRENT_TIMESTAMP , '%s');";
+		return database::retrieve($sql, 2, $user['user_name'], $user['user_pass'], $user['user_salt'], $user['user_email'], $user['user_role']);
 	}
 
 	/**
