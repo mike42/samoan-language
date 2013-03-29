@@ -15,9 +15,9 @@ class listtype_model {
 	/**
 	 * Return a list of all word types in the database
 	 */
-	public static function listAll() {
-		$query = "SELECT * FROM {TABLE}listtype ORDER BY type_name;";
-		if(!$res = database::retrieve($query, 0)) {
+	public static function listAll($tags = false) {
+		$query = "SELECT * FROM {TABLE}listtype WHERE type_istag =%d ORDER BY type_name;";
+		if(!$res = database::retrieve($query, 0, $tags ? '1' : '0')) {
 			return false;
 		}
 		
