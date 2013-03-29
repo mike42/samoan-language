@@ -1209,8 +1209,12 @@ h1,h2,h3,h4,h5,h6 {
 	margin-bottom: 1em;
 }
 
+#page-editbox, .editform table {
+	width: 100%;
+}
+
 #page-editbox {
-	width: 610px;
+	resize: none;
 }
 
 .indent {
