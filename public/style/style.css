@@ -1195,3 +1195,28 @@ img#wpstats {
 .word-edit caption {
 	font-weight: bold;
 }
+
+h1,h2,h3,h4,h5,h6 {
+	font-family: sans-serif; 
+}
+
+#content p,#content li
+#content blockquote, #content dl {
+	margin: 0 0 1em 0;
+}
+
+#content table {
+	margin-bottom: 1em;
+}
+
+#page-editbox {
+	width: 610px;
+}
+
+.indent {
+	-webkit-margin-start: 40px;
+}
+
+a.new {
+	color: #BA0000;
+}

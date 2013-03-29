@@ -1,6 +1,6 @@
 <script type="text/javascript">
 function delWord() {
-	if(confirm("foobar")) {
+	if(confirm("Delete this definition?")) {
 		document.getElementById("action").value="delete";
 		document.getElementById("def-form").submit();
 	}
@@ -21,7 +21,7 @@ function delWord() {
 		<tr>
 			<th>English meaning</th>
 			<td>
-				<textarea cols="40" rows="2" name="def_en" style="resize: none;"><?php echo core::escapeHTML($data['def']['def_en']); ?></textarea>
+				<textarea rows="2" cols="70" name="def_en" style="resize: none;"><?php echo core::escapeHTML($data['def']['def_en']); ?></textarea>
 			</td>
 		</tr>
 		<tr>

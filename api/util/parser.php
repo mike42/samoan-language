@@ -22,9 +22,15 @@ class SmParserBackend extends DefaultParserBackend {
 				if($wlpart['number'] != 0) {
 					$newinfo['caption'] .= "<sub><small>".(int)$wlpart['number']."</small></sub>";
 				}
-				if(word_model::getIdStrBySpellingNum($wlpart['spelling'], $wlpart['number']) === false) {
-					$info['exists'] = false;
-				}
+			}
+
+			/* Figure out ID string and look it up */
+			$idstr = word_model::getIdStrBySpellingNum($wlpart['spelling'], $wlpart['number']);
+			if(word_model::getWordIDfromStr($idstr) === false) {
+				$newinfo['exists'] = false;
+				$newinfo['title'] = $idstr . " (definition not known)";
+			} else {
+				$newinfo['title'] = $idstr;
 			}
 			return $newinfo;
 		} else {

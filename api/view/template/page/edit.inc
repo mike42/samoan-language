@@ -7,7 +7,7 @@
 			</tr>
 			<tr>
 				<td colspan=2>
-					<textarea name="revision_text" cols=65 rows=20><?php echo core::escapeHTML($data['page']['page_rel_revision']['revision_text']); ?></textarea>
+					<textarea id="page-editbox" name="revision_text" cols=65 rows=20><?php echo core::escapeHTML($data['page']['page_rel_revision']['revision_text']); ?></textarea>
 				</td>
 			</tr>
 			<tr>

@@ -34,9 +34,21 @@
 						href="<?php  echo self::$config['webroot']; ?>">Home</a></li>
 					<li class="page_item"><a href="<?php  echo self::$config['webroot']; ?>guide">Language guide</a>
 						<ul class="children">
+							<li class="page_item"><a href="<?php  echo self::$config['webroot']; ?>pronounce">Pronunciation</a></li>
+							<li class="page_item"><a href="<?php  echo self::$config['webroot']; ?>grammar">Grammar</a>
+								<ul class="children">
+									<li><a href="<?php echo self::$config['webroot']; ?>02-describing">Describing Objects</a></li>
+									<li><a href="<?php echo self::$config['webroot']; ?>03-verbs">Using Verbs</a></li>
+									<li><a href="<?php echo self::$config['webroot']; ?>04-questions">Questions</a></li>
+									<li><a href="<?php echo self::$config['webroot']; ?>05-numbers-time">Numbers and Time</a></li>
+									<li><a href="<?php echo self::$config['webroot']; ?>06-advanced">Advanced</a></li>
+									<li><a href="<?php echo self::$config['webroot']; ?>07-respect">Respect</a></li>
+								</ul>
+							</li>
 							<li class="page_item"><a href="<?php  echo self::$config['webroot']; ?>phrases">Phrases</a></li>
-							<li class="page_item"><a href="<?php  echo self::$config['webroot']; ?>grammar">Grammar</a></li>
-							<li class="page_item"><a href="<?php  echo self::$config['webroot']; ?>word/">Vocabulary</a></li>
+							<li class="page_item"><a href="<?php  echo self::$config['webroot']; ?>word/">Vocabulary</a>
+</li>
+
 						</ul></li>
 					<li class="page_item"><a href="<?php  echo self::$config['webroot']; ?>about">About</a></li>
 				</ul>
@@ -83,8 +95,9 @@
 								<li><a href="<?php echo self::$config['webroot']; ?>home">Home</a></li>
 								<li><a href="<?php echo self::$config['webroot']; ?>guide">Language guide</a>
 									<ul>
-										<li class="page_item"><a href="<?php  echo self::$config['webroot']; ?>phrases">Phrases</a></li>
+										<li class="page_item"><a href="<?php  echo self::$config['webroot']; ?>pronounce">Pronunciation</a></li>
 										<li class="page_item"><a href="<?php  echo self::$config['webroot']; ?>grammar">Grammar</a></li>
+										<li class="page_item"><a href="<?php  echo self::$config['webroot']; ?>phrases">Phrases</a></li>
 										<li class="page_item"><a href="<?php  echo self::$config['webroot']; ?>word/">Vocabulary</a></li>
 									</ul>
 								</li>

@@ -108,7 +108,7 @@ class core {
 	}
 	
 	public static function escapeHTML($inp) {
-		return htmlentities($inp, null,'UTF-8');	
+		return htmlspecialchars($inp, ENT_COMPAT | ENT_HTML401, 'UTF-8');	
 	}
 	
 	public static function getAlphabet() {

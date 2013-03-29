@@ -11,8 +11,8 @@ class word_controller {
 	 * 
 	 * @param string $id
 	 */
-	public function view($id) {
-		if($id == '') {
+	public function view($idstr) {
+		if($idstr == '') {
 			$counts = array(
 				'word' => word_model::countWords(),
 				'example' => example_model::countExamples(),
@@ -22,13 +22,13 @@ class word_controller {
 							'counts' => $counts);
 		}
 		
-		if($id = word_model::getWordIDfromStr($id)) {
+		if($id = word_model::getWordIDfromStr($idstr)) {
 			if($word = word_model::getByID($id)) {
 				$id = $word['rel_spelling']['spelling_t_style'].(($word['word_num'] != 0)? (int)$word['word_num'] : "");
 				return array('title' => 'Samoan Language Vocabulary', 'word' => $word, 'id' => $id);
 			}
 		}
-		return array('error' => '404');
+		return array('error' => '404', 'word' => $idstr);
 	}
 
 	public function create($spelling_t_style = '') {
