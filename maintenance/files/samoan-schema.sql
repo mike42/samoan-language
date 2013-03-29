@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Dec 12, 2012 at 08:36 PM
+-- Generation Time: Mar 30, 2013 at 10:05 AM
 -- Server version: 5.5.28
--- PHP Version: 5.4.4-9
+-- PHP Version: 5.4.4-14
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -17,7 +17,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Database: `bitrevis_sm`
+-- Database: `samoan`
 --
 
 -- --------------------------------------------------------
@@ -34,7 +34,19 @@ CREATE TABLE IF NOT EXISTS `sm_def` (
   PRIMARY KEY (`def_id`),
   KEY `def_word_id` (`def_word_id`),
   KEY `def_type` (`def_type`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Each definition of a word goes here. Eg. moe noun, moe verb.' AUTO_INCREMENT=1401 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Each definition of a word goes here. Eg. moe noun, moe verb.' AUTO_INCREMENT=1409 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sm_def_tag`
+--
+
+CREATE TABLE IF NOT EXISTS `sm_def_tag` (
+  `def_id` int(11) NOT NULL,
+  `type_id` int(11) NOT NULL,
+  PRIMARY KEY (`def_id`,`type_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Tags definitions (for ''polite'', ''vulgar'', etc)';
 
 -- --------------------------------------------------------
 
@@ -54,7 +66,7 @@ CREATE TABLE IF NOT EXISTS `sm_example` (
   `example_uploaded` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `example_audio_tag` text NOT NULL,
   PRIMARY KEY (`example_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=316 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=325 ;
 
 -- --------------------------------------------------------
 
@@ -123,8 +135,9 @@ CREATE TABLE IF NOT EXISTS `sm_listtype` (
   `type_name` varchar(256) NOT NULL COMMENT 'Full name of word type',
   `type_title` varchar(255) NOT NULL,
   `type_short` varchar(256) NOT NULL,
+  `type_istag` int(1) NOT NULL,
   PRIMARY KEY (`type_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=21 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=23 ;
 
 -- --------------------------------------------------------
 
@@ -139,7 +152,7 @@ CREATE TABLE IF NOT EXISTS `sm_page` (
   `page_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`page_id`),
   UNIQUE KEY `page_short` (`page_short`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=12 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=21 ;
 
 -- --------------------------------------------------------
 
@@ -159,7 +172,7 @@ CREATE TABLE IF NOT EXISTS `sm_revision` (
   `revision_parse_valid` int(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`revision_id`),
   KEY `revision_page_id` (`revision_page_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=248 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=460 ;
 
 -- --------------------------------------------------------
 
@@ -179,7 +192,7 @@ CREATE TABLE IF NOT EXISTS `sm_spelling` (
   `spelling_sortkey_sm` varchar(127) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`spelling_id`),
   UNIQUE KEY `spelling_t_style` (`spelling_t_style`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Each word with unique pronunciation' AUTO_INCREMENT=1371 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Each word with unique pronunciation' AUTO_INCREMENT=1380 ;
 
 -- --------------------------------------------------------
 
@@ -236,7 +249,7 @@ CREATE TABLE IF NOT EXISTS `sm_word` (
   KEY `word_spelling` (`word_spelling`),
   KEY `word_origin_lang` (`word_origin_lang`),
   KEY `word_redirect_to` (`word_redirect_to`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1373 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1379 ;
 
 -- --------------------------------------------------------
 
@@ -250,7 +263,7 @@ CREATE TABLE IF NOT EXISTS `sm_wordrel` (
   `wordrel_type` varchar(256) NOT NULL,
   `wordrel_target` int(11) NOT NULL,
   PRIMARY KEY (`wordrel_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1066 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1076 ;
 
 --
 -- Constraints for dumped tables
