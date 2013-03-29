@@ -70,10 +70,23 @@ class example_model {
 	 * Create a new example and return the ID
 	 */
 	public static function insert($example_sm, $example_en) {
-		// TODO: implement insert
-		die("insert not yet implemented in example_model.");
+		$str = self::autobracket($example_sm);
+		$query = "INSERT INTO {TABLE}example (example_id, example_str, example_t_style, example_k_style, example_t_style_recorded, example_k_style_recorded, example_en, example_en_lit, example_uploaded, example_audio_tag) VALUES (NULL ,  '%s',  '%s',  '%s',  '%d',  '%d', '%s', '%s', CURRENT_TIMESTAMP, '%s');";
+		$id = database::retrieve($query, 2, $str, $example_sm, '', '0', '0', $example_en, '', '');
+		return $id;
 	}
 	
+	/* Wrap each word in single-brackets */
+	private static function autobracket($str) {
+		$a = explode(" ", $str);
+		$i = 0;
+		foreach($a as $b) {
+			$a[$i] = "[".$a[$i]."]";
+			$i++;
+		}
+		return join(" ", $a);
+	}
+
 	/**
 	 * @return number Total number of examples currently stored.
 	 */

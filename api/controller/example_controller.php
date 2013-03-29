@@ -7,6 +7,7 @@ class example_controller {
 	
 	public static function view($example_id) {
 		if($example_id == '') {
+			core::redirect(core::constructURL('example', 'search', array(''), 'html'));
 			return array();
 		} elseif($example = example_model::getById($example_id)) {
 			return array('example' => $example);
@@ -16,18 +17,26 @@ class example_controller {
 	}
 	
 	public static function search($word) {
+		if(isset($_GET['s']) && $word == '') {
+			$word = $_GET['s'];
+		}
+		$word = trim($word);
 		$part = word_model::getSpellingAndNumberFromStr($word);
 		$example_list = example_model::listByWordMention($part['spelling'], $part['number']);
-		return array('examples' => $example_list);
+		return array('search' => $word, 'examples' => $example_list);
 	}
 	
 	public static function create() {
 		$permissions = core::getPermissions('example');
-		if($permissions['create'] && isset($_REQUEST['example_en']) && isset($_REQUEST['example_str'])) {
+		if(!$permissions['create']) {
+			return array('error' => '403');
+		}
+
+		if(isset($_REQUEST['example_en']) && isset($_REQUEST['example_str'])) {
 			$example_id = example_model::insert($_REQUEST['example_str'], $_REQUEST['example_en']);
 			core::redirect(core::constructURL('example', 'edit', array($example_id), 'html'));
 		} else {
-			return array('error' => '403');
+			return array();
 		}
 	}
 	

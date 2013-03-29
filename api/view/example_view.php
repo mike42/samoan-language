@@ -7,24 +7,32 @@ class example_view {
 	}
 	
 	public static function view_html($data) {
+		$data['title'] = "Language examples";
 		self::useTemplate('view', $data);
 	}
 	
 	public static function edit_html($data) {
+		$data['title'] = "Editing example";
 		self::useTemplate('edit', $data);
+	}
+
+	public static function create_html($data) {
+		$data['title'] = "Add example";
+		self::useTemplate('create', $data);
 	}
 	
 	public static function search_html($data) {
+		$data['title'] = "Search examples";
 		self::useTemplate('search', $data);
 	}
 	
 	public static function error_html($data) {
 		if($data['error'] == "404") {
 			header("HTTP/1.0 404 Not Found");
-			$data['title'] = "Error &mdash; Example not found";
+			$data['title'] = "Error - Example not found";
 		} else if($data['error'] == "403") {
 			header("HTTP/1.0 403 Forbidden");
-			$data['title'] = "Error &mdash; Forbidden";
+			$data['title'] = "Error - Forbidden";
 				
 		}
 		self::useTemplate('error', $data);
