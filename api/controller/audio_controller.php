@@ -1,19 +1,38 @@
 <?php
 class audio_controller {
 	static $audioDir;
-	
+
+
 	function init() {
 		core::loadClass("spellingaudio_model");
 		core::loadClass("spelling_model");
 	}
 	
+	static function view($type = false, $id = false) {
+		switch($type) {
+			case 'spelling':
+				if(!$spelling = spelling_model::getBySpelling($id)) {
+					/* Spelling does not actually exist! good luck */
+					return array("error" => "404");
+				}
+
+				if($spellingaudio = spellingaudio_model::getRowBySpellingTStyle($id, 0)) {
+					return array('spelling' => $spelling, 'spellingaudio' => $spellingaudio);
+				}
+
+				return array('spelling' => $spelling);
+		}
+
+		return array("error" => "404");
+	}
+
 	/**
 	 * Dish out an audio file to the user if one can be found
 	 * 
 	 * @param string $type
 	 * @param string $id
 	 */
-	static function listen($type, $id) {
+	static function listen($type = false, $id = false) {
 		switch($type) {
 			case 'spelling':
 				if($spellingaudio = spellingaudio_model::getRowBySpellingTStyle($id, 0)) {

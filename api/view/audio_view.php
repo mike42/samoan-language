@@ -1,9 +1,11 @@
 <?php
 class audio_view {
 	static $config;
+	static $config_audio;
 	
 	static function init() {
-		self::$config = core::getConfig('audio');
+		self::$config_audio = core::getConfig('audio');
+		self::$config = core::getConfig('core');
 	}
 	
 	static function error_ogg($data) {
@@ -22,10 +24,33 @@ class audio_view {
 	static function listen_mp3($data) {
 		self::redirTo($data, 'mp3');
 	}
-	
+
 	private static function redirTo($data, $format) {
-		$url = self::$config['extern'] . $data['type'] . '/' . $format . '/' . $data['fn'] . '.' . $format;
+		$url = self::$config_audio['extern'] . $data['type'] . '/' . $format . '/' . $data['fn'] . '.' . $format;
 		core::redirect($url);
 	}
-	
+
+	static function view_html($data) {
+		if(isset($data['spelling'])) {
+			$data['title'] = "Audio for word";
+			self :: useTemplate('view.spelling', $data);
+		} else {
+			$data['title'] = "Audio for example";
+			self :: useTemplate('view.example', $data);
+		}
+	}	
+
+	static function error_html($data) {
+		if($data['error'] == "404") {
+			header("HTTP/1.0 404 Not Found");
+			$data['title'] = "Not found";
+		}
+		self::useTemplate("error", $data);
+	}
+
+	private static function useTemplate($template, $data) {
+		$permissions = core::getPermissions('audio');
+		$view_template = dirname(__FILE__)."/template/audio/$template.inc";
+		include(dirname(__FILE__)."/template/htmlLayout.php");
+	}
 }

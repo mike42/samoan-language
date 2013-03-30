@@ -200,7 +200,10 @@ class word_view {
 	}
 	
 	static function roman_numeral($count) {
-		return self::$roman_numerals[$count];
+		if((int)$count < count(self::$roman_numerals)) { 
+			return self::$roman_numerals[$count];
+		}
+		return $count;
 	}
 	
 	/**
