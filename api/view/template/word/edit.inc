@@ -1,4 +1,4 @@
-<div class="editform">
+<div>
 	<table class="word-edit">
 		<caption>Word properties</caption>
 		<tr>
@@ -68,12 +68,13 @@
 				echo "<th>".self::$roman_numerals[$id].".</th>";
 				echo "<td style=\"text-align: left\"><i>".$def['rel_type']['type_abbr']."</i> ".$def['def_en']."</td>";
 				echo "<td><a href=\"".core::constructURL('word', 'edit', array($data['id'], 'def', $def['def_id']), 'html') ."\">[edit]</a></td>";
+				echo "<td><a href=\"".core::constructURL('word', 'edit', array($data['id'], 'example', $def['def_id']), 'html') ."\">[examples]</a></td>";
 				echo "</tr>\n";
 		}
 		?>
 
 		<tr>
-			<td colspan="3" style="text-align: center">
+			<td colspan="4" style="text-align: center">
 				<a href="<?php echo core::constructURL('word', 'edit', array($data['id'], 'def'), 'html'); ?>">[add new definition]</a>
 			</td>
 		</tr>

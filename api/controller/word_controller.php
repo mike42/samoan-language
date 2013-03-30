@@ -204,7 +204,19 @@ class word_controller {
 				$wordInfo['listtype'] = listtype_model::listAll();
 				$wordInfo['form'] = "def";
 				break;
-			
+			case 'example':
+				$word_id = $wordInfo['word']['word_id'];
+				$def_id = $target;
+				if(!$def = def_model::get($word_id, $target)) {
+					/* Def not found. Return to edit page */
+					core::redirect($editPage);
+				}
+
+				$wordInfo['def'] = $def;
+				// TODO: Load candidates using example_model::listByWordMention($spelling_t_style, $word_num)
+				$wordInfo['candidates'] = array();
+				$wordInfo['form'] = "example";
+				break;
 			case 'rel':
 				$wordInfo['form'] = "rel";
 				$fail = false;
