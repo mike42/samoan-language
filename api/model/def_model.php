@@ -6,6 +6,7 @@ class def_model {
 		core::loadClass('database');
 		core::loadClass('listtype_model');
 		core::loadClass('example_model');
+		core::loadClass('examplerel_model');
 		
 		self::$template = array(
 				'def_id'		=> '0',

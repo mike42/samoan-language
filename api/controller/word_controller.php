@@ -212,9 +212,27 @@ class word_controller {
 					core::redirect($editPage);
 				}
 
+				if(isset($_POST['action']) && isset($_POST['example_id'])) {
+					$example_id = (int)$_POST['example_id'];
+					$action = $_POST['action'];
+
+					if($action == 'delete') {
+						examplerel_model :: delete($example_id, $word_id, $def_id);
+					} else if($action == 'add') {
+						examplerel_model :: add($example_id, $word_id, $def_id);
+					}
+
+					/* Re-fetch modified definition */
+					if(!$def = def_model::get($word_id, $target)) {
+						core::redirect($editPage);
+					}
+					if(!$wordInfo['word'] = word_model::getByID($word_id)) {
+						core::redirect($editPage);
+					}
+				}
+
 				$wordInfo['def'] = $def;
-				// TODO: Load candidates using example_model::listByWordMention($spelling_t_style, $word_num)
-				$wordInfo['candidates'] = array();
+				$wordInfo['candidates'] = example_model::listByWordMention($wordInfo['word']['rel_spelling']['spelling_t_style'], $wordInfo['word']['word_num']);
 				$wordInfo['form'] = "example";
 				break;
 			case 'rel':

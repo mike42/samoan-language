@@ -91,7 +91,7 @@ class example_model {
 	 * @return number Total number of examples currently stored.
 	 */
 	public static function countExamples() {
-		$query = "SELECT COUNT(example_id) FROM  {TABLE}example;";
+		$query = "SELECT COUNT(example_id) FROM {TABLE}example;";
 		if($row = database::retrieve($query, 1)) {
 			return (int)$row[0];
 		}
