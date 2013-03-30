@@ -25,7 +25,7 @@ function delWord() {
 			</td>
 		</tr>
 		<tr>
-			<td colspan="2" style="text-align: right"><a href="<?php echo core::constructURL('word', 'edit', array($data['id']), 'html'); ?>">[back to word]</a> <input style="color: #f00" type="button" value="Delete" onClick="delWord();"> <input type="submit" value="Save"></td>
+			<td colspan="2" style="text-align: right"><a href="<?php echo core::constructURL('word', 'edit', array($data['id']), 'html'); ?>">[back to word]</a> <input class="danger" type="button" value="Delete" onClick="delWord();"> <input type="submit" value="Save"></td>
 		</tr>
 	</table>
 </form>

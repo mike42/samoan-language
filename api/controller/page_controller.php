@@ -52,9 +52,10 @@ class page_controller {
 			/* Page does not exist -- Go to create it instead */
 			$url = core::constructURL('page', 'create', array($id), 'html');
 			core::redirect($url);
+			return;
 		}
 		
-		if(!isset($_POST['submit'])) {
+		if(!isset($_POST['action'])) {
 			/* Has not submitted (show the edit form) */
 			return array('title' => "Editing '". $page['page_rel_revision']['revision_title'] . "'", 'id' => $id, 'page' => $page);
 		}
@@ -70,15 +71,26 @@ class page_controller {
 		}
 		$page['page_rel_revision'] = $revision;
 		
-		if($_POST['submit'] == "Save") {
+		if($_POST['action'] == "save") {
 			/* Actually submit */
 			revision_model::insert($page, $revision);
 			
 			/* Go back to the page */
 			$url = core::constructURL('page', 'view', array($id), 'html');
 			core::redirect($url);
+			return;
+		} else if($_POST['action'] == "delete") {
+			if(!$permissions['delete']) {
+				return array('title' => 'Forbidden', 'error' => '403', 'id' => $id);
+			}
+			
+			page_model :: delete($page['page_id']);
+
+			/* Take the user to the (now deleted) site */
+			$url = core::constructURL('page', 'view', array($id), 'html');
+			core::redirect($url);
+			return;
 		}
-		
 		/* Preview type thing */
 		$page['page_rel_revision']['revision_text_parsed'] = page_model::render($page);
 		return array('title' => "Editing '". $page['page_rel_revision']['revision_title'] . "'", 'id' => $id, 'page' => $page, 'preview' => true);

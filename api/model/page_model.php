@@ -52,4 +52,13 @@ class page_model {
 		core::loadClass('parser');
 		return wikitextParser::parse($page['page_rel_revision']['revision_text']);
 	}
+
+	public static function delete($id) {
+		/* Delete a page by ID (you should of course check that it exists first, or this will do nothing) */
+		$query = "DELETE FROM {TABLE}revision WHERE revision_page_id =%d;";
+		database::retrieve($query, 0, (int)$id);
+		$query = "DELETE FROM {TABLE}page WHERE page_id =%d;";
+		database::retrieve($query, 0, (int)$id);
+		return true;
+	}
 } ?>

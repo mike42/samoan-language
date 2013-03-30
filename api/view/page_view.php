@@ -21,11 +21,13 @@ class page_view {
 	}
 	
 	public function create_html($data) {
+		$permissions = core::getPermissions('page');
 		$view_template = dirname(__FILE__)."/template/page/create.inc";
 		include(dirname(__FILE__)."/template/htmlLayout.php");
 	}
 	
 	public function edit_html($data) {
+		$permissions = core::getPermissions('page');
 		$view_template = dirname(__FILE__)."/template/page/edit.inc";
 		include(dirname(__FILE__)."/template/htmlLayout.php");
 	}
