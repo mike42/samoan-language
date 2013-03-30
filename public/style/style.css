@@ -1224,3 +1224,8 @@ h1,h2,h3,h4,h5,h6 {
 a.new {
 	color: #BA0000;
 }
+
+.notice {
+	color: #BA0000;
+	font-weight: bold;
+}

@@ -63,8 +63,11 @@ class page_controller {
 		$revision['revision_page_id'] = $page['page_id'];
 		$revision['revision_title'] = $_POST['revision_title'];
 		$revision['revision_text']  = $_POST['revision_text'];
-		// TODO: author code
-		$revision['revision_author'] = 0;
+		if($author = session::getUser()) {
+			$revision['revision_author'] = $author['user_id'];
+		} else {
+			$revision['revision_author'] = 0;
+		}
 		$page['page_rel_revision'] = $revision;
 		
 		if($_POST['submit'] == "Save") {
@@ -77,7 +80,8 @@ class page_controller {
 		}
 		
 		/* Preview type thing */
-		return array('title' => "Editing '". $page['page_rel_revision']['revision_title'] . "'", 'id' => $id, 'page' => $page);
+		$page['page_rel_revision']['revision_text_parsed'] = page_model::render($page);
+		return array('title' => "Editing '". $page['page_rel_revision']['revision_title'] . "'", 'id' => $id, 'page' => $page, 'preview' => true);
 	}
 	
 	public function delete($id) {
