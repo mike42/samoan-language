@@ -8,6 +8,7 @@ class page_controller {
 		if($page = page_model::getByShort($id)) {
 			if(!($page['page_rel_revision']['revision_parse_valid'] == 1)) {
 				$page['page_rel_revision']['revision_text_parsed'] = page_model::render($page);
+				revision_model::cache_save($page['page_rel_revision']);
 			}			
 			return array('title' => $page['page_rel_revision']['revision_title'], 'page' => $page, 'id' => $id);
 		} else {
@@ -95,9 +96,15 @@ class page_controller {
 		$page['page_rel_revision']['revision_text_parsed'] = page_model::render($page);
 		return array('title' => "Editing '". $page['page_rel_revision']['revision_title'] . "'", 'id' => $id, 'page' => $page, 'preview' => true);
 	}
-	
-	public function delete($id) {
-			
+
+	public static function purge($id) {
+		if(!$page = page_model::getByShort($id)) {
+			return array('title' => 'Not found', 'error' => '404', 'id' => $id);
+		}
+
+		revision_model::cache_purge_page($page['page_id']);
+		$url = core::constructURL('page', 'view', array($page['page_short']), 'html');
+		core::redirect($url);
 	}
 }
 ?>

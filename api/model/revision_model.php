@@ -30,6 +30,26 @@ class revision_model {
 		return page_model::setCurrentRevisionID($page['page_id'], $revision_id);
 	}
 
+	public static function cache_purge($revision_id) {
+		/* Purge a single revision */
+		$query = "UPDATE {TABLE}revision SET revision_text_parsed ='', revision_parse_valid =0 WHERE revision_id =%d";
+		database::retrieve($query, 0, (int)$revision_id);
+	}
+
+	public static function cache_purge_page($revision_page_id) {
+		/* Purge all revisions for a page */
+		$query = "UPDATE {TABLE}revision SET revision_text_parsed ='', revision_parse_valid =0 WHERE revision_page_id =%d";
+		database::retrieve($query, 0, (int)$revision_page_id);
+	}
+
+	public static function cache_purge_all() {
+		/* Purge every cached revision (potentially slow) */
+		$query = "UPDATE {TABLE}revision SET revision_text_parsed ='', revision_parse_valid =0 WHERE 1";
+		database::retrieve($query, 0);
+	}
+
+	public static function cache_save($revision) {
+		$query = "UPDATE {TABLE}revision SET revision_text_parsed ='%s', revision_parse_ts = CURRENT_TIMESTAMP, revision_parse_valid =1 WHERE revision_id =%d";
+		database::retrieve($query, 0, $revision['revision_text_parsed'], (int)$revision['revision_id']);
+	}
 } ?>
-
-
