@@ -97,5 +97,23 @@ class example_model {
 		}
 		return 0;
 	}
+
+	public static function update($example) {
+		$query = "UPDATE {TABLE}example SET example_str ='%s', example_en='%s' WHERE example_id =%d";
+		database::retrieve($query, 0, $example['example_str'], $example['example_en'], (int)$example['example_id']);
+	}
+
+	public static function delete($example_id) {
+		/* Delete an example, after removing it from everywhere it appears */
+		$query = "DELETE FROM {TABLE}exampleaudio WHERE example_id =%d;";
+		database::retrieve($query, 0, (int)$example_id); // NB: this may leave orphan audio files.
+
+		$query = "DELETE FROM {TABLE}examplerel WHERE example_rel_example_id =%d;";
+		database::retrieve($query, 0, (int)$example_id);
+
+		$query = "DELETE FROM {TABLE}example WHERE example_id =%d;";
+		database::retrieve($query, 0, (int)$example_id);
+		return true;
+	}
 }
 ?>

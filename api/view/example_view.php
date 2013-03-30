@@ -97,7 +97,4 @@ class example_view {
 		$targetURL = core::constructURL("word", "view", array($target), "html");
 		return "<a href=\"".core::escapeHTML($targetURL)."\">".core::escapeHTML($text)."</a>";
 	}
-	
-	
-	
 }

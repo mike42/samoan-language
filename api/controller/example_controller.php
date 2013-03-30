@@ -42,25 +42,52 @@ class example_controller {
 	
 	public static function edit($example_id) {
 		$permissions = core::getPermissions('example');
-		if($permissions['edit']) {
-			if($example = example_model::getById($example_id)) {
-				if(isset($_REQUEST['submit']) && isset($_POST['example_sm']) && isset($_POST['example_str'])) {
-					/* Update example if we have enough info */
-					$example['example_en'] = $_POST['example_en'];
-					$example['example_str'] = $_POST['example_str'];
-					example_model::update($example);	
-					core::redirect(core::constructURL('example', 'view', array($example['example_id'])));
-					return;
-				}
-				return array('example' => $example);
-			} else {
-				/* No such example */
-				return array('error' => '403');
-			}
-		} else {
+		if(!$permissions['edit']) {
 			/* No edit permission */
 			return array('error' => '403');
 		}
+
+		if(!$example = example_model::getById($example_id)) {
+			/* No such example */
+			return array('error' => '404');
+		}
+
+		if(!isset($_REQUEST['action'])) {
+			/* No action (show edit form) */
+			return array('example' => $example);
+		}
+		$action = $_REQUEST['action'];
+
+		if(!isset($_POST['example_str']) && isset($_POST['example_en'])) {
+			print_r($_POST);
+			/* Got dodgy data */
+			return array('error' => '404');
+		}
+
+		/* Update example if we have enough info */
+		$example['example_en'] = $_POST['example_en'];
+		$example['example_str'] = $_POST['example_str'];
+
+		if($action == 'delete') {
+			/* Delete the page */
+			if(!$permissions['delete']) {
+				return array('error' => '403');
+			}
+
+			example_model::delete($example['example_id']);
+			$dest  = core::constructURL('example', 'view', array(''));
+			core::redirect($dest);
+			return;
+		} else if($action == 'save') {
+			/* Save the page */
+			example_model::update($example);
+			$dest = core::constructURL('example', 'view', array($example['example_id']), 'html');
+			core::redirect($dest);
+			return;
+		}
+
+		/* Default to preview */
+		return array('example' => $example, 'preview' => true);
 	}
 }
 
