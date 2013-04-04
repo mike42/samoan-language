@@ -1,6 +1,17 @@
 Samoan
 ======
-Web app for managing Samoan language resources.
+This is a web app for managing Samoan Language Resources. It is a wiki-like CMS, with many features to support this:
+- Multiple users with customisable permissions.
+- Embedded audio.
+- In-browser editable vocabulary.
+- Database of usage examples.
+- Pages can embed definitions and usage examples.
+
+Requirements
+------------
+This project is PHP-based, so it should run on any major OS.
+
+You will require the [imagick](http://php.net/manual/en/book.imagick.php) extension, which is used to generate thumbnails.
 
 Setup
 -----
