@@ -1,6 +1,6 @@
 <?php
 /* Uses the bitrevision wikitext parser */
-require_once(dirname(__FILE__) . "/../../vendor/wikitext/WikitextParser.php");
+require_once(dirname(__FILE__) . "/../../vendor/wikitext/wikitext.php");
 
 /**
  * The custom behaviour of templates/links are defined here:
@@ -8,15 +8,13 @@ require_once(dirname(__FILE__) . "/../../vendor/wikitext/WikitextParser.php");
 class SmParserBackend extends DefaultParserBackend {
 
 	public function getInternalLinkInfo($info) {
-		$part = explode(":", $info['dest']);
-		if(count($part) == 2 && trim($part[0]) == 'word') {
+		if($info['namespace'] == 'word') {
 			/* Link to a word and display it with subscript number */
 			$newinfo = $info;
-			$part[1] = trim($part[1]);
-			$newinfo['dest'] = core::constructURL('word', 'view', array($part[1]), 'html');
-			$wlpart = word_model::getSpellingAndNumberFromStr($part[1]);
+			$newinfo['url'] = core::constructURL('word', 'view', array($info['target']), 'html');
+			$wlpart = word_model::getSpellingAndNumberFromStr($info['target']);
 
-			if($info['dest'] == $info['caption']) {
+			if($info['title'] == $info['caption']) {
 				/* Change caption if user hasn't set their own */
 				$newinfo['caption'] = $wlpart['spelling'];
 				if($wlpart['number'] != 0) {
@@ -34,7 +32,7 @@ class SmParserBackend extends DefaultParserBackend {
 			}
 			return $newinfo;
 		} else {
-			$info['dest'] = core::constructURL('page', 'view', array($info['dest']), 'html');
+			$info['url'] = core::constructURL('page', 'view', array($info['target']), 'html');
 		}
 		return $info;
 	}
