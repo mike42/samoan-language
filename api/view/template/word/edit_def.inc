@@ -21,9 +21,7 @@ function delWord() {
 		</tr>
 		<tr>
 			<th>English meaning</th>
-			<td><textarea rows="2" cols="70" name="def_en" style="resize: none;">
-					<?php echo core::escapeHTML($data['def']['def_en']); ?>
-				</textarea>
+			<td><textarea rows="2" cols="70" name="def_en" style="resize: none;"><?php echo core::escapeHTML($data['def']['def_en']); ?></textarea>
 			</td>
 		</tr>
 		<tr>

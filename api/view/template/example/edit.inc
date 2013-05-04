@@ -24,16 +24,12 @@ echo core::escapeHTML($data['example']['example_en'])."</dd></dl>";
 
 		<tr>
 			<th>Samoan</th>
-			<td><textarea name="example_str" rows=4 cols=60>
-					<? echo core::escapeHTML($data['example']['example_str']); ?>
-				</textarea></td>
+			<td><textarea name="example_str" rows=4 cols=60><? echo core::escapeHTML($data['example']['example_str']); ?></textarea></td>
 		</tr>
 
 		<tr>
 			<th>English</th>
-			<td><textarea name="example_en" rows=4 cols=60>
-					<? echo core::escapeHTML($data['example']['example_en']); ?>
-				</textarea></td>
+			<td><textarea name="example_en" rows=4 cols=60><? echo core::escapeHTML($data['example']['example_en']); ?></textarea></td>
 		</tr>
 
 		<tr>
