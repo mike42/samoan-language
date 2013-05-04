@@ -11,7 +11,7 @@ class listtype_model {
 				'type_title'	=> '',
 				'type_short'	=> '');
 	}
-	
+
 	/**
 	 * Return a list of all word types in the database
 	 */
@@ -20,31 +20,31 @@ class listtype_model {
 		if(!$res = database::retrieve($query, 0, $tags ? '1' : '0')) {
 			return false;
 		}
-		
+
 		$ret = array();
 		while($row = database::get_row($res)) {
 			$ret[] = self::fromRow($row);
 		}
 		return $ret;
 	}
-	
+
 	/**
 	 * Get details of a word type using its abbreviation
-	 * 
+	 *
 	 * @param string $type_short
 	 */
 	public static function getByShort($type_short) {
 		$query = "SELECT * FROM {TABLE}listtype WHERE type_short ='%s'";
-		
+
 		if($row = database::retrieve($query, 1, $type_short)) {
 			return self::fromRow($row);
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Get details of a word type using its ID
-	 * 
+	 *
 	 * @param int $type_id
 	 */
 	public static function get($type_id) {
@@ -54,7 +54,7 @@ class listtype_model {
 		}
 		return self::fromRow($row);
 	}
-	
+
 	private static function fromRow($row, $depth = 0) {
 		return database::row_from_template($row, self::$template);
 	}

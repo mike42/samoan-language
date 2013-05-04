@@ -1,7 +1,7 @@
 <style>
 .ui-autocomplete-loading {
-	background: white url('<?php echo self::$config['webroot']; ?>style/images/ui-anim_basic_16x16.gif') right center
-		no-repeat;
+	background: white url('<?php echo self::$config[' webroot
+		']; ?>style/images/ui-anim_basic_16x16.gif') right center no-repeat;
 }
 
 .ui-autocomplete {
@@ -66,7 +66,7 @@ if(isset($data['word']['rel_words'][$rel_type_id])) {
 	/* Show selector box for category */
 	echo "\t<caption>Add related word</caption>\n";
 	echo "<tr><th>Type:</th><td>".word_view::makeWordRelComboBox($data['listreltype'])."</td></tr>";
-	
+
 
 }
 /* Show submit and back buttons */

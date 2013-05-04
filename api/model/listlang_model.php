@@ -8,7 +8,7 @@ class listlang_model {
 				'lang_id'	=> '',
 				'lang_name'	=> '');
 	}
-	
+
 	/**
 	 * Return a list of all languages in the database
 	 */
@@ -24,7 +24,7 @@ class listlang_model {
 		}
 		return $ret;
 	}
-	
+
 	/**
 	 * Get a single language from its ID
 	 */
@@ -35,7 +35,7 @@ class listlang_model {
 		}
 		return self::fromRow($row);
 	}
-	
+
 	private static function fromRow($row, $depth = 0) {
 		return database::row_from_template($row, self::$template);
 	}

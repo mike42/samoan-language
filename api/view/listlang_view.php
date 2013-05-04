@@ -1,9 +1,9 @@
 <?php
 class listlang_view {
 	public static function init() {
-		
+
 	}
-	
+
 	/**
 	 * Make a compbo box for the user to select a language
 	 */
@@ -13,16 +13,16 @@ class listlang_view {
 		$str .= "\t<option value=\"\">(none)</option>\n";
 		foreach($list as $listtype) {
 			$selected = ($selected_id == $listtype[$key])? " selected=\"selected\"" : "";
-			$str .= "\t<option value=\"".core::escapeHTML($listtype[$key])."\"$selected>" . 
-					core::escapeHTML($listtype['lang_name']) . "</option>\n";
+			$str .= "\t<option value=\"".core::escapeHTML($listtype[$key])."\"$selected>" .
+			core::escapeHTML($listtype['lang_name']) . "</option>\n";
 		}
 
 		$str .= "</select>\n";
 		return $str;
 	}
-	
-	
-	
+
+
+
 	/**
 	 * Link to an external definition.
 	 */

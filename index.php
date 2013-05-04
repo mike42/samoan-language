@@ -27,7 +27,7 @@ if(count($arg) > 2) {
 	/* $controller/$action/{foo/bar/baz}.quux */
 	$controller = array_shift($arg);
 	$action = array_shift($arg);
-	
+
 } elseif(count($arg) == 2) {
 	/* No action specified - $controller/(default action)/{foo}.quux */
 	$controller = array_shift($arg);
@@ -45,7 +45,7 @@ try {
 	$controllerMethodName = $action;
 	$viewClassName = $controller.'_view';
 	$viewMethodName = $action . "_" . $fmt;
-	
+
 	core::loadClass($controllerClassName);
 	core::loadClass($viewClassName);
 	if(!is_callable($controllerClassName . "::" . $controllerMethodName)) {

@@ -2,25 +2,25 @@
 class audio_view {
 	static $config;
 	static $config_audio;
-	
+
 	static function init() {
 		self::$config_audio = core::getConfig('audio');
 		self::$config = core::getConfig('core');
 	}
-	
+
 	static function error_ogg($data) {
 		header("HTTP/1.1 404 Not Found");
 		echo "<h1>404 Not Found</h1><hr /><p>That audio file does not exist!</p>";
 	}
-	
+
 	static function error_mp3($data) {
 		self::error_ogg($data);
 	}
-	
+
 	static function listen_ogg($data) {
 		self::redirTo($data, 'ogg');
 	}
-	
+
 	static function listen_mp3($data) {
 		self::redirTo($data, 'mp3');
 	}
@@ -38,7 +38,7 @@ class audio_view {
 			$data['title'] = "Audio for example";
 			self :: useTemplate('view.example', $data);
 		}
-	}	
+	}
 
 	static function error_html($data) {
 		if($data['error'] == "404") {

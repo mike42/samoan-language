@@ -1,22 +1,22 @@
 <?php
 class user_model {
 	private static $template;
-	
+
 	public static function init() {
 		core::loadClass('database');
-		
+
 		self::$template = array(
-			'user_id'   => '',
-			'user_name' => '',
-			'user_pass' => '',
-			'user_salt' => '',
-			'user_token' => '',
-			'user_email' => '',
-			'user_email_confirmed' => '',
-			'user_created' => '',
-			'user_role' => '');
+				'user_id'   => '',
+				'user_name' => '',
+				'user_pass' => '',
+				'user_salt' => '',
+				'user_token' => '',
+				'user_email' => '',
+				'user_email_confirmed' => '',
+				'user_created' => '',
+				'user_role' => '');
 	}
-	
+
 	/**
 	 * Get user by ID
 	 */
@@ -27,7 +27,7 @@ class user_model {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Get user by email address or username
 	 */
@@ -39,10 +39,10 @@ class user_model {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Add new user to database
-	 * 
+	 *
 	 * @param string $user_name		User's login name
 	 * @param string $user_email	Email address of this user
 	 * @param string $password		Password to use (will be hashed and salted)
@@ -53,7 +53,7 @@ class user_model {
 			/* Skip if a user already has this name or email */
 			return false;
 		}
-		
+
 		if(!filter_var($user_email, FILTER_VALIDATE_EMAIL) || !(strpos($user_name, '@') === false)) {
 			/* Also skip if email is bad or username looks email-ish */
 			return false;
@@ -64,7 +64,7 @@ class user_model {
 			/* Invalid role */
 			return false;
 		}
-		
+
 		/* Fill in user details */
 		$user = self::$template;
 		$user['user_name'] = $user_name;
@@ -81,7 +81,7 @@ class user_model {
 
 	/**
 	 * Get a user by login details. Returns false if the details don't check out.
-	 * 
+	 *
 	 * @param string $user_name The user name
 	 * @param string $password	The user's claimed password
 	 */
@@ -94,24 +94,24 @@ class user_model {
 		/* No such user or wrong password*/
 		return false;
 	}
-	
-	
+
+
 	private static function gen_password_encoded($password_plaintext, $salt) {
 		/* Join password and salt, then hash them for the password field (or to compare with a password field) */
 		$password_plaintext = trim($password_plaintext);
 		return hash('sha256', $salt.":".$password_plaintext);
 	}
-	
+
 	private static function gen_salt() {
 		/* Make a salt for our string (hash some random data) */
 		return hash('sha256', self::gen_random_chars(1024));
 	}
-	
+
 	private static function gen_token() {
 		/* Tokens look the same as salts at the moment */
 		return self::gen_salt();
 	}
-	
+
 	private static function gen_random_chars($len, $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^*()1234567890-_+=,.<>") {
 		/* Return random characters from a string, to a specified length (use for generating passwords, salts, tokens */
 		$char_count = strlen($chars);

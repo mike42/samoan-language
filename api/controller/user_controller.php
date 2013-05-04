@@ -4,12 +4,12 @@ class user_controller {
 		core::loadClass('user_model');
 		core::loadClass('session');
 	}
-	
+
 	public function login($id = '') {
 		if(!(isset($_REQUEST['submit']) && isset($_POST['user_name']) && isset($_POST['user_password']))) {
 			return array('user' => false);
 		}
-		
+
 		if($user = user_model::verifyLogin($_POST['user_name'], $_POST['user_password'])) {
 			if(session::loginUser($user)) {
 				core::redirect(core::constructURL('page', 'view', array('home'), 'html'));
@@ -21,7 +21,7 @@ class user_controller {
 			return array('user' => false, 'message' => 'Incorrect username or password');
 		}
 	}
-	
+
 	public function logout() {
 		session::logoutUser();
 	}

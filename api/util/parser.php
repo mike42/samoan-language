@@ -98,7 +98,7 @@ class Parser {
 		core::loadClass("word_view");
 		core::loadClass("example_model");
 		core::loadClass("example_view");
-		
+
 		WikitextParser::init();
 		WikitextParser::$backend = new SmParserBackend;
 	}

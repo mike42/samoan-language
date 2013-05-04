@@ -9,7 +9,7 @@ body,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,a,img,ol,ul,li,fieldset,form,legend,t
 
 dl {
 	margin-top: 0;
-	margin-bottom:0;
+	margin-bottom: 0;
 }
 
 dd {
@@ -393,14 +393,12 @@ h1 a,h2 a,h3 a,h4 a,h5 a,h6 a {
 .post {
 	overflow: hidden;
 	margin: 0 0 50px 0;
-
 	background: #f0f0f0;
 	border: 1px solid #ccc;
 	-moz-border-radius: 6px;
 	-khtml-border-radius: 6px;
 	-webkit-border-radius: 6px;
 	border-radius: 6px;
-	
 	padding: 1em;
 }
 
@@ -816,7 +814,6 @@ body.attachment #commentform textarea {
 	width: 895px;
 }
 
-
 #sidebar {
 	overflow: hidden;
 }
@@ -1096,11 +1093,11 @@ img#wpstats {
 }
 
 .example-sm {
-	font-style:italic; 
+	font-style: italic;
 	border-bottom: 1px dotted;
 }
 
-.plaintable td, .plaintable tr, .plaintable table, .plaintable th {
+.plaintable td,.plaintable tr,.plaintable table,.plaintable th {
 	border: 0px none;
 	border-collapse: collapse;
 }
@@ -1111,7 +1108,7 @@ img#wpstats {
 	margin: 5px 0 10px 5px;
 }
 
-.neattable th, .neattable td {
+.neattable th,.neattable td {
 	border: 1px solid #ccc;
 	padding: 3px 10px;
 	text-align: left;
@@ -1176,8 +1173,9 @@ img#wpstats {
 .word-edit td {
 	padding-left: 1em;
 	padding-right: 1em;
-	border: 1px solid #ccc;	
-	text-align: center;'
+	border: 1px solid #ccc;
+	text-align: center;
+	'
 }
 
 .word-edit select {
@@ -1187,29 +1185,28 @@ img#wpstats {
 .word-edit th {
 	padding-left: 1em;
 	padding-right: 1em;
-	border: 1px solid #ccc;	
+	border: 1px solid #ccc;
 	text-align: left;
 }
-
 
 .word-edit caption {
 	font-weight: bold;
 }
 
 h1,h2,h3,h4,h5,h6 {
-	font-family: sans-serif; 
+	font-family: sans-serif;
 }
 
 #content p,#content li
-#content blockquote, #content dl {
+#content blockquote,#content dl {
 	margin: 0 0 1em 0;
 }
 
-#content table, #content ol, #content ul {
+#content table,#content ol,#content ul {
 	margin-bottom: 1em;
 }
 
-#page-editbox, .editform table {
+#page-editbox,.editform table {
 	width: 100%;
 }
 

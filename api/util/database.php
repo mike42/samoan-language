@@ -2,7 +2,7 @@
 class database {
 	private static $conn; /* Database connection */
 	private static $conf; /* Config */
-	
+
 	public static function init() {
 		/* Get configuration for this class and connect to the database */
 		database::$conf = core::getConfig(__CLASS__);
@@ -10,18 +10,18 @@ class database {
 			core::fizzle("Failed to connect to database: " . mysql_error());
 		}
 	}
-	
+
 	private static function connect() {
 		if(!database::$conn = mysql_connect(database::$conf['host'], database::$conf['user'], database::$conf['password'])) {
 			return false;
 		}
 		return mysql_select_db(database::$conf['name']);
 	}
-	
+
 	private static function query($query) {
 		return mysql_query($query);
 	}
-	
+
 	public static function get_row($result) {
 		if($result == false) {
 			return false;
@@ -29,20 +29,20 @@ class database {
 			return mysql_fetch_array($result);
 		}
 	}
-	
+
 	public static function escape($str) {
 		return mysql_real_escape_string($str);
 	}
-	
+
 	public function insert_id() {
 		return mysql_insert_id();
 	}
-	
+
 	public static function close() {
 		/* Close connection */
 		return mysql_close(Database::$conn);
 	}
-	
+
 	static function retrieve($query, $return_type = 0,
 			$a1  = null, $a2  = null, $a3  = null, $a4  = null, $a5  = null,
 			$a6  = null, $a7  = null, $a8  = null, $a9  = null, $a10 = null,
@@ -58,26 +58,26 @@ class database {
 				Database::retrieve_arg($a11),		Database::retrieve_arg($a12),
 				Database::retrieve_arg($a13),		Database::retrieve_arg($a14),
 				Database::retrieve_arg($a15));
-	
+
 		$res = Database::query($query);
-		
+
 		/* Die on database errors */
 		if(!$res) {
 			$errmsg = 'Query failed:' . $query." ". mysql_error();;
 			Core::fizzle($errmsg);
 		}
-	
+
 		/* Return methods: Return a result set, or return a row if only one is expected */
 		switch($return_type) {
 			case 0;
-				return $res;
+			return $res;
 			case 1;
-				return Database::get_row($res);
+			return Database::get_row($res);
 			case 2;
-				return Database::insert_id($res);
+			return Database::insert_id($res);
 		}
 	}
-	
+
 	function retrieve_arg($arg) {
 		/* Escape an argument for an SQL query, or return false if there was none */
 		if($arg) {
@@ -85,7 +85,7 @@ class database {
 		}
 		return false;
 	}
-	
+
 	static function row_from_template($row, $template) {
 		/* This copies an associative array from the database, copying only fields which exist in this template */
 		$res = $template;
@@ -96,8 +96,8 @@ class database {
 		}
 		return $res;
 	}
-	
-	
+
+
 }
 
 ?>

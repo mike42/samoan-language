@@ -8,7 +8,7 @@ switch($data['error']) {
 		if($permissions['create']) {
 			echo "Would you like to <a href=\"".core::constructURL("page", "create", array($data['id']), "html")."\">create it</a>?";
 		}
-	
+
 }
 
 ?>

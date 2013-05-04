@@ -12,11 +12,11 @@ echo " done\n";
 
 /* Spot spellings which are incorrectly numbered:
  * 		SELECT *
-		FROM (
-		
-				SELECT word_spelling, COUNT( word_id ) AS wordCount, MAX( word_num ) AS highestNum
-				FROM sm_word
-				GROUP BY word_spelling
-		)a
-		WHERE highestNum !=0
-		AND wordCount != highestNum */
+FROM (
+
+		SELECT word_spelling, COUNT( word_id ) AS wordCount, MAX( word_num ) AS highestNum
+		FROM sm_word
+		GROUP BY word_spelling
+)a
+WHERE highestNum !=0
+AND wordCount != highestNum */

@@ -3,8 +3,8 @@ class example_controller {
 	public static function init() {
 		core::loadClass('example_model');
 		core::loadClass('word_model');
-	}	
-	
+	}
+
 	public static function view($example_id) {
 		if($example_id == '') {
 			core::redirect(core::constructURL('example', 'search', array(''), 'html'));
@@ -15,7 +15,7 @@ class example_controller {
 			return array('error' => '404');
 		}
 	}
-	
+
 	public static function search($word) {
 		if(isset($_GET['s']) && $word == '') {
 			$word = $_GET['s'];
@@ -25,7 +25,7 @@ class example_controller {
 		$example_list = example_model::listByWordMention($part['spelling'], $part['number']);
 		return array('search' => $word, 'examples' => $example_list);
 	}
-	
+
 	public static function create() {
 		$permissions = core::getPermissions('example');
 		if(!$permissions['create']) {
@@ -39,7 +39,7 @@ class example_controller {
 			return array();
 		}
 	}
-	
+
 	public static function edit($example_id) {
 		$permissions = core::getPermissions('example');
 		if(!$permissions['edit']) {

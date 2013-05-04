@@ -6,7 +6,7 @@ class examplerel_model {
 		core::loadClass('database');
 		core::loadClass('example_model');
 		core::loadClass('def_model');
-	
+
 		self::$template = array(
 				'example_rel_example_id'		=> '0',
 				'example_rel_def_id'			=> '0');

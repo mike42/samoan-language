@@ -4,7 +4,7 @@ class example_model {
 
 	public static function init() {
 		core::loadClass('database');
-		
+
 		self::$template = array(
 				'example_id'				=> '0',
 				'example_str'				=> '',
@@ -20,7 +20,7 @@ class example_model {
 
 	/**
 	 * Get a single example using example_id
-	 * 
+	 *
 	 * @param number $id ID to fetch
 	 */
 	public static function getById($example_id) {
@@ -30,14 +30,14 @@ class example_model {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Get all examples associated with a given definition
 	 */
 	public static function listByDef($def_id) {
 		$query = "SELECT * FROM {TABLE}examplerel " .
-					"JOIN {TABLE}example ON example_rel_example_id = example_id " .
-					"WHERE example_rel_def_id =%d";
+				"JOIN {TABLE}example ON example_rel_example_id = example_id " .
+				"WHERE example_rel_def_id =%d";
 		$ret = array();
 		if($res = database::retrieve($query, 0, (int)$def_id)) {
 			while($row = database::get_row($res)) {
@@ -48,7 +48,7 @@ class example_model {
 		}
 		return $ret;
 	}
-	
+
 	/**
 	 * Find examples which mention a given word. Use to prompt suggested additions to examples
 	 */
@@ -65,7 +65,7 @@ class example_model {
 		}
 		return $ret;
 	}
-	
+
 	/**
 	 * Create a new example and return the ID
 	 */
@@ -75,7 +75,7 @@ class example_model {
 		$id = database::retrieve($query, 2, $str, $example_sm, '', '0', '0', $example_en, '', '');
 		return $id;
 	}
-	
+
 	/* Wrap each word in single-brackets */
 	private static function autobracket($str) {
 		$a = explode(" ", $str);

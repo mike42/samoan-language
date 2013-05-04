@@ -3,19 +3,19 @@ class page_controller {
 	public function init() {
 		core::loadClass('page_model');
 	}
-	
+
 	public function view($id) {
 		if($page = page_model::getByShort($id)) {
 			if(!($page['page_rel_revision']['revision_parse_valid'] == 1)) {
 				$page['page_rel_revision']['revision_text_parsed'] = page_model::render($page);
 				revision_model::cache_save($page['page_rel_revision']);
-			}			
+			}
 			return array('title' => $page['page_rel_revision']['revision_title'], 'page' => $page, 'id' => $id);
 		} else {
 			return array('title' => 'Not found', 'error' => '404', 'id' => $id);
 		}
 	}
-	
+
 	public function create($id) {
 		if($page = page_model::getByShort($id)) {
 			/* Page already exists - redirect to it */
@@ -28,7 +28,7 @@ class page_controller {
 			/* No permission */
 			return array('title' => 'Forbidden', 'error' => '403', 'id' => $id);
 		}
-	
+
 		if(!isset($_POST['submit'])) {
 			/* Has not submitted (show form) */
 			return array('title' => 'Create page', 'id' => $id);
@@ -39,28 +39,28 @@ class page_controller {
 		$url = core::constructURL('page', 'edit', array($id), 'html');
 		core::redirect($url);
 	}
-	
-	
+
+
 	public function edit($id) {
 		$permissions = core::getPermissions('page');
-		
+
 		if(!$permissions['edit']) {
 			/* No permission */
 			return array('title' => 'Forbidden', 'error' => '403', 'id' => $id);
 		}
-		
+
 		if(!$page = page_model::getByShort($id)) {
 			/* Page does not exist -- Go to create it instead */
 			$url = core::constructURL('page', 'create', array($id), 'html');
 			core::redirect($url);
 			return;
 		}
-		
+
 		if(!isset($_POST['action'])) {
 			/* Has not submitted (show the edit form) */
 			return array('title' => "Editing '". $page['page_rel_revision']['revision_title'] . "'", 'id' => $id, 'page' => $page);
 		}
-		
+
 		$revision = revision_model::$template;
 		$revision['revision_page_id'] = $page['page_id'];
 		$revision['revision_title'] = $_POST['revision_title'];
@@ -71,11 +71,11 @@ class page_controller {
 			$revision['revision_author'] = 0;
 		}
 		$page['page_rel_revision'] = $revision;
-		
+
 		if($_POST['action'] == "save") {
 			/* Actually submit */
 			revision_model::insert($page, $revision);
-			
+				
 			/* Go back to the page */
 			$url = core::constructURL('page', 'view', array($id), 'html');
 			core::redirect($url);
@@ -84,7 +84,7 @@ class page_controller {
 			if(!$permissions['delete']) {
 				return array('title' => 'Forbidden', 'error' => '403', 'id' => $id);
 			}
-			
+				
 			page_model :: delete($page['page_id']);
 
 			/* Take the user to the (now deleted) site */

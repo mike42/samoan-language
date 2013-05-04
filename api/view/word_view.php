@@ -2,7 +2,7 @@
 class word_view {
 	private static $config;
 	private static $roman_numerals; // Used to label defs as i, ii, ii etc
-	
+
 	public function init() {
 		self::$config = core::getConfig('core');
 		self::$roman_numerals = Array("i","ii","iii","iv","v","vi","vii","viii","ix","x","xi","xii","xiii","xiv","xv","xvi","xvii","xviii","xix","xx");
@@ -11,15 +11,15 @@ class word_view {
 		core::loadClass('example_view');
 		core::loadClass('listtype_view');
 		core::loadClass('listlang_view');
-		
+
 		self::$config = core::getConfig('core');
 	}
-	
+
 	public static function view_html($data) {
 		$data['titlebar'] = $data['word']['rel_spelling']['spelling_t_style'] . " - Samoan Language Vocabulary";
 		self::useTemplate("view", $data);
 	}
-	
+
 	public static function edit_html($data) {
 		$template = "edit";
 		if(isset($data['form'])) {
@@ -28,27 +28,27 @@ class word_view {
 		$data['title'] = "Editing " . $data['word']['rel_spelling']['spelling_t_style'];
 		self::useTemplate($template, $data);
 	}
-	
+
 	public static function create_html($data) {
 		self::useTemplate("create", $data);
 	}
-	
+
 	public static function letter_html($data) {
 		self::useTemplate("letter", $data);
 	}
-	
+
 	public static function type_html($data) {
 		self::useTemplate("type", $data);
 	}
-	
+
 	public static function default_html($data) {
 		self::useTemplate("default", $data);
 	}
-	
+
 	public static function search_html($data) {
 		self::useTemplate("search", $data);
 	}
-	
+
 	public static function search_json($data) {
 		header("content-type: application/json");
 		/* Construct heavily simplified key->val data structure for autocomplete use */
@@ -70,7 +70,7 @@ class word_view {
 		}
 		echo json_encode(array("words" => $ret));
 	}
-	
+
 	public static function error_html($data) {
 		if($data['error'] == "404") {
 			header("HTTP/1.0 404 Not Found");
@@ -78,10 +78,10 @@ class word_view {
 		}
 		self::useTemplate("error", $data);
 	}
-	
+
 	/**
 	 * Show data using given template
-	 * 
+	 *
 	 * @param string $template Template to use
 	 * @param mixed $data	Data for the page
 	 */
@@ -90,11 +90,11 @@ class word_view {
 		$view_template = dirname(__FILE__)."/template/word/$template.inc";
 		include(dirname(__FILE__)."/template/htmlLayout.php");
 	}
-	
-	
+
+
 	public static function toHTML($word) {
 		$str = self::linkToWord($word). " ";
-		
+
 		if($word['rel_target']) {
 			/* This definition is just a pointer/redirect */
 			$str .= " see ". self::linkToWord($word['rel_target'], true, false, true);
@@ -105,7 +105,7 @@ class word_view {
 			if(count($inner) != 0) {
 				$str .= "(" . implode(", ", $inner) .") ";
 			}
-			
+				
 			if(count($word['rel_def']) > 1) {
 				$str .= "<dl>";
 				$count = 0;
@@ -118,7 +118,7 @@ class word_view {
 			} elseif(count($word['rel_def']) == 1) {
 				$str .= def_view::toHTML(array_pop($word['rel_def']));
 			}
-			
+				
 			$footerItems = array("from", "syn", "opp", "sals");
 			$inner = self::getInnerItems($footerItems, $word['rel_words'], true, false, true, 'rel_type_long');
 			if($word['word_origin_lang'] != '') {
@@ -127,12 +127,12 @@ class word_view {
 			if(count($inner) != 0) {
 				$str .= "(" . implode(", ", $inner) .") ";
 			}
-			
+				
 		}
-		
+
 		return "<div class=\"entry\">".$str."</div>\n";
 	}
-	
+
 	static function getInnerItems($items, $relatives, $show_audio = true, $bold = true, $link_to = false, $key = 'rel_type_short') {
 		$ret = array();
 		foreach($items as $item) {
@@ -148,7 +148,7 @@ class word_view {
 		}
 		return $ret;
 	}
-	
+
 	/**
 	 * @param mixed $word The word to link to
 	 * @param boolean $show_audio Set to true to include an audio link beside the word
@@ -161,7 +161,7 @@ class word_view {
 		$combined = $spelling.(($word['word_num'] != 0)? (int)$word['word_num'] : "");
 		$wordURL = core::constructURL("word", "view", array($combined), "html");
 		$sub = (($word['word_num'] != 0)? "<sub><small>".(int)$word['word_num']."</small></sub>" : "");
-		
+
 		if($show_audio) {
 			if($word['rel_spelling']['spelling_t_style_recorded']) {
 				/* Make link to audio */
@@ -169,11 +169,11 @@ class word_view {
 				$audioMP3 = core::constructURL("audio", "listen", array('spelling', $spelling), "mp3");
 				$id = "word".(int)$word['word_id']."-sp".(int)($word['rel_spelling']['spelling_id']);
 				$audio = "<audio id=\"$id\" preload=\"none\">" .
-							"<source src=\"".core::escapeHTML($audioOGG)."\" type=\"audio/ogg\" />" .
-							"<source src=\"".core::escapeHTML($audioMP3)."\" type=\"audio/mp3\" />" .
-							"</audio>" .
-							"<a href=\"javascript:void(0);\" onclick=\"audio_play('$id')\" title=\"".core::escapeHTML($spelling)."\">" . 
-							"<img src=\"".core::escapeHTML(self::$config['webroot'])."style/images/listen.png\" border=0 /></a>";
+				"<source src=\"".core::escapeHTML($audioOGG)."\" type=\"audio/ogg\" />" .
+				"<source src=\"".core::escapeHTML($audioMP3)."\" type=\"audio/mp3\" />" .
+				"</audio>" .
+				"<a href=\"javascript:void(0);\" onclick=\"audio_play('$id')\" title=\"".core::escapeHTML($spelling)."\">" .
+				"<img src=\"".core::escapeHTML(self::$config['webroot'])."style/images/listen.png\" border=0 /></a>";
 			} else {
 				/* Link to upload page */
 				$audioURL = core::constructURL("audio", "view", array('spelling', $spelling), "html");
@@ -183,14 +183,14 @@ class word_view {
 			/* No audio link at all */
 			$audio = "";
 		}
-		
+
 		$str = ($link_to? "<a href=\"".core::escapeHTML($wordURL)."\">" : "").
-					($bold? "<b>".core::escapeHTML($spelling).$sub . "</b>" : core::escapeHTML($spelling).$sub) .
-					($link_to? "</a>" : "") . $audio;
+		($bold? "<b>".core::escapeHTML($spelling).$sub . "</b>" : core::escapeHTML($spelling).$sub) .
+		($link_to? "</a>" : "") . $audio;
 		return $str;
 
 	}
-	
+
 	public static function alphabeticPageLinks($sep = "\n") {
 		$alphabet = core::getAlphabet();
 		foreach($alphabet as $letter) {
@@ -198,14 +198,14 @@ class word_view {
 		}
 		return implode($sep, $outp);
 	}
-	
+
 	static function roman_numeral($count) {
-		if((int)$count < count(self::$roman_numerals)) { 
+		if((int)$count < count(self::$roman_numerals)) {
 			return self::$roman_numerals[$count];
 		}
 		return $count;
 	}
-	
+
 	/**
 	 * Return a combo box for viewing word-relation types (eg opposite, compound word, etc)
 	 */
@@ -214,10 +214,10 @@ class word_view {
 		$str .= "<option value=\"\">(relation type)</option>";
 		foreach($list as $listreltype) {
 			$selected = ($selected_id == $listreltype[$key])? " selected=\"selected\"" : "";
-			$str .= "\t<option value=\"".core::escapeHTML($listreltype[$key])."\"$selected>" . 
-					core::escapeHTML($listreltype['rel_type_long_label']) . "</option>\n";
+			$str .= "\t<option value=\"".core::escapeHTML($listreltype[$key])."\"$selected>" .
+			core::escapeHTML($listreltype['rel_type_long_label']) . "</option>\n";
 		}
-	
+
 		$str .= "</select>\n";
 		return $str;
 	}

@@ -3,7 +3,7 @@ class def_view {
 	public static function init() {
 		core::loadClass('def_model');
 	}
-	
+
 	public static function toHTML($def) {
 		$typeStr = "";
 		if($def['rel_type']['type_id'] != '0') {
@@ -11,12 +11,12 @@ class def_view {
 			$type = $def['rel_type'];
 			$typeURL = core::constructURL("word", "type", array($type['type_short']), "html");
 			$typeStr = "<i class=\"type-link\">" .
-						"<a href=\"".core::escapeHTML($typeURL)."\">" .
-						core::escapeHTML($type['type_abbr'])."</a></i> ";
+					"<a href=\"".core::escapeHTML($typeURL)."\">" .
+					core::escapeHTML($type['type_abbr'])."</a></i> ";
 		}
-		
+
 		$str = $typeStr . core::escapeHTML($def['def_en']);
-		
+
 		/* Append any examples */
 		$any = false;
 		foreach($def['rel_example'] as $example) {
@@ -31,5 +31,5 @@ class def_view {
 		$str .= "; ";
 		return $str;
 	}
-	
+
 }
