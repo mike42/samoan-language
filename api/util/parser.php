@@ -6,7 +6,6 @@ require_once(dirname(__FILE__) . "/../../vendor/wikitext/wikitext.php");
  * The custom behaviour of templates/links are defined here:
  */
 class SmParserBackend extends DefaultParserBackend {
-
 	public function getInternalLinkInfo($info) {
 		switch($info['namespace']) {
 			case 'word':
@@ -76,13 +75,23 @@ class SmParserBackend extends DefaultParserBackend {
 		}
 		return "[[$template]]";
 	}
+
+	public function getImageInfo($info) {
+		$info['url'] = Parser::$conf['imgextern'] . 'full/' . $info['url'];
+		$info['thumb'] = Parser::$conf['imgextern'] . 'thumb/' . $info['thumb'];
+		return $info;
+	}
 }
 
 /**
  * Simple wrapper for init()
  */
 class Parser {
+	public static $conf; /* Config */
+
 	public function init() {
+		self::$conf = core::getConfig('parser');
+
 		/* Initialise wikitext parser here */
 		core::loadClass("page_model");
 		core::loadClass("word_model");
