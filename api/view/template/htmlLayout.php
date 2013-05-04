@@ -138,23 +138,18 @@
 								<li><a href="<?php echo self::$config['webroot']; ?>songs">Songs</a>
 								</li>
 								<li><a
-									href="<?php echo self::$config['webroot']; ?>digitisation">Digitisation</a>
+									href="<?php echo self::$config['webroot']; ?>books">Books</a>
 								</li>
 								<li><a href="<?php echo self::$config['webroot']; ?>about">About</a>
 								</li>
 							</ul>
 						</div>
 						<div class="widget">
-							<h3 class="widget-title">Options</h3>
-							<ul>
-								<li>(unimplemented)</li>
-							</ul>
-						</div>
-						<div class="widget">
 							<h3 class="widget-title">Meta</h3>
 							<ul>
-								<li>How to contribute (unimplemented)</li>
-								<li>Todo lists (unimplemented)</li>
+								<li><a href="<?php echo self::$config['webroot']; ?>contribute">How to contribute</a></li>
+								<li><a href="<?php echo self::$config['webroot']; ?>todo">Todo list</a></li>
+								<li><a href="<?php echo self::$config['webroot']; ?>dev">Development page</a></li>
 							</ul>
 						</div>
 					</div>

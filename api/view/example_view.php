@@ -84,7 +84,7 @@ class example_view {
 			} elseif($c != "]" && $c != "<" && $c != ">") {
 				/* Because of a strange bug dropping the macron-ed letters,
 				 I've removed html_escape in favour of this: */
-				$str .= $c;
+				$str .= ($c == "\n") ? "<br />" : $c;
 			}
 		}
 

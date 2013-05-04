@@ -1230,3 +1230,18 @@ a.new {
 .danger {
 	color: #f00
 }
+
+div.thumbcaption {
+	text-align: center;
+	font-size: 80%;	
+}
+
+div.tright {
+	float: right;
+	clear: both;
+}
+
+div.tleft {
+	float: left;
+	clear: both;
+}
