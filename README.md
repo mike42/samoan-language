@@ -17,9 +17,7 @@ Setup
 -----
 First clone the repo with submodules:
 
-    git clone https://github.com/mike42/samoan
-    git submodule init
-    git submodule update
+    git clone --recursive https://github.com/mike42/samoan
 
 Then follow the instructions in maintenance/help.html for the configuration steps. 
 
