@@ -1,6 +1,7 @@
 <?php
 class word_controller {
 	public static function init() {
+		core::loadClass("letter_model");
 		core::loadClass('word_model');
 		core::loadClass('def_model');
 		core::loadClass('spellingaudio_model');
@@ -354,9 +355,16 @@ class word_controller {
 				}
 			}
 			return array('title' => 'Samoan Vocabulary (single-page view)', 'letters' => $ret);
-		} else if($words = word_model::listByLetter($letter)) {
-			$title = "Samoan Words: ". core::escapeHTML(strtoUpper($letter). " " . strtolower($letter));
-			return array('title' => $title, 'words' => $words, 'letter' => $letter);
+		} else if(in_array($letter, core::$alphabet_sm)) {
+			$data = array('letter' => $letter);
+			if(!(($markup = letter_model::cache_get_html($letter)) === false)) {
+				$data['cache'] = $markup;
+			} else {
+				/* This query is a little insane (hence caching) */
+				$data['words'] = word_model::listByLetter($letter);
+			}
+			$data['title'] = "Samoan Words: ". core::escapeHTML(strtoUpper($letter). " " . strtolower($letter));
+			return $data;
 		}
 		return array('error' => '404');
 	}

@@ -11,13 +11,27 @@ if(isset($data['letters'])) {
 }
 
 function showLetter($data, $internal) {
-	echo "<div style=\"float:right; font-weight: heavy; text-align: center; \">".word_view::alphabeticPageLinks("<br />", $internal)."</div>";
+	if(isset($data['cache'])) {
+		/* Check whether this data is simply cached output */
+		echo $data['cache'];
+		return;
+	}
+
+	/* Otherwise build output */
+	$outp = "<div style=\"float:right; font-weight: heavy; text-align: center; \">".word_view::alphabeticPageLinks("<br />", $internal)."</div>";
 	if(isset($data['words'])) {
 		foreach($data['words'] as $word) {
-			echo word_view::toHTML($word);
+			$outp .= word_view::toHTML($word);
 		}
 	} else {
-		echo "No words";
+		$outp = "No words";
 	}
+
+	/* Save generated output to cache */
+	$lm = letter_model::$template;
+	$lm['letter_id'] = $data['letter'];
+	$lm['letter_html'] = $outp;
+	letter_model::cache_save($lm);
+	echo $outp;
 }
 ?>

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Mar 30, 2013 at 10:05 AM
+-- Generation Time: May 05, 2013 at 10:50 PM
 -- Server version: 5.5.28
 -- PHP Version: 5.4.4-14
 
@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `sm_def` (
   PRIMARY KEY (`def_id`),
   KEY `def_word_id` (`def_word_id`),
   KEY `def_type` (`def_type`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Each definition of a word goes here. Eg. moe noun, moe verb.' AUTO_INCREMENT=1409 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Each definition of a word goes here. Eg. moe noun, moe verb.' AUTO_INCREMENT=1422 ;
 
 -- --------------------------------------------------------
 
@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS `sm_example` (
   `example_uploaded` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `example_audio_tag` text NOT NULL,
   PRIMARY KEY (`example_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=325 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=346 ;
 
 -- --------------------------------------------------------
 
@@ -96,6 +96,20 @@ CREATE TABLE IF NOT EXISTS `sm_examplerel` (
   KEY `example_rel_example_id` (`example_rel_example_id`),
   KEY `example_rel_def_id` (`example_rel_def_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Links examples with definitions';
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sm_letter`
+--
+
+CREATE TABLE IF NOT EXISTS `sm_letter` (
+  `letter_html` mediumtext NOT NULL,
+  `letter_html_ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `letter_html_valid` int(1) NOT NULL,
+  `letter_id` varchar(1) NOT NULL,
+  PRIMARY KEY (`letter_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Cached data for per-letter vocab';
 
 -- --------------------------------------------------------
 
@@ -152,7 +166,7 @@ CREATE TABLE IF NOT EXISTS `sm_page` (
   `page_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`page_id`),
   UNIQUE KEY `page_short` (`page_short`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=21 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=33 ;
 
 -- --------------------------------------------------------
 
@@ -166,13 +180,13 @@ CREATE TABLE IF NOT EXISTS `sm_revision` (
   `revision_title` varchar(256) NOT NULL,
   `revision_author` int(11) NOT NULL,
   `revision_ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `revision_text` text NOT NULL,
-  `revision_text_parsed` text NOT NULL,
+  `revision_text` mediumtext NOT NULL,
+  `revision_text_parsed` mediumtext NOT NULL,
   `revision_parse_ts` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `revision_parse_valid` int(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`revision_id`),
   KEY `revision_page_id` (`revision_page_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=460 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=587 ;
 
 -- --------------------------------------------------------
 
@@ -192,7 +206,7 @@ CREATE TABLE IF NOT EXISTS `sm_spelling` (
   `spelling_sortkey_sm` varchar(127) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`spelling_id`),
   UNIQUE KEY `spelling_t_style` (`spelling_t_style`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Each word with unique pronunciation' AUTO_INCREMENT=1380 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Each word with unique pronunciation' AUTO_INCREMENT=1392 ;
 
 -- --------------------------------------------------------
 
@@ -228,7 +242,7 @@ CREATE TABLE IF NOT EXISTS `sm_user` (
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `user_email` (`user_email`),
   UNIQUE KEY `user_name` (`user_name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='User accounts' AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='User accounts' AUTO_INCREMENT=7 ;
 
 -- --------------------------------------------------------
 
@@ -249,7 +263,7 @@ CREATE TABLE IF NOT EXISTS `sm_word` (
   KEY `word_spelling` (`word_spelling`),
   KEY `word_origin_lang` (`word_origin_lang`),
   KEY `word_redirect_to` (`word_redirect_to`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1379 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1391 ;
 
 -- --------------------------------------------------------
 
@@ -263,7 +277,7 @@ CREATE TABLE IF NOT EXISTS `sm_wordrel` (
   `wordrel_type` varchar(256) NOT NULL,
   `wordrel_target` int(11) NOT NULL,
   PRIMARY KEY (`wordrel_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1076 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1082 ;
 
 --
 -- Constraints for dumped tables
@@ -273,8 +287,8 @@ CREATE TABLE IF NOT EXISTS `sm_wordrel` (
 -- Constraints for table `sm_def`
 --
 ALTER TABLE `sm_def`
-  ADD CONSTRAINT `sm_def_ibfk_2` FOREIGN KEY (`def_type`) REFERENCES `sm_listtype` (`type_id`),
-  ADD CONSTRAINT `sm_def_ibfk_1` FOREIGN KEY (`def_word_id`) REFERENCES `sm_word` (`word_id`);
+  ADD CONSTRAINT `sm_def_ibfk_1` FOREIGN KEY (`def_word_id`) REFERENCES `sm_word` (`word_id`),
+  ADD CONSTRAINT `sm_def_ibfk_2` FOREIGN KEY (`def_type`) REFERENCES `sm_listtype` (`type_id`);
 
 --
 -- Constraints for table `sm_exampleaudio`
@@ -286,8 +300,8 @@ ALTER TABLE `sm_exampleaudio`
 -- Constraints for table `sm_examplerel`
 --
 ALTER TABLE `sm_examplerel`
-  ADD CONSTRAINT `sm_examplerel_ibfk_2` FOREIGN KEY (`example_rel_def_id`) REFERENCES `sm_def` (`def_id`),
-  ADD CONSTRAINT `sm_examplerel_ibfk_1` FOREIGN KEY (`example_rel_example_id`) REFERENCES `sm_example` (`example_id`);
+  ADD CONSTRAINT `sm_examplerel_ibfk_1` FOREIGN KEY (`example_rel_example_id`) REFERENCES `sm_example` (`example_id`),
+  ADD CONSTRAINT `sm_examplerel_ibfk_2` FOREIGN KEY (`example_rel_def_id`) REFERENCES `sm_def` (`def_id`);
 
 --
 -- Constraints for table `sm_revision`
@@ -305,9 +319,9 @@ ALTER TABLE `sm_spellingaudio`
 -- Constraints for table `sm_word`
 --
 ALTER TABLE `sm_word`
-  ADD CONSTRAINT `sm_word_ibfk_3` FOREIGN KEY (`word_origin_lang`) REFERENCES `sm_listlang` (`lang_id`),
   ADD CONSTRAINT `sm_word_ibfk_1` FOREIGN KEY (`word_spelling`) REFERENCES `sm_spelling` (`spelling_id`),
-  ADD CONSTRAINT `sm_word_ibfk_2` FOREIGN KEY (`word_redirect_to`) REFERENCES `sm_word` (`word_id`);
+  ADD CONSTRAINT `sm_word_ibfk_2` FOREIGN KEY (`word_redirect_to`) REFERENCES `sm_word` (`word_id`),
+  ADD CONSTRAINT `sm_word_ibfk_3` FOREIGN KEY (`word_origin_lang`) REFERENCES `sm_listlang` (`lang_id`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
