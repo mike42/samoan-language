@@ -89,7 +89,7 @@ class SmParserBackend extends DefaultParserBackend {
 class Parser {
 	public static $conf; /* Config */
 
-	public function init() {
+	public static function init() {
 		self::$conf = core::getConfig('parser');
 
 		/* Initialise wikitext parser here */

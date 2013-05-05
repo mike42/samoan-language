@@ -8,7 +8,7 @@ class session {
 	/**
 	 * Start the session with no user details.
 	 */
-	public function init() {
+	public static function init() {
 		self::$user = null;
 		self::$verified = false;
 
