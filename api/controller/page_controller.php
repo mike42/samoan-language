@@ -1,10 +1,10 @@
 <?php 
 class page_controller {
-	public function init() {
+	public static function init() {
 		core::loadClass('page_model');
 	}
 
-	public function view($id) {
+	public static function view($id) {
 		if($page = page_model::getByShort($id)) {
 			if(!($page['page_rel_revision']['revision_parse_valid'] == 1)) {
 				$page['page_rel_revision']['revision_text_parsed'] = page_model::render($page);
@@ -16,7 +16,7 @@ class page_controller {
 		}
 	}
 
-	public function create($id) {
+	public static function create($id) {
 		if($page = page_model::getByShort($id)) {
 			/* Page already exists - redirect to it */
 			$url = core::constructURL('page', 'view', array($id), 'html');
@@ -41,7 +41,7 @@ class page_controller {
 	}
 
 
-	public function edit($id) {
+	public static function edit($id) {
 		$permissions = core::getPermissions('page');
 
 		if(!$permissions['edit']) {

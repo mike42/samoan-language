@@ -6,7 +6,7 @@ class page_view {
 		self::$config = core::getConfig('core');
 	}
 
-	public function view_html($data) {
+	public static function view_html($data) {
 		$config = core::getConfig('core');
 		$permissions = core::getPermissions('page');
 		$view_template = dirname(__FILE__)."/template/page/view.inc";
@@ -14,19 +14,19 @@ class page_view {
 	}
 
 
-	public function error_html($data) {
+	public static function error_html($data) {
 		$permissions = core::getPermissions('page');
 		$view_template = dirname(__FILE__)."/template/page/error.inc";
 		include(dirname(__FILE__)."/template/htmlLayout.php");
 	}
 
-	public function create_html($data) {
+	public static function create_html($data) {
 		$permissions = core::getPermissions('page');
 		$view_template = dirname(__FILE__)."/template/page/create.inc";
 		include(dirname(__FILE__)."/template/htmlLayout.php");
 	}
 
-	public function edit_html($data) {
+	public static function edit_html($data) {
 		$permissions = core::getPermissions('page');
 		$view_template = dirname(__FILE__)."/template/page/edit.inc";
 		include(dirname(__FILE__)."/template/htmlLayout.php");

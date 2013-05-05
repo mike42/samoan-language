@@ -3,12 +3,12 @@ class audio_controller {
 	static $audioDir;
 
 
-	function init() {
+	public static function init() {
 		core::loadClass("spellingaudio_model");
 		core::loadClass("spelling_model");
 	}
 
-	static function view($type = false, $id = false) {
+	public static function view($type = false, $id = false) {
 		switch($type) {
 			case 'spelling':
 				if(!$spelling = spelling_model::getBySpelling($id)) {
@@ -32,7 +32,7 @@ class audio_controller {
 	 * @param string $type
 	 * @param string $id
 	 */
-	static function listen($type = false, $id = false) {
+	public static function listen($type = false, $id = false) {
 		switch($type) {
 			case 'spelling':
 				if($spellingaudio = spellingaudio_model::getRowBySpellingTStyle($id, 0)) {

@@ -1,6 +1,6 @@
 <?php
 class word_controller {
-	public function init() {
+	public static function init() {
 		core::loadClass('word_model');
 		core::loadClass('def_model');
 		core::loadClass('spellingaudio_model');
@@ -11,7 +11,7 @@ class word_controller {
 	 *
 	 * @param string $id
 	 */
-	public function view($idstr) {
+	public static function view($idstr) {
 		if($idstr == '') {
 			$counts = array(
 					'word' => word_model::countWords(),
@@ -31,7 +31,7 @@ class word_controller {
 		return array('error' => '404', 'word' => $idstr);
 	}
 
-	public function create($spelling_t_style = '') {
+	public static function create($spelling_t_style = '') {
 		$permissions = core::getPermissions('word');
 		if(!$permissions['create']) {
 			/* No permission */
@@ -68,7 +68,7 @@ class word_controller {
 	 *
 	 * @param string $id
 	 */
-	public function edit($id, $secondary = '', $target = '') {
+	public static function edit($id, $secondary = '', $target = '') {
 		$permissions = core::getPermissions('word');
 
 		/* Check edit permissions */
@@ -327,7 +327,7 @@ class word_controller {
 	 *
 	 * @param string $type_short
 	 */
-	public function type($type_short) {
+	public static function type($type_short) {
 		if(!$type = listtype_model::getByShort($type_short)) {
 			return array('error' => '404');
 		}
@@ -344,7 +344,7 @@ class word_controller {
 	 *
 	 * @param string $letter
 	 */
-	public function letter($letter) {
+	public static function letter($letter) {
 		if($words = word_model::listByLetter($letter)) {
 			$title = "Samoan Words: ". core::escapeHTML(strtoUpper($letter). " " . strtolower($letter));
 			return array('title' => $title, 'words' => $words, 'letter' => $letter);
@@ -357,7 +357,7 @@ class word_controller {
 	 *
 	 * @param unknown_type $search
 	 */
-	public function search($search) {
+	public static function search($search) {
 		if($search == 'suggest') {
 			return self::suggest();
 		}
@@ -379,7 +379,7 @@ class word_controller {
 	/**
 	 * Search for a word using the beginning only. (should be invoked using search/suggest.json)
 	 */
-	private function suggest() {
+	public static function suggest() {
 		if(!isset($_POST['term'])) {
 			return array('redirect' => core::constructURL("page", "view", array("home"), "html"));
 		}
@@ -396,7 +396,7 @@ class word_controller {
 	 * @param string $spelling_t_style
 	 * @return the next vacant number on this spelling, after moving around things as necessary
 	 */
-	private function get_next_wordnum($spelling_t_style) {
+	public static function get_next_wordnum($spelling_t_style) {
 		$word_num = 0;
 
 		/* If there is already a word 'foo0', change it to 'foo1' and make this 'foo2' */

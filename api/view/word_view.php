@@ -3,7 +3,7 @@ class word_view {
 	private static $config;
 	private static $roman_numerals; // Used to label defs as i, ii, ii etc
 
-	public function init() {
+	public static function init() {
 		self::$config = core::getConfig('core');
 		self::$roman_numerals = Array("i","ii","iii","iv","v","vi","vii","viii","ix","x","xi","xii","xiii","xiv","xv","xvi","xvii","xviii","xix","xx");
 
@@ -133,7 +133,7 @@ class word_view {
 		return "<div class=\"entry\">".$str."</div>\n";
 	}
 
-	static function getInnerItems($items, $relatives, $show_audio = true, $bold = true, $link_to = false, $key = 'rel_type_short') {
+	private static function getInnerItems($items, $relatives, $show_audio = true, $bold = true, $link_to = false, $key = 'rel_type_short') {
 		$ret = array();
 		foreach($items as $item) {
 			if(isset($relatives[$item]) && count($relatives[$item] > 0)) {
@@ -199,7 +199,7 @@ class word_view {
 		return implode($sep, $outp);
 	}
 
-	static function roman_numeral($count) {
+	public static function roman_numeral($count) {
 		if((int)$count < count(self::$roman_numerals)) {
 			return self::$roman_numerals[$count];
 		}

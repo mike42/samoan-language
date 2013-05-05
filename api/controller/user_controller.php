@@ -1,11 +1,11 @@
 <?php
 class user_controller {
-	public function init() {
+	public static function init() {
 		core::loadClass('user_model');
 		core::loadClass('session');
 	}
 
-	public function login($id = '') {
+	public static function login($id = '') {
 		if(!(isset($_REQUEST['submit']) && isset($_POST['user_name']) && isset($_POST['user_password']))) {
 			return array('user' => false);
 		}
@@ -22,7 +22,7 @@ class user_controller {
 		}
 	}
 
-	public function logout() {
+	public static function logout() {
 		session::logoutUser();
 	}
 }
