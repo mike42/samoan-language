@@ -27,7 +27,7 @@ $form .= "	<option value=\"".(int)$type->type_id."\">".$samoan->html_escape($typ
 }
 $form .= "</select><input type=\"submit\" value=\"Go\" style=\"display:none;\"/>"; echo $form; */ ?>
 		</li>
-		<li><a href="/words/letter/all">View the entire vocabulary on single
+		<li><a href="<? echo core::constructURL("word", "letter", array("all"), "html"); ?>">View the entire vocabulary on single
 				page</a></li>
 	</ul>
 </form>

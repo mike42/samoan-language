@@ -191,10 +191,11 @@ class word_view {
 
 	}
 
-	public static function alphabeticPageLinks($sep = "\n") {
+	public static function alphabeticPageLinks($sep = "\n", $internal = false) {
 		$alphabet = core::getAlphabet();
 		foreach($alphabet as $letter) {
-			$outp[] = "<a href=\"".core::constructURL("word", "letter", array(strtolower($letter)), "html"). "\">".core::escapeHTML(strtoupper($letter))."</a>";
+			$dest = $internal ? "#" . strtolower($letter) : core::constructURL("word", "letter", array(strtolower($letter)), "html");
+			$outp[] = "<a href=\"".$dest. "\">".core::escapeHTML(strtoupper($letter))."</a>";
 		}
 		return implode($sep, $outp);
 	}

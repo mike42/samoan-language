@@ -345,7 +345,16 @@ class word_controller {
 	 * @param string $letter
 	 */
 	public static function letter($letter) {
-		if($words = word_model::listByLetter($letter)) {
+		if($letter == "all") {
+			$ret = array();
+			foreach(core::$alphabet_sm as $a) {
+				$next = self::letter($a);
+				if(isset($next['letter'])) {
+					$ret[] = $next;
+				}
+			}
+			return array('title' => 'Samoan Vocabulary (single-page view)', 'letters' => $ret);
+		} else if($words = word_model::listByLetter($letter)) {
 			$title = "Samoan Words: ". core::escapeHTML(strtoUpper($letter). " " . strtolower($letter));
 			return array('title' => $title, 'words' => $words, 'letter' => $letter);
 		}
