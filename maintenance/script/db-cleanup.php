@@ -1,4 +1,4 @@
-#!/usr/bin/php
+#!/usr/bin/env php
 <?php
 /* This script will tidy up the database to clean up after word numberings and moves. */
 require_once(dirname(__FILE__) . "/../../api/core.php");

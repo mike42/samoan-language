@@ -1,4 +1,4 @@
-#!/usr/bin/php
+#!/usr/bin/env php
 <?php
 /* Use this script to purge the cache */
 require_once(dirname(__FILE__) . "/../../api/core.php");

@@ -1,4 +1,4 @@
-#!/usr/bin/php
+#!/usr/bin/env php
 <?php
 /* Use this script to make a new user, for when there are no users in the database */
 if(count($argv) != 5) {
