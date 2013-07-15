@@ -25,7 +25,7 @@ class audio_view {
 		self::redirTo($data, 'mp3');
 	}
 
-	public static static function redirTo($data, $format) {
+	public static function redirTo($data, $format) {
 		$url = self::$config_audio['extern'] . $data['type'] . '/' . $format . '/' . $data['fn'] . '.' . $format;
 		core::redirect($url);
 	}
