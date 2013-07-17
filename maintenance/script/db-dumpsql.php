@@ -27,14 +27,14 @@ $tblStart = $db['name'].".".$db['prefix'];
 $tblUser = $tblStart."user";
 $tblPage = $tblStart."page";
 $tblRevision = $tblStart."revision";
-$cmd_template = "mysqldump --defaults-file=%s --host=%s --skip-comments %s --ignore-table=%s --ignore-table=%s --ignore-table=%s > %s";
-$cmd = sprintf($cmd_template, escapeshellarg($defaults), escapeshellarg($host), escapeshellarg($dbname), escapeshellarg($tblUser), escapeshellarg($tblPage), escapeshellarg($tblRevision), escapeshellarg($destFull));
+$tblLetter = $tblStart."letter";
+$cmd_template = "mysqldump --defaults-file=%s --host=%s --skip-comments %s --ignore-table=%s --ignore-table=%s --ignore-table=%s --ignore-table=%s > %s";
+$cmd = sprintf($cmd_template, escapeshellarg($defaults), escapeshellarg($host), escapeshellarg($dbname), escapeshellarg($tblUser), escapeshellarg($tblPage), escapeshellarg($tblRevision), escapeshellarg($tblLetter), escapeshellarg($destFull));
 exec($cmd);
-echo $cmd;
 unlink($defaults_file);
 
 /* Compress */
-$cmd = sprintf("gzip %s", escapeshellarg($destFull));
+$cmd = sprintf("gzip -f %s", escapeshellarg($destFull));
 exec($cmd);
 $destFull .= ".gz";
 
