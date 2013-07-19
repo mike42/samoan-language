@@ -89,8 +89,12 @@ function compress_cmd($destFull) {
 }
 
 function checksum_cmd($destFullGz) {
+	$dirname = dirname($destFullGz);
+	$info = pathinfo($destFullGz);
+	$basename = $info['basename'];
+
 	/* Command to add md5 checksum */
-	$cmd = sprintf("md5sum %s > %s", escapeshellarg($destFullGz), escapeshellarg($destFullGz.".md5.txt"));
+	$cmd = sprintf("cd %s; md5sum %s > %s", escapeshellarg($dirname), escapeshellarg($basename), escapeshellarg($basename.".md5.txt"));
 	return $cmd;
 }
 
