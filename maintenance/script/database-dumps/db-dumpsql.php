@@ -5,13 +5,13 @@
 	- Requires mysqldump, mkdir, gzip, md5sum (any respectable server has this!)
 	- .my.cnf must be writeable by the user that runs this script
 */
-require_once(dirname(__FILE__) . "/../../api/config.php");
+require_once(dirname(__FILE__) . "/../../../api/config.php");
 $db = $config['database'];
 
 /* Info used in many places */
 $defaults_file = dirname(__FILE__) . "/.my.cnf";
 $date = date("Y-m-d");
-$destFull = dirname(__FILE__) . "/../../data/sql/sm-vocabulary-$date.sql";
+$destFull = dirname(__FILE__) . "/../../../data/sql/sm-vocabulary-$date.sql";
 $destFullGz = $destFull . ".gz";
 
 if($argc == 2) { // Pass commands back to bash script, for environments where exec() is unavailable
