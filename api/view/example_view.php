@@ -44,7 +44,7 @@ class example_view {
 		include(dirname(__FILE__)."/template/htmlLayout.php");
 	}
 
-	public static function toHTML($example, $show_en = true) {
+	public static function toHTML($example, $show_en = true, $plain = false) {
 		$inp = $example['example_str'];
 		$str = '';
 
@@ -57,7 +57,11 @@ class example_view {
 			$c = mb_substr($inp,$i,1);
 			if($inlink) {
 				if($c == "]" || $c == "." || $c == "," || $c == "?" || $c == "!") {
-					$str .= self::linkToWord($target, $text);
+					if(!$plain) {
+						$str .= self::linkToWord($target, $text);
+					} else {
+						$str .= $text;
+					}
 					$inlink = $pasttarget = false;
 					$target = $text = "";
 					if($c != "]") {
@@ -84,11 +88,11 @@ class example_view {
 			} elseif($c != "]" && $c != "<" && $c != ">") {
 				/* Because of a strange bug dropping the macron-ed letters,
 				 I've removed html_escape in favour of this: */
-				$str .= ($c == "\n") ? "<br />" : $c;
+				$str .= ($c == "\n") ? ($plain ? "\n" : "<br />") : $c;
 			}
 		}
 
-		return "<span class=\"example-sm\">".$str."</span>";
+		return $plain ? $str : "<span class=\"example-sm\">".$str."</span>";
 	}
 
 	private static function linkToWord($target, $text) {
