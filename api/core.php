@@ -108,7 +108,11 @@ class core {
 	}
 
 	public static function escapeHTML($inp) {
-		return htmlspecialchars($inp, ENT_COMPAT | defined('ENT_HTML401') ? ENT_HTML401 : 0, 'UTF-8');
+		if(!defined('ENT_HTML401')) {
+			return htmlspecialchars($inp, null, 'UTF-8');
+		} else {
+			return htmlspecialchars($inp, ENT_COMPAT | ENT_HTML401, 'UTF-8');
+		}
 	}
 
 	public static function getAlphabet() {
