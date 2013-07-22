@@ -39,9 +39,8 @@ function esc($in) {
 
 $abbr = listtype_model::listAll();
 $date = $date = date("d-m-Y"); // I strongly dislike this format
-echo "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>";
-?>
-<!DOCTYPE xdxf SYSTEM "https://raw.github.com/soshial/xdxf_makedict/master/format_standard/xdxf_strict.dtd">
+echo "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n";
+?><!DOCTYPE xdxf SYSTEM "https://raw.github.com/soshial/xdxf_makedict/master/format_standard/xdxf_strict.dtd">
 <xdxf lang_from="SMO" lang_to="ENG" format="logical" revision="032beta">
 	<meta_info>
 		<title>Samoan Language Vocabulary</title>
@@ -55,7 +54,7 @@ echo "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>";
 			}
 		}
 ?>		</abbreviations>
-		<file_ver>001</file_version>
+		<file_ver>001</file_ver>
 		<creation_date><? echo $date ?></creation_date>
 	</meta_info>
 	<lexicon>
