@@ -1,0 +1,259 @@
+-- Edited version of MySQL dump, suitable for sqlite.
+
+--
+-- Table structure for table "sm_def"
+--
+
+CREATE TABLE "sm_def" (
+  "def_id" int(11) NOT NULL,
+  "def_word_id" int(11) NOT NULL,
+  "def_type" int(11) NOT NULL,
+  "def_en" varchar(256) NOT NULL,
+  PRIMARY KEY ("def_id")
+--KEY "def_word_id" ("def_word_id")
+--KEY "def_type" ("def_type")
+);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table "sm_def_tag"
+--
+
+CREATE TABLE "sm_def_tag" (
+  "def_id" int(11) NOT NULL,
+  "type_id" int(11) NOT NULL,
+  PRIMARY KEY ("def_id","type_id")
+);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table "sm_example"
+--
+
+CREATE TABLE "sm_example" (
+  "example_id" int(11) NOT NULL,
+  "example_str" text NOT NULL,
+  "example_t_style" text NOT NULL,
+  "example_k_style" text NOT NULL,
+  "example_t_style_recorded" int(1),
+  "example_k_style_recorded" int(1),
+  "example_en" text NOT NULL,
+  "example_en_lit" text NOT NULL,
+  "example_uploaded" timestamp NOT NULL,
+  "example_audio_tag" text NOT NULL,
+  PRIMARY KEY ("example_id")
+);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table "sm_exampleaudio"
+--
+
+CREATE TABLE "sm_exampleaudio" (
+  "example_id" int(11) NOT NULL,
+  "audio_k_stye" int(1) NOT NULL,
+  "audio_upload_date" datetime NOT NULL,
+  "audio_speaker" int(11) NOT NULL,
+  PRIMARY KEY ("example_id","audio_k_stye")
+--KEY "example_id" ("example_id")
+);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table "sm_examplerel"
+--
+
+CREATE TABLE "sm_examplerel" (
+  "example_rel_example_id" int(11) NOT NULL,
+  "example_rel_def_id" int(11) NOT NULL,
+  PRIMARY KEY ("example_rel_example_id","example_rel_def_id")
+--KEY "example_rel_example_id" ("example_rel_example_id")
+--KEY "example_rel_def_id" ("example_rel_def_id")
+);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table "sm_letter"
+--
+
+CREATE TABLE "sm_letter" (
+  "letter_html" mediumtext NOT NULL,
+  "letter_html_ts" timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  "letter_html_valid" int(1) NOT NULL,
+  "letter_id" varchar(1) NOT NULL,
+  PRIMARY KEY ("letter_id")
+);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table "sm_listlang"
+--
+
+CREATE TABLE "sm_listlang" (
+  "lang_id" varchar(2) NOT NULL,
+  "lang_name" varchar(32) NOT NULL
+--KEY "id" ("lang_id")
+);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table "sm_listreltype"
+--
+
+CREATE TABLE "sm_listreltype" (
+  "rel_type_id" varchar(4) NOT NULL DEFAULT '',
+  "rel_type_short" varchar(256) NOT NULL,
+  "rel_type_long" varchar(256) NOT NULL,
+  "rel_type_long_label" varchar(256) NOT NULL,
+  PRIMARY KEY ("rel_type_id")
+);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table "sm_listtype"
+--
+
+CREATE TABLE "sm_listtype" (
+  "type_id" int(11) NOT NULL,
+  "type_abbr" varchar(256) NOT NULL,
+  "type_name" varchar(256) NOT NULL,
+  "type_title" varchar(255) NOT NULL,
+  "type_short" varchar(256) NOT NULL,
+  "type_istag" int(1) NOT NULL,
+  PRIMARY KEY ("type_id")
+);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table "sm_page"
+--
+
+CREATE TABLE "sm_page" (
+  "page_id" int(11) NOT NULL,
+  "page_short" varchar(256) NOT NULL,
+  "page_revision" int(11) DEFAULT NULL,
+  "page_created" timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY ("page_id")
+--UNIQUE KEY "page_short" ("page_short")
+);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table "sm_revision"
+--
+
+CREATE TABLE "sm_revision" (
+  "revision_id" int(11) NOT NULL,
+  "revision_page_id" int(11) NOT NULL,
+  "revision_title" varchar(256) NOT NULL,
+  "revision_author" int(11) NOT NULL,
+  "revision_ts" timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  "revision_text" mediumtext NOT NULL,
+  "revision_text_parsed" mediumtext NOT NULL,
+  "revision_parse_ts" timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  "revision_parse_valid" int(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY ("revision_id")
+--KEY "revision_page_id" ("revision_page_id")
+);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table "sm_spelling"
+--
+
+CREATE TABLE "sm_spelling" (
+  "spelling_id" int(11) NOT NULL,
+  "spelling_t_style" varchar(127) NOT NULL,
+  "spelling_t_style_recorded" tinyint(1) NOT NULL DEFAULT '0',
+  "spelling_k_style" varchar(127) NOT NULL,
+  "spelling_k_style_recorded" tinyint(1) NOT NULL DEFAULT '0',
+  "spelling_simple" varchar(127) NOT NULL,
+  "spelling_sortkey" varchar(127) NOT NULL,
+  "spelling_searchkey" varchar(127) NOT NULL,
+  "spelling_sortkey_sm" varchar(127) NOT NULL,
+  PRIMARY KEY ("spelling_id")
+--UNIQUE KEY "spelling_t_style" ("spelling_t_style")
+);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table "sm_spellingaudio"
+--
+
+CREATE TABLE "sm_spellingaudio" (
+  "spelling_id" int(11) NOT NULL,
+  "audio_k_style" int(1) NOT NULL,
+  "audio_upload_date" datetime NOT NULL,
+  "audio_speaker" int(11) NOT NULL,
+  PRIMARY KEY ("spelling_id","audio_k_style")
+--KEY "spelling_id" ("spelling_id")
+);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table "sm_user"
+--
+
+CREATE TABLE "sm_user" (
+  "user_id" int(11) NOT NULL,
+  "user_name" varchar(127) NOT NULL,
+  "user_pass" varchar(127) NOT NULL,
+  "user_salt" varchar(127) NOT NULL,
+  "user_token" varchar(127) NOT NULL,
+  "user_email" varchar(256) NOT NULL,
+  "user_email_confirmed" int(1) NOT NULL DEFAULT '0',
+  "user_created" timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  "user_role" varchar(256) NOT NULL,
+  PRIMARY KEY ("user_id")
+--UNIQUE KEY "user_email" ("user_email"),
+--UNIQUE KEY "user_name" ("user_name")
+);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table "sm_word"
+--
+
+CREATE TABLE "sm_word" (
+  "word_id" int(11) NOT NULL,
+  "word_spelling" int(11) NOT NULL,
+  "word_num" int(1) NOT NULL,
+  "word_origin_lang" varchar(2) DEFAULT NULL,
+  "word_origin_word" varchar(127) NOT NULL,
+  "word_auto" tinyint(1) NOT NULL DEFAULT '0',
+  "word_redirect_to" int(11) DEFAULT NULL,
+  PRIMARY KEY ("word_id")
+--UNIQUE KEY "word_idstr_unique" ("word_spelling","word_num"),
+--KEY "word_spelling" ("word_spelling"),
+--KEY "word_origin_lang" ("word_origin_lang"),
+--KEY "word_redirect_to" ("word_redirect_to")
+);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table "sm_wordrel"
+--
+
+CREATE TABLE "sm_wordrel" (
+  "wordrel_id" int(11) NOT NULL,
+  "wordrel_word_id" int(11) NOT NULL,
+  "wordrel_type" varchar(256) NOT NULL,
+  "wordrel_target" int(11) NOT NULL,
+  PRIMARY KEY ("wordrel_id")
+);
+
