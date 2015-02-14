@@ -392,7 +392,7 @@ h1 a,h2 a,h3 a,h4 a,h5 a,h6 a {
 
 .post {
 	overflow: hidden;
-	margin: 0 0 50px 0;
+	margin: 0 0 15px 0;
 	background: #f0f0f0;
 	border: 1px solid #ccc;
 	-moz-border-radius: 6px;
@@ -1246,3 +1246,5 @@ div.tleft {
 	float: left;
 	clear: both;
 }
+
+
