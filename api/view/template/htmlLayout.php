@@ -13,18 +13,11 @@
 } ?>
 </title>
 <link rel="stylesheet" type="text/css" media="all"
-	href="<?php echo self::$config['webroot']; ?>style/style.css">
+	href="<?php echo self::$config['webroot']; ?>style/style.min.css">
 <link rel="stylesheet" type="text/css" media="all"
 	href="<?php echo self::$config['webroot']; ?>style/ui-lightness/jquery-ui-1.9.2.custom.min.css">
 <script type="text/javascript"
 	src="<?php echo self::$config['webroot']; ?>js/jquery-1.8.3.js"></script>
-<script type="text/javascript"
-	src="<?php echo self::$config['webroot']; ?>js/jquery-ui-1.9.2.custom.min.js"></script>
-<script type="text/javascript">
-		function audio_play(id) {
-			document.getElementById(id).play();
-		}
-	</script>
 </head>
 
 <body class="two-column content-sidebar">
@@ -176,7 +169,13 @@
 		</div>
 
 	</div>
-
+	<script type="text/javascript"
+		src="<?php echo self::$config['webroot']; ?>js/jquery-ui-1.9.2.custom.min.js"></script>
+	<script type="text/javascript">
+		function audio_play(id) {
+			document.getElementById(id).play();
+		}
+	</script>
 </body>
 </html>
 
