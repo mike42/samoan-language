@@ -11,22 +11,22 @@
 		$('#def-example').submit();
 	}
 </script>
-<?
+<?php
 $formdest = core::constructURL('word', 'edit', array($data['word']['word_id'], 'example', $data['def']['def_id']), 'html');
 echo "<div style=\"float:right\"><a href=\"".core::constructURL('word', 'edit', array($data['id']), 'html')."\">(back to word)</a></div>";
 ?>
-<form id="def-example" method="post" action="<? echo $formdest; ?>">
+<form id="def-example" method="post" action="<?php echo $formdest; ?>">
 	<input type="hidden" name="action" id="action" value="" /> <input
 		type="hidden" name="example_id" id="example_id" value="" />
 </form>
-<? echo word_view::toHTML($data['word']); ?>
+<?php echo word_view::toHTML($data['word']); ?>
 <hr />
 <p>Definition:</p>
 <ul>
-	<li><i><?
+	<li><i><?php
 	echo core::escapeHTML($data['def']['rel_type']['type_abbr']);
 	?>
-	</i> <?
+	</i> <?php
 	$dest = core::constructURL('word', 'edit', array($data['word']['word_id'], 'def', $data['def']['def_id']), 'html');
 	echo core::escapeHTML($data['def']['def_en']);
 	echo " <a href=\"$dest\">[edit]</a>";
@@ -35,7 +35,7 @@ echo "<div style=\"float:right\"><a href=\"".core::constructURL('word', 'edit', 
 </ul>
 
 <h4>Examples</h4>
-<?
+<?php
 echo "<ul>";
 if(count($data['def']['rel_example']) == 0) {
 	echo "<li>There are no usage examples for this definition.</li>";
@@ -52,7 +52,7 @@ echo "</ul>";
 ?>
 
 <h4>List of examples which contain this word</h4>
-<?
+<?php
 echo "<ul>";
 if(count($data['candidates']) == 0) {
 	echo "<li>No examples use this word</li>";
@@ -81,7 +81,7 @@ echo "</ul>";
 		</tr>
 		<tr>
 			<td colspan="2" style="text-align: right"><a
-				href="<? echo core::constructURL('example', 'view', array(''), 'html'); ?>"
+				href="<?php echo core::constructURL('example', 'view', array(''), 'html'); ?>"
 				target="_new">[search]</a> <input type="submit" value="Add" />
 			</td>
 		</tr>

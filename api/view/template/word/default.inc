@@ -8,7 +8,7 @@
 </p>
 <p>Browse alphabetically:</p>
 <ul>
-	<li><? echo word_view::alphabeticPageLinks() ;?></li>
+	<li><?php echo word_view::alphabeticPageLinks() ;?></li>
 </ul>
 
 <form id="form-type" action="words.php" method="post"
@@ -18,7 +18,7 @@
 	
 	
 	<ul>
-		<li>Browse by word type: <?		/*		$field_id="type";
+		<li>Browse by word type: <?php		/*		$field_id="type";
 $form = "<select name=\"$field_id\" onChange=\"form_submit('$field_id');\" style=\"padding:0;margin:0\">";
 $res = $samoan -> db -> type_enumerate();
 while($data = $samoan -> db -> get_row($res)) {
@@ -27,7 +27,7 @@ $form .= "	<option value=\"".(int)$type->type_id."\">".$samoan->html_escape($typ
 }
 $form .= "</select><input type=\"submit\" value=\"Go\" style=\"display:none;\"/>"; echo $form; */ ?>
 		</li>
-		<li><a href="<? echo core::constructURL("word", "letter", array("all"), "html"); ?>">View the entire vocabulary on single
+		<li><a href="<?php echo core::constructURL("word", "letter", array("all"), "html"); ?>">View the entire vocabulary on single
 				page</a></li>
 	</ul>
 </form>

@@ -96,7 +96,7 @@
 			<div id="maincontent">
 				<div id="maincontent_inner">
 					<div class="post">
-						<? include($view_template); ?>
+						<?php include($view_template); ?>
 					</div>
 				</div>
 

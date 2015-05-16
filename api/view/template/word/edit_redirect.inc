@@ -1,5 +1,5 @@
 <form method="post"
-	action="<? echo core::constructURL("word", "edit", array($data['id'], "redirect"), "html") ?>">
+	action="<?php echo core::constructURL("word", "edit", array($data['id'], "redirect"), "html") ?>">
 	<table class="word-edit">
 		<caption>Redirect a word</caption>
 		<tr>

@@ -1,5 +1,5 @@
 <form method="post"
-	action="<? echo core::constructURL("word", "edit", array($data['id'], "move"), "html") ?>">
+	action="<?php echo core::constructURL("word", "edit", array($data['id'], "move"), "html") ?>">
 	<table class="word-edit">
 		<caption>Change spelling</caption>
 		<tr>

@@ -1,5 +1,5 @@
 <form method="post"
-	action="<? echo core::constructURL("word", "edit", array($data['id'], "delete"), "html") ?>">
+	action="<?php echo core::constructURL("word", "edit", array($data['id'], "delete"), "html") ?>">
 	<input type="hidden" name="confirm" value="yes" />
 	<table class="word-edit">
 		<caption>Confirm deletion</caption>

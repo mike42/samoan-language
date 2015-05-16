@@ -1,5 +1,5 @@
 <form method="post"
-	action="<? echo core::constructURL("word", "create", array(''), "html") ?>">
+	action="<?php echo core::constructURL("word", "create", array(''), "html") ?>">
 	<input type="hidden" name="confirm" value="yes" />
 
 	<table class="word-edit">

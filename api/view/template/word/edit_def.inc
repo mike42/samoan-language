@@ -8,7 +8,7 @@ function delWord() {
 </script>
 
 <form method="post" id="def-form"
-	action="<? echo core::constructURL("word", "edit", array($data['id'], 'def', $data['def']['def_id']), 'html'); ?>">
+	action="<?php echo core::constructURL("word", "edit", array($data['id'], 'def', $data['def']['def_id']), 'html'); ?>">
 	<input type="hidden" id="action" name="action" value="update" />
 	<table class="word-edit">
 		<caption>Definition details</caption>

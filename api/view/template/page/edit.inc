@@ -11,7 +11,7 @@
 		}
 	}
 </script>
-<? if(isset($data['preview'])) {
+<?php if(isset($data['preview'])) {
 	echo "<div class=\"notice\">Note: This is only a preview, your changes have not been saved!</div>";
 	echo "<hr>";
 	echo $data['page']['page_rel_revision']['revision_text_parsed'];
@@ -19,7 +19,7 @@
 } ?>
 <div class="editform">
 	<form id="frmedit"
-		action="<? echo core::constructURL('page', 'edit', array($data['id']), 'html'); ?>"
+		action="<?php echo core::constructURL('page', 'edit', array($data['id']), 'html'); ?>"
 		method="post">
 		<input type="hidden" name="action" id="action" value="save">
 		<table>
@@ -35,8 +35,8 @@
 				</td>
 			</tr>
 			<tr>
-				<td colspan=2 style="text-align: right"><? $dest = core::constructURL('page', 'view', array($data['id']), 'html'); ?>
-					<a href="<? echo $dest; ?>">[cancel edit]</a> <? 	if($permissions['delete']) {
+				<td colspan=2 style="text-align: right"><?php $dest = core::constructURL('page', 'view', array($data['id']), 'html'); ?>
+					<a href="<?php echo $dest; ?>">[cancel edit]</a> <?php 	if($permissions['delete']) {
 						echo "<input type=\"button\" onClick=\"deletePage()\" class=\"danger\" value=\"Delete\" />";
 					}
 					?> <input type="button" onClick="previewPage()" value="Preview" />

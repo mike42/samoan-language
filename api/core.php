@@ -1,11 +1,11 @@
-<?
+<?php
 /**
  * Core class -- Handles links and class-loading amongst other things.
  */
 class core {
 	static $alphabet_en		= array("a","e","f","g","h","i","k","l","m","n","o","p","r","s","t","u","v");
 	static $alphabet_sm		= array("a","e","i","o","u","f","g","l","m","n","p","s","t","v","h","k","r");
-
+	
 	private static $config = null;
 
 	function __autoload($className) {
@@ -45,10 +45,28 @@ class core {
 		}
 	}
 
-	static function fizzle($info = '') {
-		header("HTTP/1.0 404 Not Found");
-		echo "404 at fizzle($info)";
-		die();
+	/**
+	 * Stop with an error message (fatal error).
+	 * 
+	 * @param string $info
+	 * @param string $code HTTP error code- 404 or 500.
+	 */
+	static function fizzle($info = '', $code = '404') {
+		if($code === '404') {
+			header("HTTP/1.1 404 Not Found");
+		} else if($code == '500') {
+			header("HTTP/1.1 500 Internal Server Error");
+		}
+		echo "<html>\n" . 
+			"\t<head>\n" .
+			"\t\t<title>Uh oh!</title>\n" .
+			"\t</head>\n" .
+			"\t<body>\n" .
+			"\t\t<div style='text-align: center; font-size: 200%'>Uh oh!</div>\n" .
+			"\t\t<div style='text-align: center;'>" . self::escapeHTML($info) . "</div>\n" .
+			"\t</body>\n" .
+			"</html>\n";
+		exit();
 	}
 
 	static function constructURL($controller, $action, $arg, $fmt) {
@@ -95,14 +113,18 @@ class core {
 	static public function getConfig($className) {
 		if(core::$config == null) {
 			/* Load config if it is needed */
-			include(dirname(__FILE__).'/config.php');
+			$fn = dirname(__FILE__).'/config.php';
+			if(!file_exists($fn)) {
+				core::fizzle("Configuration file does not exist. Please install the application.", "500");
+			}
+			include($fn);
 			core::$config = $config;
 		}
 
 		if(isset(core::$config[$className])) {
 			return core::$config[$className];
 		} else {
-			core::fizzle("No configuration for $className");
+			core::fizzle("No configuration for $className", "500");
 			return false;
 		}
 	}

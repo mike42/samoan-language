@@ -1,4 +1,4 @@
-<?
+<?php
 if($data['error'] == '403') {
 	echo "<p>You do not have permission to view this page. You may have to log in.</p>";
 } else {

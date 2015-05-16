@@ -4,7 +4,7 @@
 		<tr>
 			<th>Number:</th>
 			<td><?php echo (int)$data['word']['word_id']; ?></td>
-			<td><?if($permissions['delete']) {
+			<td><?php if($permissions['delete']) {
 				$dest = core::constructURL('word', 'edit', array($data['id'], 'delete'), 'html');
 				echo "<a href=\"$dest\" style=\"color:#f00\">[delete]</a>";
 				  }?></td>
