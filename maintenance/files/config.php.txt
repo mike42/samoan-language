@@ -5,6 +5,7 @@ $config['core']['default']['controller']	= 'page';
 $config['core']['default']['action']		= 'view';
 $config['core']['default']['arg']			= array('home');
 $config['core']['default']['format']		= 'html';
+$config['core']['footer']					= false; // Set to filename of inc to be included after every page
 
 /* Database */
 $config['database']['user'] = '';

@@ -98,6 +98,10 @@
 					<div class="post">
 						<?php include($view_template); ?>
 					</div>
+					<?php
+					if(isset(self::$config['footer']) && self::$config['footer'] !== false) {
+						include(self::$config['footer']);
+					}?>
 				</div>
 
 			</div>
