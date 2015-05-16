@@ -23,6 +23,6 @@ Then follow the instructions in maintenance/help.html for the configuration step
 
 Credit
 ------
-* Uses modified version of [zBench](http://wordpress.org/extend/themes/zbench/developers/) wordpress theme (GPL v2 or newer)
+* Uses modified version of [zBench](https://wordpress.org/themes/zbench/) wordpress theme (GPL v2 or newer)
 * Uses the [Bitrevision Wikitext parser](http://mike.bitrevision.com/wikitext/) for a wiki-like feel to the editing interface.
 * Uses [jQuery UI](http://jqueryui.com) and [jQuery](http://jquery.com) for some non-static elements.
