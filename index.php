@@ -27,7 +27,6 @@ if(count($arg) > 2) {
 	/* $controller/$action/{foo/bar/baz}.quux */
 	$controller = array_shift($arg);
 	$action = array_shift($arg);
-
 } elseif(count($arg) == 2) {
 	/* No action specified - $controller/(default action)/{foo}.quux */
 	$controller = array_shift($arg);
@@ -61,6 +60,7 @@ try {
 		core::redirect($ret['redirect']);
 	}
 	/* Run view code */
+	$ret['url'] = core::constructUrl($controller, $action, $arg, $fmt);
 	if(!is_callable($viewClassName . "::" .$viewMethodName)) {
 		core::fizzle("View '$viewClassName' does not have method '$viewMethodName'");
 	}

@@ -130,7 +130,7 @@ class word_view {
 				
 		}
 
-		return "<div class=\"entry\">".$str."</div>\n";
+		return "<div class=\"sm-entry\">".$str."</div>\n";
 	}
 
 	private static function getInnerItems($items, $relatives, $show_audio = true, $bold = true, $link_to = false, $key = 'rel_type_short') {
@@ -178,6 +178,7 @@ class word_view {
 				/* Link to upload page */
 				$audioURL = core::constructURL("audio", "view", array('spelling', $spelling), "html");
 				$audio = "<a href=\"".core::escapeHTML($audioURL)."\" title=\"".core::escapeHTML($spelling)."\"><img src=\"".core::escapeHTML(self::$config['webroot'])."style/images/no-sound.png\" border=0 /></a>";
+				$audio = ""; // Hiding red audio links for now.
 			}
 		} else {
 			/* No audio link at all */
@@ -187,8 +188,7 @@ class word_view {
 		$str = ($link_to? "<a href=\"".core::escapeHTML($wordURL)."\">" : "").
 		($bold? "<b>".core::escapeHTML($spelling).$sub . "</b>" : core::escapeHTML($spelling).$sub) .
 		($link_to? "</a>" : "") . $audio;
-		return $str;
-
+		return "<span class=\"sm-word\">$str</span>";
 	}
 
 	public static function alphabeticPageLinks($sep = "\n", $internal = false) {

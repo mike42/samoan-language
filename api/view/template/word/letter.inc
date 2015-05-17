@@ -11,7 +11,7 @@ if(isset($data['letters'])) {
 }
 
 function showLetter($data, $internal) {
-	echo "<div style=\"float:right; font-weight: heavy; text-align: center; \">".word_view::alphabeticPageLinks("<br />", $internal)."</div>";
+	echo "<div style=\"float:right; font-weight: heavy; text-align: center; padding-left: 1em; \">".word_view::alphabeticPageLinks("<br />", $internal)."</div>";
 
 	if(isset($data['cache'])) {
 		/* Check whether this data is simply cached output */

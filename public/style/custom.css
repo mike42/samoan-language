@@ -1,0 +1,169 @@
+/* Customisations */
+.word-edit {
+	border-collapse: collapse;
+}
+
+.word-edit td {
+	padding-left: 1em;
+	padding-right: 1em;
+	border: 1px solid #ccc;
+	text-align: center;
+}
+
+.word-edit select {
+	width: 100%;
+}
+
+.word-edit th {
+	padding-left: 1em;
+	padding-right: 1em;
+	border: 1px solid #ccc;
+	text-align: left;
+}
+
+.word-edit caption {
+	font-weight: bold;
+}
+
+.entry h1, .entry h2, .entry h3, .entry h4, .entry h5, .entry h6 {
+	font-family: sans-serif;
+	margin: 22px 0 0 0;
+}
+
+#content p,#content li
+#content blockquote,#content dl {
+	margin: 0 0 1em 0;
+}
+
+#content table,#content ol,#content ul {
+	margin-bottom: 1em;
+}
+
+#page-editbox,.editform table {
+	width: 100%;
+}
+
+#page-editbox {
+	resize: none;
+}
+
+.entry .indent, dd {
+	margin-left: 20px;
+}
+
+.entry a {
+	color: #047;
+}
+
+a.new {
+	color: #BA0000;
+}
+
+.notice {
+	color: #BA0000;
+	font-weight: bold;
+}
+
+.danger {
+	color: #f00
+}
+
+div.thumbcaption {
+	text-align: center;
+	font-size: 80%;	
+}
+
+div.tright {
+	float: right;
+	clear: both;
+}
+
+div.tleft {
+	float: left;
+	clear: both;
+}
+
+@media screen and (max-width:1000px) {
+	#menus ul ul{float: inherit;}
+}
+
+.example-sm {
+	font-style: italic;
+	border-bottom: 1px dotted;
+}
+
+.sm-word {
+	white-space: nowrap;
+}
+
+.entry a img {
+	margin: 0;
+}
+
+.entry table, .entry table td, .entry table tr, .entry table th {
+	border: none;
+	background: none;
+}
+
+.entry .neattable table {
+	border: 1px solid #ccc;
+	border-collapse: collapse;
+	margin: 5px 0 10px 5px;
+}
+
+.entry .neattable th, .entry .neattable td {
+	border: 1px solid #ccc;
+	padding: 3px 10px;
+	text-align: left;
+	vertical-align: top;
+}
+
+.entry .neattable tr.even td {
+	background: #f7f7f7;
+}
+
+.entry .neattable th {
+	background: #edeff0;
+}
+
+sub {
+	vertical-align: bottom;
+	position: relative;
+	bottom: -0.4em;
+}
+
+#content .sm-entry dl {
+	margin-bottom: 0;
+}
+
+.entry dd {
+	padding: 3px 10px;
+}
+
+h2.title {
+	border-bottom: none;
+}
+
+.entry *, .widget * {
+	font-size: 16px;
+}
+
+.entry small, .widget small {
+	font-size: 12px;
+}
+
+.entry *, .entry p, .entry li {
+	line-height: 30px;
+}
+
+h2.title {
+	text-shadow: none;
+}
+
+.site_title {
+	margin-bottom: 15px;
+}
+
+#sidebar {
+	padding-top: 10px;
+}
