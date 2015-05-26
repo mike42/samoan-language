@@ -1,4 +1,6 @@
 <?php
+namespace SmWeb;
+
 class database {
 	private static $conn; /* Database connection */
 	private static $conf; /* Config */

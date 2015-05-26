@@ -1,4 +1,6 @@
 <?php
+namespace SmWeb;
+
 class word_view {
 	private static $config;
 	private static $roman_numerals; // Used to label defs as i, ii, ii etc

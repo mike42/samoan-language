@@ -1,4 +1,5 @@
 <?php
+namespace SmWeb;
 
 class letter_model {
 	public static $template;

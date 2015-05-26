@@ -1,4 +1,6 @@
 <?php
+namespace SmWeb;
+
 class example_controller {
 	public static function init() {
 		core::loadClass('example_model');

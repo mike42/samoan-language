@@ -1,4 +1,6 @@
 <?php
+namespace SmWeb;
+
 class listlang_model {
 	public static $template;
 

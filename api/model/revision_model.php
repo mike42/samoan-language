@@ -1,4 +1,6 @@
 <?php
+namespace SmWeb;
+
 class revision_model {
 	public static $template;
 

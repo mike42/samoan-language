@@ -1,4 +1,6 @@
 <?php
+namespace SmWeb;
+
 class examplerel_model {
 	private static $template;
 

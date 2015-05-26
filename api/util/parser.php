@@ -1,4 +1,6 @@
 <?php
+namespace SmWeb;
+
 /* Uses the bitrevision wikitext parser */
 require_once(dirname(__FILE__) . "/../../vendor/wikitext/wikitext.php");
 

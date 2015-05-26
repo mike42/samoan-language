@@ -1,4 +1,6 @@
 <?php
+namespace SmWeb;
+
 class def_view {
 	public static function init() {
 		core::loadClass('def_model');

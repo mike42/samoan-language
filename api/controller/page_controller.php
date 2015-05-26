@@ -1,4 +1,6 @@
-<?php 
+<?php
+namespace SmWeb;
+
 class page_controller {
 	public static function init() {
 		core::loadClass('page_model');

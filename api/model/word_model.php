@@ -1,4 +1,6 @@
 <?php
+namespace SmWeb;
+
 class word_model {
 	public static $template;
 	private static $rel_template; /* Template for how words relate to eachother */

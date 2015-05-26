@@ -1,4 +1,6 @@
 <?php
+namespace SmWeb;
+
 class user_controller {
 	public static function init() {
 		core::loadClass('user_model');

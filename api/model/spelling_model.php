@@ -1,4 +1,6 @@
 <?php
+namespace SmWeb;
+
 class spelling_model {
 	public static $template;
 

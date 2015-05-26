@@ -1,4 +1,6 @@
-<?php 
+<?php
+namespace SmWeb;
+
 class page_view {
 	private static $config;
 

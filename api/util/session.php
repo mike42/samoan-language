@@ -1,4 +1,6 @@
 <?php
+namespace SmWeb;
+
 /* Manage user sessions */
 class session {
 	private static $started;

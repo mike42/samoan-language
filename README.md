@@ -1,5 +1,5 @@
-Samoan
-======
+Samoan Language Web App
+=======================
 This is a web app for managing Samoan Language Resources. It is a wiki-like CMS, with many features to support this:
 - Multiple users with customisable permissions.
 - Embedded audio.
@@ -26,3 +26,4 @@ Credit
 * Uses modified version of [zBench](https://wordpress.org/themes/zbench/) wordpress theme (GPL v2 or newer)
 * Uses the [Bitrevision Wikitext parser](http://mike.bitrevision.com/wikitext/) for a wiki-like feel to the editing interface.
 * Uses [jQuery UI](http://jqueryui.com) and [jQuery](http://jquery.com) for some non-static elements.
+

@@ -1,4 +1,6 @@
 <?php
+namespace SmWeb;
+
 class listtype_view {
 	public static function init() {
 

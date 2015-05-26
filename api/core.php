@@ -1,4 +1,6 @@
 <?php
+namespace SmWeb;
+
 /**
  * Core class -- Handles links and class-loading amongst other things.
  */

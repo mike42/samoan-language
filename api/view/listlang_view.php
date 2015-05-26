@@ -1,4 +1,6 @@
 <?php
+namespace SmWeb;
+
 class listlang_view {
 	public static function init() {
 

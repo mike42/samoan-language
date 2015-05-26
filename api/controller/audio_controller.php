@@ -1,4 +1,6 @@
 <?php
+namespace SmWeb;
+
 class audio_controller {
 	static $audioDir;
 

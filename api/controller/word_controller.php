@@ -1,4 +1,6 @@
 <?php
+namespace SmWeb;
+
 class word_controller {
 	public static function init() {
 		core::loadClass("letter_model");
