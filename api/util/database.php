@@ -7,7 +7,7 @@ class database {
 
 	public static function init() {
 		/* Get configuration for this class and connect to the database */
-		database::$conf = core::getConfig(__CLASS__);
+		database::$conf = core::getConfig("database");
 		if(!database::connect()) {
 			core::fizzle("Failed to connect to database: " . mysql_error());
 		}

@@ -28,9 +28,9 @@ class core {
 			require_once($fn);
 				
 			/* Call init function if one is defined */
-			if(is_callable($className . "::init")) {
+			if(is_callable("\\SmWeb\\" . $className . "::init")) {
 				try {
-					call_user_func($className . "::init");
+					call_user_func("\\SmWeb\\" . $className . "::init");
 				} catch(Exception $e) {
 					/* If init() threw an exception, chuck a hissy fit */
 					core::fizzle("The class '$className' did not initialise: " . $e);
