@@ -46,13 +46,12 @@ try {
 	$controllerMethodName = $action;
 	$viewClassName = $controller.'_view';
 	$viewMethodName = $action . "_" . $fmt;
-
 	core::loadClass($controllerClassName);
 	core::loadClass($viewClassName);
-	if(!is_callable("\\SmWeb\\" . $controllerClassName . "::" . $controllerMethodName)) {
+	if(!is_callable(__NAMESPACE__ . "\\" . $controllerClassName . "::" . $controllerMethodName)) {
 		core::fizzle("Controller '$controllerClassName' does not have method '$controllerMethodName'");
 	}
-	$ret = call_user_func_array(array("\\SmWeb\\" . $controllerClassName, $controllerMethodName), $arg);
+	$ret = call_user_func_array(array(__NAMESPACE__ . "\\" . $controllerClassName, $controllerMethodName), $arg);
 
 	if(isset($ret['view'])) {
 		$viewMethodName = $ret['view'] . "_" . $fmt;
@@ -63,10 +62,10 @@ try {
 	}
 	/* Run view code */
 	$ret['url'] = core::constructUrl($controller, $action, $arg, $fmt);
-	if(!is_callable("\\SmWeb\\" . $viewClassName . "::" .$viewMethodName)) {
+	if(!is_callable(__NAMESPACE__ . "\\" . $viewClassName . "::" .$viewMethodName)) {
 		core::fizzle("View '$viewClassName' does not have method '$viewMethodName'");
 	}
-	$ret = call_user_func_array(array("\\SmWeb\\" . $viewClassName, $viewMethodName), array($ret));
+	$ret = call_user_func_array(array(__NAMESPACE__ . "\\" . $viewClassName, $viewMethodName), array($ret));
 } catch(Exception $e) {
 	core::fizzle("Failed to run controller: " . $e);
 }
