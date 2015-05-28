@@ -1,4 +1,5 @@
 <?php
+namespace SmWeb;
 /* The 'add example' form */
 echo "<form action=\"".core::constructURL('example', 'create', array(''), 'html')."\" method=\"post\">";
 echo "<p>Enter an example to add it to the database:</p>";

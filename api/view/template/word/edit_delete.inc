@@ -1,3 +1,6 @@
+<?php
+namespace SmWeb;
+?>
 <form method="post"
 	action="<?php echo core::constructURL("word", "edit", array($data['id'], "delete"), "html") ?>">
 	<input type="hidden" name="confirm" value="yes" />

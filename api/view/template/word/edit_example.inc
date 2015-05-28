@@ -1,3 +1,6 @@
+<?php
+namespace SmWeb;
+?>
 <script type="text/javascript">
 	function addExample(id) {
 		$('#action').val('add');

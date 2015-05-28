@@ -1,3 +1,6 @@
+<?php
+namespace SmWeb;
+?>
 <style>
 .ui-autocomplete-loading {
 	background: white url('<?php echo self::$config[' webroot

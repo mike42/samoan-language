@@ -1,3 +1,6 @@
+<?php
+namespace SmWeb;
+?>
 <script type="text/javascript">
 	function previewExample() {
 		$('#action').val('preview');

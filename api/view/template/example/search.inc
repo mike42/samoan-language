@@ -1,4 +1,6 @@
 <?php
+namespace SmWeb;
+
 if($permissions['create']) {
 	echo "<div style=\"float:right\"><a href=\"".core::constructURL('example', 'create', array(''), 'html')."\">(add new)</a></div>";
 }

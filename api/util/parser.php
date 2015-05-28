@@ -7,7 +7,7 @@ require_once(dirname(__FILE__) . "/../../vendor/wikitext/wikitext.php");
 /**
  * The custom behaviour of templates/links are defined here:
  */
-class SmParserBackend extends DefaultParserBackend {
+class SmParserBackend extends \DefaultParserBackend {
 	public function getInternalLinkInfo($info) {
 		switch($info['namespace']) {
 			case 'word':
@@ -101,8 +101,8 @@ class Parser {
 		core::loadClass("example_model");
 		core::loadClass("example_view");
 
-		WikitextParser::init();
-		WikitextParser::$backend = new SmParserBackend;
+		\WikitextParser::init();
+		\WikitextParser::$backend = new SmParserBackend();
 	}
 
 }

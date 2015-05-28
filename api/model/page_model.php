@@ -52,7 +52,7 @@ class page_model {
 
 	public static function render($page) {
 		core::loadClass('parser');
-		return wikitextParser::parse($page['page_rel_revision']['revision_text']);
+		return \WikitextParser::parse($page['page_rel_revision']['revision_text']);
 	}
 
 	public static function delete($id) {

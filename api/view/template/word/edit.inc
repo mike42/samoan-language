@@ -1,3 +1,6 @@
+<?php
+namespace SmWeb;
+?>
 <div>
 	<table class="word-edit">
 		<caption>Word properties</caption>

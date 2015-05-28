@@ -1,4 +1,6 @@
 <?php
+namespace SmWeb;
+
 if(isset($data['letters'])) {
 	foreach($data['letters'] as $l) {
 		echo "<div style=\"clear:both; padding-bottom: 1.5em;\">" .

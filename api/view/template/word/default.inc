@@ -1,3 +1,6 @@
+<?php
+namespace SmWeb;
+?>
 <p>
 	This is a non-exhaustive vocabulary of Samoan words. This section
 	contains examples, recordings, and English translations for many of the

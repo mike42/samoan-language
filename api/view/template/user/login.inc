@@ -1,3 +1,6 @@
+<?php
+namespace SmWeb;
+?>
 <form method="post"
 	action="<?php  echo core::constructURL("user", "login", array(""), "html"); ?>">
 	<?php

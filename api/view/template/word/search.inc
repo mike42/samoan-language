@@ -1,4 +1,6 @@
 <?php
+namespace SmWeb;
+
 if($data['search'] == '') {
 	echo "<p>Enter a Samoan word in the box below to locate its entry in the vocabulary:</p>";
 	echo "<form id=\"searchform\" action=\"".core::constructURL('word', 'search', array(''), 'html')."\">";

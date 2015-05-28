@@ -1,3 +1,6 @@
+<?php
+namespace SmWeb;
+?>
 <script type="text/javascript">
 function delWord() {
 	if(confirm("Delete this definition?")) {

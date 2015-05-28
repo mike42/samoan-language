@@ -1,4 +1,6 @@
 <?php
+namespace SmWeb;
+
 switch($data['error']) {
 	case '403':
 		echo "<p>You don't have permission to do that. Please contact the site owner for access.</p>";

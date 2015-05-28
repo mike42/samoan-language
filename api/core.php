@@ -42,7 +42,8 @@ class core {
 	}
 
 	static function loadClass($className) {
-		if(!class_exists($className)) {
+		
+		if(!class_exists(__NAMESPACE__ . "\\" . $className)) {
 			core::__autoload($className);
 		}
 	}

@@ -1,4 +1,6 @@
 <?php
+namespace SmWeb;
+
 /* All of site */
 $webroot = self::$config['webroot'];
 $siteTitle = "Samoan Language Resources";

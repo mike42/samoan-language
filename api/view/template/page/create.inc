@@ -1,3 +1,6 @@
+<?php
+namespace SmWeb;
+?>
 <p>
 	Please click the button below to confirm that you would like to create
 	the page '<b><?php  echo core::escapeHTML($data['id'])?> </b>'.
