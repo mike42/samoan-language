@@ -69,4 +69,3 @@ try {
 } catch(Exception $e) {
 	core::fizzle("Failed to run controller: " . $e);
 }
-?>

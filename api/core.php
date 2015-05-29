@@ -150,4 +150,3 @@ class core {
 		return $permission[session::getRole()][$area];
 	}
 }
-?>
