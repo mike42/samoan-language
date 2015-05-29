@@ -2,7 +2,7 @@
 
 namespace SmWeb;
 
-class def_view {
+class def_view implements view {
 	public static function init() {
 		core::loadClass ( 'def_model' );
 	}

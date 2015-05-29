@@ -2,7 +2,7 @@
 
 namespace SmWeb;
 
-class audio_controller {
+class audio_controller implements controller {
 	static $audioDir;
 	public static function init() {
 		core::loadClass ( "spellingaudio_model" );

@@ -2,7 +2,7 @@
 
 namespace SmWeb;
 
-class def_model {
+class def_model implements model {
 	private static $template;
 	public static function init() {
 		core::loadClass ( 'database' );

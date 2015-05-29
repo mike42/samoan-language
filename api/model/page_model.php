@@ -2,7 +2,7 @@
 
 namespace SmWeb;
 
-class page_model {
+class page_model implements model {
 	private static $template;
 	public static function init() {
 		core::loadClass ( 'database' );

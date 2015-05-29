@@ -2,7 +2,7 @@
 
 namespace SmWeb;
 
-class listtype_view {
+class listtype_view implements view {
 	public static function init() {
 	}
 	public static function makeComboBox($list, $key = 'type_id', $selected_id = '') {

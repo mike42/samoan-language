@@ -2,7 +2,7 @@
 
 namespace SmWeb;
 
-class revision_model {
+class revision_model implements model {
 	public static $template;
 	public static function init() {
 		core::loadClass ( 'database' );

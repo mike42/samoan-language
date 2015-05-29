@@ -2,7 +2,7 @@
 
 namespace SmWeb;
 
-class word_controller {
+class word_controller implements controller {
 	public static function init() {
 		core::loadClass ( "letter_model" );
 		core::loadClass ( 'word_model' );

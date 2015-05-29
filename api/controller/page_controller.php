@@ -2,7 +2,7 @@
 
 namespace SmWeb;
 
-class page_controller {
+class page_controller implements controller {
 	public static function init() {
 		core::loadClass ( 'page_model' );
 	}

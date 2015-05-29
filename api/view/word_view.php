@@ -2,7 +2,7 @@
 
 namespace SmWeb;
 
-class word_view {
+class word_view implements view {
 	private static $config;
 	private static $roman_numerals; // Used to label defs as i, ii, ii etc
 	public static function init() {
@@ -37,11 +37,11 @@ class word_view {
 		
 		self::$config = core::getConfig ( 'core' );
 	}
-	public static function view_html($data) {
+	public static function view_html(array $data) {
 		$data ['titlebar'] = $data ['word'] ['rel_spelling'] ['spelling_t_style'] . " - Samoan Language Vocabulary";
 		self::useTemplate ( "view", $data );
 	}
-	public static function edit_html($data) {
+	public static function edit_html(array $data) {
 		$template = "edit";
 		if (isset ( $data ['form'] )) {
 			$template = "edit_" . $data ['form'];
@@ -49,22 +49,22 @@ class word_view {
 		$data ['title'] = "Editing " . $data ['word'] ['rel_spelling'] ['spelling_t_style'];
 		self::useTemplate ( $template, $data );
 	}
-	public static function create_html($data) {
+	public static function create_html(array $data) {
 		self::useTemplate ( "create", $data );
 	}
-	public static function letter_html($data) {
+	public static function letter_html(array $data) {
 		self::useTemplate ( "letter", $data );
 	}
-	public static function type_html($data) {
+	public static function type_html(array $data) {
 		self::useTemplate ( "type", $data );
 	}
-	public static function default_html($data) {
+	public static function default_html(array $data) {
 		self::useTemplate ( "default", $data );
 	}
-	public static function search_html($data) {
+	public static function search_html(array $data) {
 		self::useTemplate ( "search", $data );
 	}
-	public static function search_json($data) {
+	public static function search_json(array $data) {
 		header ( "content-type: application/json" );
 		/* Construct heavily simplified key->val data structure for autocomplete use */
 		$ret = array ();
@@ -90,7 +90,7 @@ class word_view {
 				"words" => $ret 
 		) );
 	}
-	public static function error_html($data) {
+	public static function error_html(array $data) {
 		if ($data ['error'] == "404") {
 			header ( "HTTP/1.0 404 Not Found" );
 			$data ['title'] = "Error - Word not found";
@@ -245,7 +245,7 @@ class word_view {
 	/**
 	 * Return a combo box for viewing word-relation types (eg opposite, compound word, etc)
 	 */
-	public static function makeWordRelComboBox($list, $key = 'rel_type_id', $selected_id = '') {
+	public static function makeWordRelComboBox(array $list, $key = 'rel_type_id', $selected_id = '') {
 		$str = "<select name=\"" . core::escapeHTML ( $key ) . "\">\n";
 		$str .= "<option value=\"\">(relation type)</option>";
 		foreach ( $list as $listreltype ) {

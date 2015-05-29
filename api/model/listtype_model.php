@@ -2,7 +2,7 @@
 
 namespace SmWeb;
 
-class listtype_model {
+class listtype_model implements model {
 	public static $template;
 	public static function init() {
 		core::loadClass ( 'database' );

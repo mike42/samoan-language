@@ -2,7 +2,7 @@
 
 namespace SmWeb;
 
-class user_controller {
+class user_controller implements controller {
 	public static function init() {
 		core::loadClass ( 'user_model' );
 		core::loadClass ( 'session' );

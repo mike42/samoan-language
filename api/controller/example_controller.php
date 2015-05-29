@@ -2,7 +2,7 @@
 
 namespace SmWeb;
 
-class example_controller {
+class example_controller implements controller {
 	public static function init() {
 		core::loadClass ( 'example_model' );
 		core::loadClass ( 'word_model' );

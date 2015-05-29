@@ -2,7 +2,7 @@
 
 namespace SmWeb;
 
-class word_model {
+class word_model implements model {
 	public static $template;
 	private static $rel_template; /* Template for how words relate to eachother */
 	public static function init() {

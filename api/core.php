@@ -1,5 +1,6 @@
 <?php
 namespace SmWeb;
+use Exception;
 
 /**
  * Core class -- Handles links and class-loading amongst other things.
@@ -150,3 +151,7 @@ class core {
 		return $permission[session::getRole()][$area];
 	}
 }
+
+interface controller {}
+interface view {}
+interface model {}

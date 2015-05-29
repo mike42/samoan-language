@@ -2,7 +2,7 @@
 
 namespace SmWeb;
 
-class letter_model {
+class letter_model implements model {
 	public static $template;
 	public static function init() {
 		core::loadClass ( 'database' );

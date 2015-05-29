@@ -2,7 +2,7 @@
 
 namespace SmWeb;
 
-class spellingaudio_model {
+class spellingaudio_model implements model {
 	private static $template;
 	public static function init() {
 		core::loadClass ( 'database' );

@@ -2,28 +2,28 @@
 
 namespace SmWeb;
 
-class example_view {
+class example_view implements view {
 	public static $config;
 	public static function init() {
 		self::$config = core::getConfig ( 'core' );
 	}
-	public static function view_html($data) {
+	public static function view_html(array $data) {
 		$data ['title'] = "Language examples";
 		self::useTemplate ( 'view', $data );
 	}
-	public static function edit_html($data) {
+	public static function edit_html(array $data) {
 		$data ['title'] = "Editing example";
 		self::useTemplate ( 'edit', $data );
 	}
-	public static function create_html($data) {
+	public static function create_html(array $data) {
 		$data ['title'] = "Add example";
 		self::useTemplate ( 'create', $data );
 	}
-	public static function search_html($data) {
+	public static function search_html(array $data) {
 		$data ['title'] = "Search examples";
 		self::useTemplate ( 'search', $data );
 	}
-	public static function error_html($data) {
+	public static function error_html(array $data) {
 		if ($data ['error'] == "404") {
 			header ( "HTTP/1.0 404 Not Found" );
 			$data ['title'] = "Error - Example not found";

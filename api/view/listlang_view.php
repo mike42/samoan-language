@@ -2,7 +2,7 @@
 
 namespace SmWeb;
 
-class listlang_view {
+class listlang_view implements view {
 	public static function init() {
 	}
 	
