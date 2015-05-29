@@ -1,13 +1,16 @@
 #!/usr/bin/env php
 <?php
+
+namespace SmWeb;
+
 /* This script will tidy up the database to clean up after word numberings and moves. */
-require_once(dirname(__FILE__) . "/../../api/core.php");
-core::loadClass("database");
+require_once (dirname ( __FILE__ ) . "/../../api/core.php");
+core::loadClass ( "database" );
 
 /* Delete spellings which aren't used */
 echo "Clearing orphaned spellings ...";
 $query = "DELETE {TABLE}spelling FROM {TABLE}spelling LEFT JOIN {TABLE}word ON spelling_id = word_spelling WHERE word_id IS NULL;";
-database::retrieve($query, 0);
+database::retrieve ( $query, 0 );
 echo " done\n";
 
 /* Spot spellings which are incorrectly numbered:

@@ -1,6 +1,7 @@
 Samoan Language Web App
 =======================
-This is a web app for managing Samoan Language Resources. It is a wiki-like CMS, with many features to support this:
+This is a web app for managing Samoan Language Resources. It is a wiki-like CMS, with features targeted to language documentation:
+
 - Multiple users with customisable permissions.
 - Embedded audio.
 - In-browser editable vocabulary.
@@ -11,7 +12,7 @@ Requirements
 ------------
 This project is PHP-based, so it should run on any major OS.
 
-You will require the [imagick](http://php.net/manual/en/book.imagick.php) extension, which is used to generate thumbnails.
+You will require the [imagick](http://php.net/manual/en/book.imagick.php) extension, which is used by the Wikitext parset to generate thumbnails.
 
 Setup
 -----
@@ -19,7 +20,12 @@ First clone the repo with submodules:
 
     git clone --recursive https://github.com/mike42/samoan
 
-Then follow the instructions in maintenance/help.html for the configuration steps. 
+Then follow the instructions in maintenance/help.html, which will show you how to:
+
+* Create a database loaded with the schema
+* Create config
+* Set up apache with htaccess.
+* Add a user
 
 Credit
 ------
