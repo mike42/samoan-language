@@ -106,41 +106,6 @@ class request {
 				return;
 			}
 			$this->runView ( $this->view, $data, $this -> action, $this->fmt );
-			// /* Execute controller code */
-			// $controllerClassName = $controllerShortName . '_controller';
-			// $controllerMethodName = $action;
-			// $controller = $this->getController ( $controllerShortName );
-			// $controller = $this->getView ( $controllerShortName );
-			// $viewClassName = $controllerShortName . '_view';
-			// $viewMethodName = $action . "_" . $fmt;
-			// core::loadClass ( $controllerClassName );
-			// core::loadClass ( $viewClassName );
-			// if (! is_callable ( __NAMESPACE__ . "\\" . $controllerClassName . "::" . $controllerMethodName )) {
-			// core::fizzle ( "Controller '$controllerClassName' does not have method '$controllerMethodName'" );
-			// }
-			// $ret = call_user_func_array ( array (
-			// __NAMESPACE__ . "\\" . $controllerClassName,
-			// $controllerMethodName
-			// ), $arg );
-			
-			// if (isset ( $ret ['view'] )) {
-			// $viewMethodName = $ret ['view'] . "_" . $fmt;
-			// } elseif (isset ( $ret ['error'] )) {
-			// $viewMethodName = 'error' . "_" . $fmt;
-			// } elseif (isset ( $ret ['redirect'] )) {
-			// core::redirect ( $ret ['redirect'] );
-			// }
-			// /* Run view code */
-			// $ret ['url'] = core::constructUrl ( $controllerShortName, $action, $arg, $fmt );
-			// if (! is_callable ( __NAMESPACE__ . "\\" . $viewClassName . "::" . $viewMethodName )) {
-			// core::fizzle ( "View '$viewClassName' does not have method '$viewMethodName'" );
-			// }
-			// $ret = call_user_func_array ( array (
-			// __NAMESPACE__ . "\\" . $viewClassName,
-			// $viewMethodName
-			// ), array (
-			// $ret
-			// ) );
 		} catch ( Exception $e ) {
 			core::fizzle ( "Failed to run controller: " . $e );
 		}

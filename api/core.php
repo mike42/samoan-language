@@ -152,6 +152,10 @@ class core {
 	}
 }
 
+class WebException extends Exception {
+	// TODO take error code etc
+}
+
 interface controller {}
 interface view {}
 interface model {}
