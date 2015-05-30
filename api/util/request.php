@@ -10,50 +10,50 @@ use \Exception;
 class request {
 	/**
 	 *
-	 * @var array Request config
+	 * @var array Configuration for requests.
 	 */
 	private $config;
 	
 	/**
 	 *
-	 * @var controller
+	 * @var controller Controller to use
 	 */
 	private $controller;
 	
 	/**
 	 *
-	 * @var view
+	 * @var view View to use
 	 */
 	private $view;
 	
 	/**
 	 *
-	 * @var unknown
+	 * @var array Arguments to apply to the controller.
 	 */
 	private $arg;
 	
 	/**
 	 *
-	 * @var unknown
+	 * @var string Action to perform, such as 'view' or 'edit'
 	 */
 	private $action;
 	
 	/**
 	 *
-	 * @var unknown
+	 * @var string Format being requested. Usually 'html'.
 	 */
 	private $fmt;
 	
 	/**
 	 *
-	 * @var unknown
+	 * @var string URL being requested, in canonical form.
 	 */
 	private $url;
 	
 	/**
 	 * Construct request
 	 */
-	public function __construct(array $arg) {
+	public function __construct(array $arg, database $database) {
 		$this->config = core::getConfig ( 'core' )['default'];
 		
 		/* Get any extension appearing at the end of the request: */
@@ -83,33 +83,50 @@ class request {
 			$action = $this->config ['action'];
 		}
 		
+		try {
+			$this->controller = $this->getController ( $controllerShortName, $database );
+			$this->view = $this->getView ( $controllerShortName );
+		} catch ( Exception $e ) {
+			throw new NotFoundException ( "That page does not exist." );
+		}
 		$this->arg = $arg;
-		$this->controller = $this->getController ( $controllerShortName );
-		$this->view = $this->getView ( $controllerShortName );
 		$this->action = $action;
 		$this->fmt = $fmt;
 		$this->url = core::constructUrl ( $controllerShortName, $action, $arg, $fmt );
 	}
 	
 	/**
-	 *
-	 * @param array $arg
-	 *        	Execute request
+	 * Run the controller to gather data, then the view to render it.
 	 */
 	public function execute() {
-		/* Figure out class and method name */
-		try {
-			/* Run controller */
-			$data = $this->runController ( $this->controller, $this->arg, $this->action );
-			if(isset ( $data ['redirect'] )) {
-				core::redirect ( $ret ['redirect'] );
-				return;
-			}
-			$this->runView ( $this->view, $data, $this -> action, $this->fmt );
-		} catch ( Exception $e ) {
-			core::fizzle ( "Failed to run controller: " . $e );
+		/* Run controller */
+		$data = $this->runController ( $this->controller, $this->arg, $this->action );
+		if (isset ( $data ['redirect'] )) {
+			core::redirect ( $ret ['redirect'] );
+			return;
 		}
+		$data ['url'] = $this->url;
+		/* Change action if the data suggests so */
+		$action = $this->action;
+		if (isset ( $data ['view'] )) {
+			$action = $data ['view'];
+		} elseif (isset ( $data ['error'] )) {
+			$action = "error";
+		}
+		$this->runView ( $this->view, $data, $action, $this->fmt );
 	}
+	
+	/**
+	 * Run the controller with the given arguments & action
+	 *
+	 * @param controller $controller
+	 *        	Controller to use
+	 * @param array $arg
+	 *        	Arguments to pass to the controller
+	 * @param string $action
+	 *        	Action to run
+	 * @return array Associatve array of data from the controller.
+	 */
 	protected function runController(controller $controller, array $arg, $action) {
 		$controllerMethodName = $action;
 		$method = array (
@@ -117,22 +134,28 @@ class request {
 				$controllerMethodName 
 		);
 		if (! is_callable ( $method )) {
-			core::fizzle ( "The controller does not support an '$action' action.", 404 );
+			throw new NotFoundException ( "The controller does not support an '$action' action." );
 		}
 		$ret = call_user_func_array ( $method, $arg );
 		if (! is_array ( $ret )) {
-			core::fizzle ( "The controller did not return a valid data array.", 404 );
+			throw new InternalServerErrorException ( "The controller did not return valid data." );
 		}
-		$ret ['url'] = $this->url;
 		return $ret;
 	}
+	/**
+	 * Run the view with the given data & action.
+	 *
+	 * @param view $view
+	 *        	View to use
+	 * @param array $data
+	 *        	Data to pass to the view.
+	 * @param string $action
+	 *        	Associated action.
+	 * @param fmt $fmt
+	 *        	Output format to request.
+	 * @return mixed
+	 */
 	protected function runView(view $view, array $data, $action, $fmt) {
-		/* Change action if the data suggests so  */
-		if (isset ( $data ['view'] )) {
-			$action = $data ['view'];
-		} elseif (isset ( $data ['error'] )) {
-			$action = "error";
-		}
 		/* Run method for real */
 		$viewMethodName = $action . "_" . $fmt;
 		$method = array (
@@ -140,7 +163,7 @@ class request {
 				$viewMethodName 
 		);
 		if (! is_callable ( $method )) {
-			core::fizzle ( "The view does not support an '$action' action.", 404 );
+			throw new NotFoundException ( "The view does not support an '$action' action." );
 		}
 		$ret = call_user_func_array ( $method, array (
 				$data 
@@ -149,20 +172,26 @@ class request {
 	}
 	
 	/**
+	 * Instantiate and return a controller by name.
 	 *
-	 * @param string $name        	
+	 * @param string $name
+	 *        	Name of the controller
+	 * @param database $database
+	 *        	Reference to database object to pass to the controller.
 	 * @return controller Any class acting as a controller
 	 */
-	protected function getController($name) {
+	protected function getController($name, database $database) {
 		$controllerClassName = $name . '_controller';
 		core::loadClass ( $controllerClassName );
 		$fullControllerClassName = __NAMESPACE__ . "\\" . $controllerClassName;
-		return new $fullControllerClassName ();
+		return new $fullControllerClassName ( $database );
 	}
 	
 	/**
+	 * Instantiate and return a view by name.
 	 *
-	 * @param string $name        	
+	 * @param string $name
+	 *        	Name of the view.
 	 * @return view Any class acting as a view
 	 */
 	protected function getView($name) {
