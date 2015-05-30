@@ -7,7 +7,7 @@ class User_Controller implements Controller {
 		Core::loadClass ( 'User_Model' );
 		Core::loadClass ( 'Session' );
 	}
-	public static function login($id = '') {
+	public function login($id = '') {
 		if (! (isset ( $_REQUEST ['submit'] ) && isset ( $_POST ['user_name'] ) && isset ( $_POST ['user_password'] ))) {
 			return array (
 					'user' => false 
@@ -35,7 +35,7 @@ class User_Controller implements Controller {
 			);
 		}
 	}
-	public static function logout() {
+	public function logout() {
 		Session::logoutUser ();
 	}
 }

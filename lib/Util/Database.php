@@ -3,48 +3,50 @@
 namespace SmWeb;
 
 class Database {
-	private static $conn; /* Database connection */
+	private static $instance = null;
+	private $conn; /* Database connection */
 	private static $conf; /* Config */
-	
 	public static function init() {
+		Database::$conf = Core::getConfig ( "Database" );
+	}
+	private function __construct() {
 		/* Get configuration for this class and connect to the database */
-		Database::$conf = Core::getConfig ( "database" );
-		if (! Database::connect ()) {
+		if (! $this->connect ()) {
 			throw new InternalServerErrorException ( "Failed to connect to database: " . mysql_error () );
 		}
 	}
-	private static function connect() {
-		if (! Database::$conn = mysql_connect ( Database::$conf ['host'], Database::$conf ['user'], Database::$conf ['password'] )) {
+	private function connect() {
+		if (! $this->conn = mysql_connect ( Database::$conf ['host'], Database::$conf ['user'], Database::$conf ['password'] )) {
 			return false;
 		}
 		return mysql_select_db ( Database::$conf ['name'] );
 	}
-	private static function query($query) {
-		return mysql_query ( $query );
+	private function query($query) {
+		return mysql_query ( $query, $this->conn );
 	}
-	public static function get_row($result) {
+	public function get_row($result) {
 		if ($result == false) {
 			return false;
 		} else {
 			return mysql_fetch_array ( $result );
 		}
 	}
-	public static function escape($str) {
-		return mysql_real_escape_string ( $str );
+	private function escape($str) {
+		return mysql_real_escape_string ( $str, $this->conn );
 	}
 	public function insert_id() {
-		return mysql_insert_id ();
+		return mysql_insert_id ( $this->conn );
 	}
-	public static function close() {
+	public function close() {
 		/* Close connection */
-		return mysql_close ( Database::$conn );
+		return mysql_close ( $this->conn );
 	}
-	static function retrieve($query, $return_type = 0, $a1 = null, $a2 = null, $a3 = null, $a4 = null, $a5 = null, $a6 = null, $a7 = null, $a8 = null, $a9 = null, $a10 = null, $a11 = null, $a12 = null, $a13 = null, $a14 = null, $a15 = null) {
+	public function retrieve($query, $return_type = 0, $a1 = null, $a2 = null, $a3 = null, $a4 = null, $a5 = null, $a6 = null, $a7 = null, $a8 = null, $a9 = null, $a10 = null, $a11 = null, $a12 = null, $a13 = null, $a14 = null, $a15 = null) {
 		/* Query wrapper to be sure everything is escaped. All SQL must go through here! */
 		$query = str_replace ( "{TABLE}", Database::$conf ['prefix'], $query );
-		$query = sprintf ( $query, Database::retrieve_arg ( $a1 ), Database::retrieve_arg ( $a2 ), Database::retrieve_arg ( $a3 ), Database::retrieve_arg ( $a4 ), Database::retrieve_arg ( $a5 ), Database::retrieve_arg ( $a6 ), Database::retrieve_arg ( $a7 ), Database::retrieve_arg ( $a8 ), Database::retrieve_arg ( $a9 ), Database::retrieve_arg ( $a10 ), Database::retrieve_arg ( $a11 ), Database::retrieve_arg ( $a12 ), Database::retrieve_arg ( $a13 ), Database::retrieve_arg ( $a14 ), Database::retrieve_arg ( $a15 ) );
+		$query = sprintf ( $query, $this->retrieve_arg ( $a1 ), $this->retrieve_arg ( $a2 ), $this->retrieve_arg ( $a3 ), $this->retrieve_arg ( $a4 ), $this->retrieve_arg ( $a5 ), $this->retrieve_arg ( $a6 ), $this->retrieve_arg ( $a7 ), $this->retrieve_arg ( $a8 ), $this->retrieve_arg ( $a9 ), $this->retrieve_arg ( $a10 ), $this->retrieve_arg ( $a11 ), $this->retrieve_arg ( $a12 ), $this->retrieve_arg ( $a13 ), $this->retrieve_arg ( $a14 ), $this->retrieve_arg ( $a15 ) );
 		
-		$res = Database::query ( $query );
+		$res = $this->query ( $query );
 		
 		/* Die on database errors */
 		if (! $res) {
@@ -62,10 +64,10 @@ class Database {
 				return Database::insert_id ( $res );
 		}
 	}
-	function retrieve_arg($arg) {
+	public function retrieve_arg($arg) {
 		/* Escape an argument for an SQL query, or return false if there was none */
 		if ($arg) {
-			return Database::escape ( $arg );
+			return $this->escape ( $arg, $this->conn );
 		}
 		return false;
 	}
@@ -78,5 +80,11 @@ class Database {
 			}
 		}
 		return $res;
+	}
+	public static function getInstance() {
+		if (self::$instance == null) {
+			self::$instance = new Database ();
+		}
+		return self::$instance;
 	}
 }

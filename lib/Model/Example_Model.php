@@ -4,6 +4,7 @@ namespace SmWeb;
 
 class Example_Model implements Model {
 	public static $template;
+	public static $database;
 	public static function init() {
 		Core::loadClass ( 'Database' );
 		
@@ -19,6 +20,7 @@ class Example_Model implements Model {
 				'example_uploaded' => '',
 				'example_audio_tag' => '' 
 		);
+		self::$database = Database::getInstance();
 	}
 	
 	/**
@@ -29,8 +31,8 @@ class Example_Model implements Model {
 	 */
 	public static function getById($example_id) {
 		$sql = "SELECT * FROM {TABLE}example WHERE example_id ='%s';";
-		if ($row = Database::retrieve ( $sql, 1, ( int ) $example_id )) {
-			return Database::row_from_template ( $row, self::$template );
+		if ($row = self::$database -> retrieve ( $sql, 1, ( int ) $example_id )) {
+			return self::$database -> row_from_template ( $row, self::$template );
 		}
 		return false;
 	}
@@ -41,10 +43,10 @@ class Example_Model implements Model {
 	public static function listByDef($def_id) {
 		$query = "SELECT * FROM {TABLE}examplerel " . "JOIN {TABLE}example ON example_rel_example_id = example_id " . "WHERE example_rel_def_id =%d";
 		$ret = array ();
-		if ($res = Database::retrieve ( $query, 0, ( int ) $def_id )) {
-			while ( $row = Database::get_row ( $res ) ) {
+		if ($res = self::$database -> retrieve ( $query, 0, ( int ) $def_id )) {
+			while ( $row = self::$database -> get_row ( $res ) ) {
 				/* Load examples */
-				$example = Database::row_from_template ( $row, self::$template );
+				$example = self::$database -> row_from_template ( $row, self::$template );
 				$ret [] = $example;
 			}
 		}
@@ -59,10 +61,10 @@ class Example_Model implements Model {
 		$id = Word_Model::getIdStrBySpellingNum ( $spelling_t_style, $word_num );
 		$query = "SELECT * FROM {TABLE}example WHERE example_str like '%%[%s|%%' or example_str like '%%[%s]%%';";
 		$ret = array ();
-		if ($res = Database::retrieve ( $query, 0, $id, $id )) {
-			while ( $row = Database::get_row ( $res ) ) {
+		if ($res = self::$database -> retrieve ( $query, 0, $id, $id )) {
+			while ( $row = self::$database -> get_row ( $res ) ) {
 				/* Load examples */
-				$example = Database::row_from_template ( $row, self::$template );
+				$example = self::$database -> row_from_template ( $row, self::$template );
 				$ret [] = $example;
 			}
 		}
@@ -75,7 +77,7 @@ class Example_Model implements Model {
 	public static function insert($example_sm, $example_en) {
 		$str = self::autobracket ( $example_sm );
 		$query = "INSERT INTO {TABLE}example (example_id, example_str, example_t_style, example_k_style, example_t_style_recorded, example_k_style_recorded, example_en, example_en_lit, example_uploaded, example_audio_tag) VALUES (NULL ,  '%s',  '%s',  '%s',  '%d',  '%d', '%s', '%s', CURRENT_TIMESTAMP, '%s');";
-		$id = Database::retrieve ( $query, 2, $str, $example_sm, '', '0', '0', $example_en, '', '' );
+		$id = self::$database -> retrieve ( $query, 2, $str, $example_sm, '', '0', '0', $example_en, '', '' );
 		return $id;
 	}
 	
@@ -96,25 +98,25 @@ class Example_Model implements Model {
 	 */
 	public static function countExamples() {
 		$query = "SELECT COUNT(example_id) FROM {TABLE}example;";
-		if ($row = Database::retrieve ( $query, 1 )) {
+		if ($row = self::$database -> retrieve ( $query, 1 )) {
 			return ( int ) $row [0];
 		}
 		return 0;
 	}
 	public static function update($example) {
 		$query = "UPDATE {TABLE}example SET example_str ='%s', example_en='%s' WHERE example_id =%d";
-		Database::retrieve ( $query, 0, $example ['example_str'], $example ['example_en'], ( int ) $example ['example_id'] );
+		self::$database -> retrieve ( $query, 0, $example ['example_str'], $example ['example_en'], ( int ) $example ['example_id'] );
 	}
 	public static function delete($example_id) {
 		/* Delete an example, after removing it from everywhere it appears */
 		$query = "DELETE FROM {TABLE}exampleaudio WHERE example_id =%d;";
-		Database::retrieve ( $query, 0, ( int ) $example_id ); // NB: this may leave orphan audio files.
+		self::$database -> retrieve ( $query, 0, ( int ) $example_id ); // NB: this may leave orphan audio files.
 		
 		$query = "DELETE FROM {TABLE}examplerel WHERE example_rel_example_id =%d;";
-		Database::retrieve ( $query, 0, ( int ) $example_id );
+		self::$database -> retrieve ( $query, 0, ( int ) $example_id );
 		
 		$query = "DELETE FROM {TABLE}example WHERE example_id =%d;";
-		Database::retrieve ( $query, 0, ( int ) $example_id );
+		self::$database -> retrieve ( $query, 0, ( int ) $example_id );
 		return true;
 	}
 }

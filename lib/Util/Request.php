@@ -103,7 +103,7 @@ class Request {
 		/* Run controller */
 		$data = $this->runController ( $this->controller, $this->arg, $this->action );
 		if (isset ( $data ['redirect'] )) {
-			Core::redirect ( $ret ['redirect'] );
+			Core::redirect ( $data ['redirect'] );
 			return;
 		}
 		$data ['url'] = $this->url;

@@ -15,7 +15,7 @@ class Word_Controller implements Controller {
 	 *
 	 * @param string $id        	
 	 */
-	public static function view($idstr) {
+	public function view($idstr) {
 		if ($idstr == '') {
 			$counts = array (
 					'word' => Word_Model::countWords (),
@@ -44,7 +44,7 @@ class Word_Controller implements Controller {
 				'word' => $idstr 
 		);
 	}
-	public static function create($spelling_t_style = '') {
+	public function create($spelling_t_style = '') {
 		$permissions = Core::getPermissions ( 'word' );
 		if (! $permissions ['create']) {
 			/* No permission */
@@ -88,7 +88,7 @@ class Word_Controller implements Controller {
 	 *
 	 * @param string $id        	
 	 */
-	public static function edit($id, $secondary = '', $target = '') {
+	public function edit($id, $secondary = '', $target = '') {
 		$permissions = Core::getPermissions ( 'word' );
 		
 		/* Check edit permissions */
@@ -370,7 +370,7 @@ class Word_Controller implements Controller {
 	 *
 	 * @param string $type_short        	
 	 */
-	public static function type($type_short) {
+	public function type($type_short) {
 		if (! $type = ListType_Model::getByShort ( $type_short )) {
 			return array (
 					'error' => '404' 
@@ -395,7 +395,7 @@ class Word_Controller implements Controller {
 	 *
 	 * @param string $letter        	
 	 */
-	public static function letter($letter) {
+	public function letter($letter) {
 		if ($letter == "all") {
 			$ret = array ();
 			foreach ( Core::$alphabet_sm as $a ) {
@@ -431,7 +431,7 @@ class Word_Controller implements Controller {
 	 *
 	 * @param unknown_type $search        	
 	 */
-	public static function search($search) {
+	public function search($search) {
 		if ($search == 'suggest') {
 			return self::suggest ();
 		}
@@ -462,7 +462,7 @@ class Word_Controller implements Controller {
 	 * Search for a word using the beginning only.
 	 * (should be invoked using search/suggest.json)
 	 */
-	public static function suggest() {
+	public function suggest() {
 		if (! isset ( $_POST ['term'] )) {
 			return array (
 					'redirect' => Core::constructURL ( "page", "view", array (
@@ -487,7 +487,7 @@ class Word_Controller implements Controller {
 	 * @param string $spelling_t_style        	
 	 * @return the next vacant number on this spelling, after moving around things as necessary
 	 */
-	public static function get_next_wordnum($spelling_t_style) {
+	public function get_next_wordnum($spelling_t_style) {
 		$word_num = 0;
 		
 		/* If there is already a word 'foo0', change it to 'foo1' and make this 'foo2' */

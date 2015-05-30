@@ -1,5 +1,7 @@
 #!/usr/bin/env php
 <?php
+
+namespace SmWeb;
 /* Export XDXF version of the database */
 require_once(dirname(__FILE__) . "/../../../lib/Core.php");
 Core::loadClass("Database");
@@ -39,15 +41,16 @@ function esc($in) {
 
 $abbr = ListType_Model::listAll();
 $date = $date = date("d-m-Y"); // I strongly dislike this format
-echo "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n";
-?><!DOCTYPE xdxf SYSTEM "https://raw.github.com/soshial/xdxf_makedict/master/format_standard/xdxf_strict.dtd">
+?>
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE xdxf SYSTEM "https://raw.github.com/soshial/xdxf_makedict/master/format_standard/xdxf_strict.dtd">
 <xdxf lang_from="SMO" lang_to="ENG" format="logical" revision="032beta">
 	<meta_info>
 		<title>Samoan Language Vocabulary</title>
 		<full_title>Samoan Language Vocabulary</full_title>
 		<description>Samoan language words with English meanings, collected by Michael Billington. See http://http://mike.bitrevision.com/samoan/</description>
 		<abbreviations>
-<?
+<?php
 		foreach($abbr as $a) {
 			if($a['type_abbr'] != "") {
 				echo "\t\t\t<abbr_def><abbr_k>" . esc($a['type_abbr']) . "</abbr_k> <abbr_v>" . esc($a['type_name']) . "</abbr_v></abbr_def>\n";
@@ -55,10 +58,10 @@ echo "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n";
 		}
 ?>		</abbreviations>
 		<file_ver>001</file_ver>
-		<creation_date><? echo $date ?></creation_date>
+		<creation_date><?php echo $date ?></creation_date>
 	</meta_info>
 	<lexicon>
-<?
+<?php
 		foreach(Core::$alphabet_sm as $a) {
 			$words = Word_Model::listByLetter($a);
 

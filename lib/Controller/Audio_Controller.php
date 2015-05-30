@@ -8,7 +8,7 @@ class Audio_Controller implements Controller {
 		Core::loadClass ( "SpellingAudio_Model" );
 		Core::loadClass ( "Spelling_Model" );
 	}
-	public static function view($type = false, $id = false) {
+	public function view($type = false, $id = false) {
 		switch ($type) {
 			case 'spelling' :
 				if (! $spelling = Spelling_Model::getBySpelling ( $id )) {
@@ -41,7 +41,7 @@ class Audio_Controller implements Controller {
 	 * @param string $type        	
 	 * @param string $id        	
 	 */
-	public static function listen($type = false, $id = false) {
+	public function listen($type = false, $id = false) {
 		switch ($type) {
 			case 'spelling' :
 				if ($spellingaudio = SpellingAudio_Model::getRowBySpellingTStyle ( $id, 0 )) {

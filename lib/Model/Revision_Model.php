@@ -4,6 +4,7 @@ namespace SmWeb;
 
 class Revision_Model implements Model {
 	public static $template;
+	public static $database;
 	public static function init() {
 		Core::loadClass ( 'Database' );
 		self::$template = array (
@@ -17,6 +18,7 @@ class Revision_Model implements Model {
 				'revision_parse_ts' => '0000-00-00 00:00:00',
 				'revision_parse_valid' => '0' 
 		);
+		self::$database = Database::getInstance();
 	}
 	public static function insert($page, $revision) {
 		/* Be sure the revision goes to the right place */
@@ -24,7 +26,7 @@ class Revision_Model implements Model {
 		
 		/* Add the revision */
 		$query = "INSERT INTO {TABLE}revision (revision_id, revision_page_id, revision_title, revision_author, revision_ts, revision_text, revision_text_parsed, revision_parse_ts, revision_parse_valid) VALUES (NULL , '%d', '%s', '%d', CURRENT_TIMESTAMP , '%s', '', '0000-00-00 00:00:00', '0')";
-		if (! $revision_id = Database::retrieve ( $query, 2, ( int ) $page ['page_id'], $revision ['revision_title'], $revision ['revision_author'], $revision ['revision_text'] )) {
+		if (! $revision_id = self::$database -> retrieve ( $query, 2, ( int ) $page ['page_id'], $revision ['revision_title'], $revision ['revision_author'], $revision ['revision_text'] )) {
 			return false;
 		}
 		
@@ -34,20 +36,20 @@ class Revision_Model implements Model {
 	public static function cache_purge($revision_id) {
 		/* Purge a single revision */
 		$query = "UPDATE {TABLE}revision SET revision_text_parsed ='', revision_parse_valid =0 WHERE revision_id =%d";
-		Database::retrieve ( $query, 0, ( int ) $revision_id );
+		self::$database -> retrieve ( $query, 0, ( int ) $revision_id );
 	}
 	public static function cache_purge_page($revision_page_id) {
 		/* Purge all revisions for a page */
 		$query = "UPDATE {TABLE}revision SET revision_text_parsed ='', revision_parse_valid =0 WHERE revision_page_id =%d";
-		Database::retrieve ( $query, 0, ( int ) $revision_page_id );
+		self::$database -> retrieve ( $query, 0, ( int ) $revision_page_id );
 	}
 	public static function cache_purge_all() {
 		/* Purge every cached revision (potentially slow) */
 		$query = "UPDATE {TABLE}revision SET revision_text_parsed ='', revision_parse_valid =0 WHERE 1";
-		Database::retrieve ( $query, 0 );
+		self::$database -> retrieve ( $query, 0 );
 	}
 	public static function cache_save($revision) {
 		$query = "UPDATE {TABLE}revision SET revision_text_parsed ='%s', revision_parse_ts = CURRENT_TIMESTAMP, revision_parse_valid =1 WHERE revision_id =%d";
-		Database::retrieve ( $query, 0, $revision ['revision_text_parsed'], ( int ) $revision ['revision_id'] );
+		self::$database -> retrieve ( $query, 0, $revision ['revision_text_parsed'], ( int ) $revision ['revision_id'] );
 	}
 }

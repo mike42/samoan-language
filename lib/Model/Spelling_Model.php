@@ -4,6 +4,7 @@ namespace SmWeb;
 
 class Spelling_Model implements Model {
 	public static $template;
+	public static $database;
 	public static function init() {
 		Core::loadClass ( 'Database' );
 		self::$template = array (
@@ -17,6 +18,7 @@ class Spelling_Model implements Model {
 				'spelling_searchkey' => '',
 				'spelling_sortkey_sm' => '' 
 		);
+		self::$database = Database::getInstance();
 	}
 	public static function calcKStyle($name) {
 		/*
@@ -85,7 +87,7 @@ class Spelling_Model implements Model {
 	 */
 	public static function getBySpelling($spelling_t_style) {
 		$query = "SELECT * FROM {TABLE}spelling WHERE spelling_t_style ='%s';";
-		if ($row = Database::retrieve ( $query, 1, $spelling_t_style )) {
+		if ($row = self::$database -> retrieve ( $query, 1, $spelling_t_style )) {
 			return self::fromRow ( $row );
 		}
 		return false;
@@ -108,10 +110,10 @@ class Spelling_Model implements Model {
 		$spelling ['spelling_sortkey_sm'] = self::calcSortkeySm ( $spelling_t_style );
 		
 		$query = "INSERT INTO {TABLE}spelling (spelling_id, spelling_t_style, spelling_t_style_recorded, " . "spelling_k_style, spelling_k_style_recorded, spelling_simple, spelling_sortkey, spelling_searchkey, " . "spelling_sortkey_sm) VALUES (NULL, '%s', '0', '%s', '0', '%s', '%s', '%s', '%s');";
-		$spelling ['spelling_id'] = Database::retrieve ( $query, 2, $spelling ['spelling_t_style'], $spelling ['spelling_k_style'], $spelling ['spelling_simple'], $spelling ['spelling_sortkey'], $spelling ['spelling_searchkey'], $spelling ['spelling_sortkey_sm'] );
+		$spelling ['spelling_id'] = self::$database -> retrieve ( $query, 2, $spelling ['spelling_t_style'], $spelling ['spelling_k_style'], $spelling ['spelling_simple'], $spelling ['spelling_sortkey'], $spelling ['spelling_searchkey'], $spelling ['spelling_sortkey_sm'] );
 		return $spelling;
 	}
 	private static function fromRow($row, $depth = 0) {
-		return Database::row_from_template ( $row, self::$template );
+		return self::$database -> row_from_template ( $row, self::$template );
 	}
 }

@@ -7,7 +7,7 @@ class Example_Controller implements Controller {
 		Core::loadClass ( 'Example_Model' );
 		Core::loadClass ( 'Word_Model' );
 	}
-	public static function view($example_id) {
+	public function view($example_id) {
 		if ($example_id == '') {
 			Core::redirect ( Core::constructURL ( 'example', 'search', array (
 					'' 
@@ -23,7 +23,7 @@ class Example_Controller implements Controller {
 			);
 		}
 	}
-	public static function search($word) {
+	public function search($word) {
 		if (isset ( $_GET ['s'] ) && $word == '') {
 			$word = $_GET ['s'];
 		}
@@ -35,7 +35,7 @@ class Example_Controller implements Controller {
 				'examples' => $example_list 
 		);
 	}
-	public static function create() {
+	public function create() {
 		$permissions = Core::getPermissions ( 'example' );
 		if (! $permissions ['create']) {
 			return array (
@@ -52,7 +52,7 @@ class Example_Controller implements Controller {
 			return array ();
 		}
 	}
-	public static function edit($example_id) {
+	public function edit($example_id) {
 		$permissions = Core::getPermissions ( 'example' );
 		if (! $permissions ['edit']) {
 			/* No edit permission */

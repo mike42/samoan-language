@@ -4,6 +4,7 @@ namespace SmWeb;
 
 class User_Model implements Model {
 	private static $template;
+	public static $database;
 	public static function init() {
 		Core::loadClass ( 'Database' );
 		
@@ -18,6 +19,7 @@ class User_Model implements Model {
 				'user_created' => '',
 				'user_role' => '' 
 		);
+		self::$database = Database::getInstance();
 	}
 	
 	/**
@@ -25,8 +27,8 @@ class User_Model implements Model {
 	 */
 	public static function getById($user_id) {
 		$query = "SELECT * FROM {TABLE}user WHERE user_id = '%d';";
-		if ($row = Database::retrieve ( $query, 1, $user_id )) {
-			return Database::row_from_template ( $row, User_Model::$template );
+		if ($row = self::$database -> retrieve ( $query, 1, $user_id )) {
+			return self::$database -> row_from_template ( $row, User_Model::$template );
 		}
 		return false;
 	}
@@ -36,8 +38,8 @@ class User_Model implements Model {
 	 */
 	public static function getByNameOrEmail($name_or_email) {
 		$query = "SELECT * FROM {TABLE}user WHERE user_email = '%s' or user_name = '%s';";
-		if ($row = Database::retrieve ( $query, 1, $name_or_email, $name_or_email )) {
-			return Database::row_from_template ( $row, User_Model::$template );
+		if ($row = self::$database -> retrieve ( $query, 1, $name_or_email, $name_or_email )) {
+			return self::$database -> row_from_template ( $row, User_Model::$template );
 		} else {
 			return false;
 		}
@@ -66,7 +68,7 @@ class User_Model implements Model {
 			return false;
 		}
 		
-		$config = Core::getConfig ( 'session' );
+		$config = Core::getConfig ( 'Session' );
 		if (! isset ( $config [$role] )) {
 			/* Invalid role */
 			return false;
@@ -82,7 +84,7 @@ class User_Model implements Model {
 		
 		/* Insert */
 		$sql = "INSERT INTO {TABLE}user (user_id, user_name, user_pass, user_salt, user_token, user_email, user_email_confirmed, user_created, user_role) " . "VALUES (NULL , '%s', '%s', '%s', '', '%s', '0', CURRENT_TIMESTAMP , '%s');";
-		return Database::retrieve ( $sql, 2, $user ['user_name'], $user ['user_pass'], $user ['user_salt'], $user ['user_email'], $user ['user_role'] );
+		return self::$database -> retrieve ( $sql, 2, $user ['user_name'], $user ['user_pass'], $user ['user_salt'], $user ['user_email'], $user ['user_role'] );
 	}
 	
 	/**

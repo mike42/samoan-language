@@ -4,6 +4,7 @@ namespace SmWeb;
 
 class ListType_Model implements Model {
 	public static $template;
+	public static $database;
 	public static function init() {
 		Core::loadClass ( 'Database' );
 		self::$template = array (
@@ -13,6 +14,7 @@ class ListType_Model implements Model {
 				'type_title' => '',
 				'type_short' => '' 
 		);
+		self::$database = Database::getInstance();
 	}
 	
 	/**
@@ -20,12 +22,12 @@ class ListType_Model implements Model {
 	 */
 	public static function listAll($tags = false) {
 		$query = "SELECT * FROM {TABLE}listtype WHERE type_istag =%d ORDER BY type_name;";
-		if (! $res = Database::retrieve ( $query, 0, $tags ? '1' : '0' )) {
+		if (! $res = self::$database -> retrieve ( $query, 0, $tags ? '1' : '0' )) {
 			return false;
 		}
 		
 		$ret = array ();
-		while ( $row = Database::get_row ( $res ) ) {
+		while ( $row = self::$database -> get_row ( $res ) ) {
 			$ret [] = self::fromRow ( $row );
 		}
 		return $ret;
@@ -39,7 +41,7 @@ class ListType_Model implements Model {
 	public static function getByShort($type_short) {
 		$query = "SELECT * FROM {TABLE}listtype WHERE type_short ='%s'";
 		
-		if ($row = Database::retrieve ( $query, 1, $type_short )) {
+		if ($row = self::$database -> retrieve ( $query, 1, $type_short )) {
 			return self::fromRow ( $row );
 		}
 		return false;
@@ -52,12 +54,12 @@ class ListType_Model implements Model {
 	 */
 	public static function get($type_id) {
 		$query = "SELECT * FROM {TABLE}listtype WHERE type_id =%d";
-		if (! $row = Database::retrieve ( $query, 1, $type_id )) {
+		if (! $row = self::$database -> retrieve ( $query, 1, $type_id )) {
 			return false;
 		}
 		return self::fromRow ( $row );
 	}
 	private static function fromRow($row, $depth = 0) {
-		return Database::row_from_template ( $row, self::$template );
+		return self::$database -> row_from_template ( $row, self::$template );
 	}
 }

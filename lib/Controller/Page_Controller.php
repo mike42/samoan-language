@@ -6,7 +6,7 @@ class Page_Controller implements Controller {
 	public static function init() {
 		Core::loadClass ( 'Page_Model' );
 	}
-	public static function view($id) {
+	public function view($id) {
 		if ($page = Page_Model::getByShort ( $id )) {
 			if (! ($page ['page_rel_revision'] ['revision_parse_valid'] == 1)) {
 				$page ['page_rel_revision'] ['revision_text_parsed'] = Page_Model::render ( $page );
@@ -25,7 +25,7 @@ class Page_Controller implements Controller {
 			);
 		}
 	}
-	public static function create($id) {
+	public function create($id) {
 		if ($page = Page_Model::getByShort ( $id )) {
 			/* Page already exists - redirect to it */
 			$url = Core::constructURL ( 'page', 'view', array (
@@ -59,7 +59,7 @@ class Page_Controller implements Controller {
 		), 'html' );
 		Core::redirect ( $url );
 	}
-	public static function edit($id) {
+	public function edit($id) {
 		$permissions = Core::getPermissions ( 'page' );
 		
 		if (! $permissions ['edit']) {
@@ -137,7 +137,7 @@ class Page_Controller implements Controller {
 				'preview' => true 
 		);
 	}
-	public static function purge($id) {
+	public function purge($id) {
 		if (! $page = Page_Model::getByShort ( $id )) {
 			return array (
 					'title' => 'Not found',

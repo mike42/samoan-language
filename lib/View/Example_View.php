@@ -7,23 +7,23 @@ class Example_View implements View {
 	public static function init() {
 		self::$config = Core::getConfig ( 'Core' );
 	}
-	public static function view_html(array $data) {
+	public function view_html(array $data) {
 		$data ['title'] = "Language examples";
 		self::useTemplate ( 'view', $data );
 	}
-	public static function edit_html(array $data) {
+	public function edit_html(array $data) {
 		$data ['title'] = "Editing example";
 		self::useTemplate ( 'edit', $data );
 	}
-	public static function create_html(array $data) {
+	public function create_html(array $data) {
 		$data ['title'] = "Add example";
 		self::useTemplate ( 'create', $data );
 	}
-	public static function search_html(array $data) {
+	public function search_html(array $data) {
 		$data ['title'] = "Search examples";
 		self::useTemplate ( 'search', $data );
 	}
-	public static function error_html(array $data) {
+	public function error_html(array $data) {
 		if ($data ['error'] == "404") {
 			header ( "HTTP/1.0 404 Not Found" );
 			$data ['title'] = "Error - Example not found";

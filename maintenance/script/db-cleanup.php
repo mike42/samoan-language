@@ -4,13 +4,14 @@
 namespace SmWeb;
 
 /* This script will tidy up the database to clean up after word numberings and moves. */
-require_once (dirname ( __FILE__ ) . "/../../lib/core.php");
+require_once (dirname ( __FILE__ ) . "/../../lib/Core.php");
 Core::loadClass ( "Database" );
+$database = Database::getInstance();
 
 /* Delete spellings which aren't used */
 echo "Clearing orphaned spellings ...";
 $query = "DELETE {TABLE}spelling FROM {TABLE}spelling LEFT JOIN {TABLE}word ON spelling_id = word_spelling WHERE word_id IS NULL;";
-Database::retrieve ( $query, 0 );
+$database -> retrieve ( $query, 0 );
 echo " done\n";
 
 /* Spot spellings which are incorrectly numbered:

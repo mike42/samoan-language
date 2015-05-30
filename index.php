@@ -11,13 +11,13 @@ try {
 	if (isset ( $_REQUEST ['p'] ) && $_REQUEST ['p'] != '') {
 		$arg = explode ( '/', $_REQUEST ['p'] );
 	} else {
-		$config = Core::getConfig ( 'core' );
+		$config = Core::getConfig ( 'Core' );
 		$arg = $config ['default'] ['arg'];
 	}
 	
 	Core::loadClass ( 'Request' );
 	Core::loadClass ( 'Database' );
-	$request = new Request ( $arg, new Database () );
+	$request = new Request ( $arg, Database::getInstance () );
 	$request->execute ();
 } catch ( WebException $e ) {
 	Core::fatalError ( $e );

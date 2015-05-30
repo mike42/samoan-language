@@ -36,11 +36,11 @@ class Word_View implements View {
 		
 		self::$config = Core::getConfig ( 'Core' );
 	}
-	public static function view_html(array $data) {
+	public function view_html(array $data) {
 		$data ['titlebar'] = $data ['word'] ['rel_spelling'] ['spelling_t_style'] . " - Samoan Language Vocabulary";
 		self::useTemplate ( "view", $data );
 	}
-	public static function edit_html(array $data) {
+	public function edit_html(array $data) {
 		$template = "edit";
 		if (isset ( $data ['form'] )) {
 			$template = "edit_" . $data ['form'];
@@ -48,22 +48,22 @@ class Word_View implements View {
 		$data ['title'] = "Editing " . $data ['word'] ['rel_spelling'] ['spelling_t_style'];
 		self::useTemplate ( $template, $data );
 	}
-	public static function create_html(array $data) {
+	public function create_html(array $data) {
 		self::useTemplate ( "create", $data );
 	}
-	public static function letter_html(array $data) {
+	public function letter_html(array $data) {
 		self::useTemplate ( "letter", $data );
 	}
-	public static function type_html(array $data) {
+	public function type_html(array $data) {
 		self::useTemplate ( "type", $data );
 	}
-	public static function default_html(array $data) {
+	public function default_html(array $data) {
 		self::useTemplate ( "default", $data );
 	}
-	public static function search_html(array $data) {
+	public function search_html(array $data) {
 		self::useTemplate ( "search", $data );
 	}
-	public static function search_json(array $data) {
+	public function search_json(array $data) {
 		header ( "content-type: application/json" );
 		/* Construct heavily simplified key->val data structure for autocomplete use */
 		$ret = array ();
@@ -89,7 +89,7 @@ class Word_View implements View {
 				"words" => $ret 
 		) );
 	}
-	public static function error_html(array $data) {
+	public function error_html(array $data) {
 		if ($data ['error'] == "404") {
 			header ( "HTTP/1.0 404 Not Found" );
 			$data ['title'] = "Error - Word not found";
