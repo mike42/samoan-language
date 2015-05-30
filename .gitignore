@@ -11,3 +11,10 @@ lib/config.php
 
 # Anything in data/
 data/
+
+# Composer files, except dependencies not managed by composer
+vendor/*
+!vendor/zbench
+!vendor/wikitext
+!vendor/.htaccess
+
