@@ -17,9 +17,9 @@ if (count ( $argv ) != 5) {
 	$password = $argv [4];
 	
 	/* Insert user */
-	require_once (dirname ( __FILE__ ) . "/../../api/core.php");
-	core::loadClass ( "user_model" );
-	$id = user_model::insert ( $user_name, $user_email, $password, $role );
+	require_once (dirname ( __FILE__ ) . "/../../lib/Core.php");
+	Core::loadClass ( "User_Model" );
+	$id = User_Model::insert ( $user_name, $user_email, $password, $role );
 	
 	if (! $id) {
 		echo "Inserting the user failed. Check for duplicate accounts or invalid email addresses.\n";

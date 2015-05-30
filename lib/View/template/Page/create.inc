@@ -1,0 +1,14 @@
+<?php
+namespace SmWeb;
+?>
+<p>
+	Please click the button below to confirm that you would like to create
+	the page '<b><?php  echo Core::escapeHTML($data['id'])?> </b>'.
+</p>
+<div style="float: right">
+	<form
+		action="<?php  echo Core::constructURL('page', 'create', array($data['id']), 'html');  ?>"
+		method="post">
+		<input type="submit" name="submit" value="Create page" />
+	</form>
+</div>

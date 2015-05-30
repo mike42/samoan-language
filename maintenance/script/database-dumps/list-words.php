@@ -7,11 +7,11 @@
  */
 namespace SmWeb;
 
-require_once (dirname ( __FILE__ ) . "/../../../api/core.php");
-core::loadClass ( "database" );
+require_once (dirname ( __FILE__ ) . "/../../../lib/Core.php");
+Core::loadClass ( "Database" );
 
 $query = "SELECT spelling_t_style FROM {TABLE}spelling` WHERE 1 ORDER BY spelling_sortkey_sm;";
-$res = database::retrieve ( $query, 0 );
-while ( $row = database::get_row ( $res ) ) {
+$res = Database::retrieve ( $query, 0 );
+while ( $row = Database::get_row ( $res ) ) {
 	echo $row [0] . "\n";
 }

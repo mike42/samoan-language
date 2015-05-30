@@ -1,11 +1,11 @@
 #!/usr/bin/env php
 <?php
 /* Export XDXF version of the database */
-require_once(dirname(__FILE__) . "/../../../api/core.php");
-core::loadClass("database");
-core::loadClass("listtype_model");
-core::loadClass("word_model");
-core::loadClass("example_view");
+require_once(dirname(__FILE__) . "/../../../lib/Core.php");
+Core::loadClass("Database");
+Core::loadClass("ListType_Model");
+Core::loadClass("Word_Model");
+Core::loadClass("Example_View");
 
 function word_toXDXF($word, $indent) {
 	$spelling = $word['rel_spelling']['spelling_t_style'];
@@ -20,7 +20,7 @@ function word_toXDXF($word, $indent) {
 		}
 		$str .= "$indent\t\t" . esc($def['def_en']) . "\n";
 		foreach($def['rel_example'] as $example) {
-			$sm = example_view::toHTML($example, false, true);
+			$sm = Example_View::toHTML($example, false, true);
 			$str .= "$indent\t\t<ex>\n" .
 				"$indent\t\t\t<ex_orig>" . esc($sm) . "</ex_orig>\n" .
 				"$indent\t\t\t<ex_trans>" . esc($example['example_en']) . "</ex_trans>\n" .
@@ -34,10 +34,10 @@ function word_toXDXF($word, $indent) {
 
 function esc($in) {
 	/* Escape an XML value */
-	return core::escapeHTML($in);
+	return Core::escapeHTML($in);
 }
 
-$abbr = listtype_model::listAll();
+$abbr = ListType_Model::listAll();
 $date = $date = date("d-m-Y"); // I strongly dislike this format
 echo "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n";
 ?><!DOCTYPE xdxf SYSTEM "https://raw.github.com/soshial/xdxf_makedict/master/format_standard/xdxf_strict.dtd">
@@ -59,8 +59,8 @@ echo "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n";
 	</meta_info>
 	<lexicon>
 <?
-		foreach(core::$alphabet_sm as $a) {
-			$words = word_model::listByLetter($a);
+		foreach(Core::$alphabet_sm as $a) {
+			$words = Word_Model::listByLetter($a);
 
 			foreach($words as $word) {
 				echo word_toXDXF($word, "\t\t");

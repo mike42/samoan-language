@@ -4,23 +4,23 @@ namespace SmWeb;
 
 use Exception;
 
-require_once ("api/core.php");
+require_once ("lib/Core.php");
 
 try {
 	/* Get page (or go to default if none is specified) */
 	if (isset ( $_REQUEST ['p'] ) && $_REQUEST ['p'] != '') {
 		$arg = explode ( '/', $_REQUEST ['p'] );
 	} else {
-		$config = core::getConfig ( 'core' );
+		$config = Core::getConfig ( 'core' );
 		$arg = $config ['default'] ['arg'];
 	}
 	
-	core::loadClass ( 'request' );
-	core::loadClass ( 'database' );
-	$request = new request ( $arg, new database () );
+	Core::loadClass ( 'Request' );
+	Core::loadClass ( 'Database' );
+	$request = new Request ( $arg, new Database () );
 	$request->execute ();
 } catch ( WebException $e ) {
-	core::fatalError ( $e );
+	Core::fatalError ( $e );
 } catch ( Exception $e ) {
-	core::fatalError ( new InternalServerErrorException ( "Unexpected error while processing request: " . $e->getMessage () ) );
+	Core::fatalError ( new InternalServerErrorException ( "Unexpected error while processing request: " . $e->getMessage () ) );
 }

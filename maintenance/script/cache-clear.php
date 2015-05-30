@@ -4,9 +4,9 @@
 /* Use this script to purge the cache */
 namespace SmWeb;
 
-require_once (dirname ( __FILE__ ) . "/../../api/core.php");
-core::loadClass ( "revision_model" );
-core::loadClass ( "letter_model" );
-revision_model::cache_purge_all ();
-letter_model::cache_purge_all ();
+require_once (dirname ( __FILE__ ) . "/../../lib/Core.php");
+Core::loadClass ( "Revision_Model" );
+Core::loadClass ( "Letter_Model" );
+Revision_Model::cache_purge_all ();
+Letter_Model::cache_purge_all ();
 echo "The cache is now clear.\n";

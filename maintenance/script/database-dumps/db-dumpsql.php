@@ -9,7 +9,7 @@ namespace SmWeb;
  * - Requires mysqldump, mkdir, gzip, md5sum (any respectable server has this!)
  * - .my.cnf must be writeable by the user that runs this script
  */
-require_once (dirname ( __FILE__ ) . "/../../../api/config.php");
+require_once (dirname ( __FILE__ ) . "/../../../lib/config.php");
 $db = $config ['database'];
 
 /* Info used in many places */
