@@ -218,7 +218,8 @@ class Core {
 	public static function getPermissions($area) {
 		Core::loadClass ( 'Session' );
 		$permission = Core::getConfig ( 'Session' );
-		return $permission [Session::getRole ()] [$area];
+		
+		return $permission [Session::getInstance(null) -> getRole ()] [$area];
 	}
 }
 abstract class WebException extends Exception {
@@ -245,10 +246,12 @@ class InternalServerErrorException extends WebException {
 	}
 }
 interface controller {
-	// Up next:
-	//public function __construct(database $database);
+	public function __construct(database $database);
 }
+
 interface view {
 }
+
 interface model {
+	public function __construct(database $database);
 }

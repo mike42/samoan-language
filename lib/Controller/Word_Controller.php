@@ -3,10 +3,28 @@
 namespace SmWeb;
 
 class Word_Controller implements Controller {
+	private $database;
+	private $letter;
+	private $word;
+	private $def;
+	private $example;
+	private $spellingAudio;
+	private $spelling;
+	public function __construct(database $database) {
+		$this->database = $database;
+		$this->letter = Letter_Model::getInstance ( $database );
+		$this->word = Word_Model::getInstance ( $database );
+		$this->def = Def_Model::getInstance ( $database );
+		$this->spellingAudio = SpellingAudio_Model::getInstance ( $database );
+		$this->example = Example_Model::getInstance ( $database );
+		$this->spelling = Spelling_Model::getInstance ( $database );
+	}
 	public static function init() {
 		Core::loadClass ( "Letter_Model" );
 		Core::loadClass ( 'Word_Model' );
 		Core::loadClass ( 'Def_Model' );
+		Core::loadClass ( 'Example_Model' );
+		Core::loadClass ( 'Spelling_Model' );
 		Core::loadClass ( 'SpellingAudio_Model' );
 	}
 	
@@ -18,9 +36,9 @@ class Word_Controller implements Controller {
 	public function view($idstr) {
 		if ($idstr == '') {
 			$counts = array (
-					'word' => Word_Model::countWords (),
-					'example' => Example_Model::countExamples (),
-					'audio' => SpellingAudio_Model::countAudio () 
+					'word' => $this -> word -> countWords (),
+					'example' => $this -> example -> countExamples (),
+					'audio' => $this -> spellingAudio -> countAudio () 
 			);
 			return array (
 					'title' => 'Samoan Language Vocabulary',
@@ -29,8 +47,8 @@ class Word_Controller implements Controller {
 			);
 		}
 		
-		if ($id = Word_Model::getWordIDfromStr ( $idstr )) {
-			if ($word = Word_Model::getByID ( $id )) {
+		if ($id = $this -> word -> getWordIDfromStr ( $idstr )) {
+			if ($word = $this -> word -> getByID ( $id )) {
 				$id = $word ['rel_spelling'] ['spelling_t_style'] . (($word ['word_num'] != 0) ? ( int ) $word ['word_num'] : "");
 				return array (
 						'title' => 'Samoan Language Vocabulary',
@@ -59,20 +77,20 @@ class Word_Controller implements Controller {
 		
 		if (isset ( $_POST ['confirm'] )) {
 			/* Ensure there are no numbers at the end of the name */
-			$newSpelling = Word_Model::getSpellingAndNumberFromStr ( $_POST ['spelling_t_style'] );
+			$newSpelling = $this -> word -> getSpellingAndNumberFromStr ( $_POST ['spelling_t_style'] );
 			$spelling_t_style = trim ( $newSpelling ['spelling'] );
 			
 			if ($spelling_t_style != '') {
 				/* Make sure we have the spelling in the database */
-				if (! $spelling = Spelling_Model::getBySpelling ( $spelling_t_style )) {
-					$spelling = Spelling_Model::add ( $spelling_t_style );
+				if (! $spelling = $this -> spelling -> getBySpelling ( $spelling_t_style )) {
+					$spelling = $this -> spelling -> add ( $spelling_t_style );
 				}
 				$word_num = self::get_next_wordnum ( $spelling_t_style );
 				
 				/* Go ahead and create the word page */
-				$word = Word_Model::add ( $spelling ['spelling_id'], $word_num );
+				$word = $this -> word -> add ( $spelling ['spelling_id'], $word_num );
 				Core::redirect ( Core::constructURL ( "word", "edit", array (
-						Word_Model::getIdStrBySpellingNum ( $spelling_t_style, $word_num ) 
+						$this -> word -> getIdStrBySpellingNum ( $spelling_t_style, $word_num ) 
 				), "html" ) );
 			}
 		}
@@ -121,7 +139,7 @@ class Word_Controller implements Controller {
 				$wordInfo ['form'] = "delete";
 				if (isset ( $_POST ['confirm'] )) {
 					/* Actually delete the word */
-					Word_Model::delete ( $wordInfo ['word'] ['word_id'] );
+					$this -> word -> delete ( $wordInfo ['word'] ['word_id'] );
 					Core::redirect ( Core::constructURL ( "word", "", array (), "html" ) );
 				}
 				break;
@@ -135,14 +153,14 @@ class Word_Controller implements Controller {
 					if ($redirect == '') {
 						/* Clear redirect */
 						$word_id = '0';
-					} else if (! $word_id = Word_Model::getWordIDfromStr ( $_POST ['word_redirect_to'] )) {
+					} else if (! $word_id = $this -> word -> getWordIDfromStr ( $_POST ['word_redirect_to'] )) {
 						$wordInfo ['message'] = "That word does not exist";
 						return $wordInfo;
 					}
 					$wordInfo ['word'] ['word_redirect_to'] = $word_id;
 					
 					/* Update and redirect */
-					Word_Model::setRedirect ( $wordInfo ['word'] );
+					$this -> word -> setRedirect ( $wordInfo ['word'] );
 					Core::redirect ( $editPage );
 				}
 				break;
@@ -162,7 +180,7 @@ class Word_Controller implements Controller {
 					$wordInfo ['word'] ['word_origin_word'] = $origin_word;
 					
 					/* Update and redirect */
-					Word_Model::setOrigin ( $wordInfo ['word'] );
+					$this -> word -> setOrigin ( $wordInfo ['word'] );
 					Core::redirect ( $editPage );
 				}
 				$wordInfo ['listlang'] = ListLang_Model::listAll ();
@@ -174,20 +192,20 @@ class Word_Controller implements Controller {
 				$wordInfo ['form'] = "move";
 				if (isset ( $_POST ['spelling_t_style'] )) {
 					$word_id = $wordInfo ['word'] ['word_id'];
-					$newSpelling = Word_Model::getSpellingAndNumberFromStr ( $_POST ['spelling_t_style'] );
+					$newSpelling = $this -> word -> getSpellingAndNumberFromStr ( $_POST ['spelling_t_style'] );
 					$spelling_t_style = trim ( $newSpelling ['spelling'] );
 					if ($spelling_t_style != '') {
 						if ($wordInfo ['word'] ['rel_spelling'] ['spelling_t_style'] != $spelling_t_style) {
 							/* Make sure we have the spelling in the database */
-							if (! $spelling = Spelling_Model::getBySpelling ( $spelling_t_style )) {
-								$spelling = Spelling_Model::add ( $spelling_t_style );
+							if (! $spelling = $this -> spelling -> getBySpelling ( $spelling_t_style )) {
+								$spelling = $this -> spelling -> add ( $spelling_t_style );
 							}
 							/* Get the next number and move */
 							$word_num = self::get_next_wordnum ( $spelling_t_style );
 							$spelling_id = $spelling ['spelling_id'];
-							Word_Model::move ( $word_id, $spelling_id, $word_num );
+							$this -> word -> move ( $word_id, $spelling_id, $word_num );
 							/* Edit page has changed now */
-							$id = Word_Model::getIdStrBySpellingNum ( $spelling_t_style, $word_num );
+							$id = $this -> word -> getIdStrBySpellingNum ( $spelling_t_style, $word_num );
 							$editPage = Core::constructURL ( "word", "edit", array (
 									$id 
 							), "html" );
@@ -203,7 +221,7 @@ class Word_Controller implements Controller {
 				$def_id = $target;
 				if ($def_id == "") {
 					/* Add new def */
-					$def_id = Def_Model::add ( $word_id );
+					$def_id = $this -> def -> add ( $word_id );
 					/* Navigate to new def */
 					$defEdit = Core::constructURL ( "word", "edit", array (
 							$id,
@@ -218,12 +236,12 @@ class Word_Controller implements Controller {
 						"def",
 						( int ) $def_id 
 				), "html" );
-				if (! $def = Def_Model::get ( $word_id, $target )) {
+				if (! $def = $this -> def -> get ( $word_id, $target )) {
 					/* Def not found. Return to edit page */
 					Core::redirect ( $editPage );
 				} elseif (isset ( $_POST ['def_en'] ) && isset ( $_POST ['type_id'] ) && isset ( $_POST ['action'] )) {
 					if ($_POST ['action'] == 'delete') {
-						Def_Model::delete ( $def ['def_id'] );
+						$this -> def -> delete ( $def ['def_id'] );
 					} else {
 						/* Check everything */
 						$def ['def_en'] = $_POST ['def_en'];
@@ -231,7 +249,7 @@ class Word_Controller implements Controller {
 						if (! $type = ListType_Model::get ( $def ['def_type'] )) {
 							Core::redirect ( $defEdit );
 						}
-						Def_Model::update ( $def );
+						$this -> def -> update ( $def );
 					}
 					/* Navigate back to edit page */
 					Core::redirect ( $editPage );
@@ -244,7 +262,7 @@ class Word_Controller implements Controller {
 			case 'example' :
 				$word_id = $wordInfo ['word'] ['word_id'];
 				$def_id = $target;
-				if (! $def = Def_Model::get ( $word_id, $target )) {
+				if (! $def = $this -> def -> get ( $word_id, $target )) {
 					/* Def not found. Return to edit page */
 					Core::redirect ( $editPage );
 				}
@@ -260,16 +278,16 @@ class Word_Controller implements Controller {
 					}
 					
 					/* Re-fetch modified definition */
-					if (! $def = Def_Model::get ( $word_id, $target )) {
+					if (! $def = $this -> def -> get ( $word_id, $target )) {
 						Core::redirect ( $editPage );
 					}
-					if (! $wordInfo ['word'] = Word_Model::getByID ( $word_id )) {
+					if (! $wordInfo ['word'] = $this -> word -> getByID ( $word_id )) {
 						Core::redirect ( $editPage );
 					}
 				}
 				
 				$wordInfo ['def'] = $def;
-				$wordInfo ['candidates'] = Example_Model::listByWordMention ( $wordInfo ['word'] ['rel_spelling'] ['spelling_t_style'], $wordInfo ['word'] ['word_num'] );
+				$wordInfo ['candidates'] = $this -> example -> listByWordMention ( $wordInfo ['word'] ['rel_spelling'] ['spelling_t_style'], $wordInfo ['word'] ['word_num'] );
 				$wordInfo ['form'] = "example";
 				break;
 			case 'rel' :
@@ -280,19 +298,19 @@ class Word_Controller implements Controller {
 					$word_str = $_POST ['word'];
 					$rel_type_id = $_POST ['rel_type_id'];
 					
-					if (! $word_id = Word_Model::getWordIDfromStr ( $word_str )) {
+					if (! $word_id = $this -> word -> getWordIDfromStr ( $word_str )) {
 						/* Verify word exists */
 						$wordInfo ['message'] = "Word does not exist";
 						$fail = true;
 					}
 					
-					if (! $fail && ! Word_Model::reltypeExists ( $rel_type_id )) {
+					if (! $fail && ! $this -> word -> reltypeExists ( $rel_type_id )) {
 						/* Verify rel_type_id exists */
 						$wordInfo ['message'] = "Please select a type first.";
 						$fail = true;
 					}
 					
-					if (! $fail && Word_Model::isRelated ( $wordInfo ['word'] ['word_id'], $rel_type_id, $word_id )) {
+					if (! $fail && $this -> word -> isRelated ( $wordInfo ['word'] ['word_id'], $rel_type_id, $word_id )) {
 						/* Verify words aren't already related */
 						$wordInfo ['message'] = "Already listed.";
 						$fail = true;
@@ -306,7 +324,7 @@ class Word_Controller implements Controller {
 					
 					if (! $fail) {
 						/* Ok. relate the words now */
-						Word_Model::relateWords ( $wordInfo ['word'] ['word_id'], $rel_type_id, $word_id );
+						$this -> word -> relateWords ( $wordInfo ['word'] ['word_id'], $rel_type_id, $word_id );
 						$url = Core::constructURL ( "word", "edit", array (
 								$wordInfo ['id'],
 								'rel',
@@ -318,26 +336,26 @@ class Word_Controller implements Controller {
 					$word_id = $_POST ['word_id'];
 					$rel_type_id = $_POST ['rel_type_id'];
 					
-					if (! $word = Word_Model::getByID ( $word_id )) {
+					if (! $word = $this -> word -> getByID ( $word_id )) {
 						/* Check word exists */
 						$wordInfo ['message'] = "Delete failed (word not found)";
 						$fail = true;
 					}
 					
-					if (! $fail && ! Word_Model::reltypeExists ( $rel_type_id )) {
+					if (! $fail && ! $this -> word -> reltypeExists ( $rel_type_id )) {
 						/* Verify rel_type_id exists */
 						$wordInfo ['message'] = "There was a problem deleting (reltype not found), please try again.";
 						$fail = true;
 					}
 					
-					if (! $fail && ! Word_Model::isRelated ( $wordInfo ['word'] ['word_id'], $rel_type_id, $word_id )) {
+					if (! $fail && ! $this -> word -> isRelated ( $wordInfo ['word'] ['word_id'], $rel_type_id, $word_id )) {
 						/* Verify words aren't already related */
 						$wordInfo ['message'] = "Delete failed (word not related).";
 						$fail = true;
 					}
 					
 					if (! $fail) {
-						Word_Model::unRelateWords ( $wordInfo ['word'] ['word_id'], $rel_type_id, $word_id );
+						$this -> word -> unRelateWords ( $wordInfo ['word'] ['word_id'], $rel_type_id, $word_id );
 						$url = Core::constructURL ( "word", "edit", array (
 								$wordInfo ['id'],
 								'rel',
@@ -348,7 +366,7 @@ class Word_Controller implements Controller {
 				}
 				
 				$wordInfo ['rel_type_id'] = $target;
-				$wordInfo ['listreltype'] = Word_Model::listRelType ();
+				$wordInfo ['listreltype'] = $this -> word -> listRelType ();
 				
 				break;
 			
@@ -377,7 +395,7 @@ class Word_Controller implements Controller {
 			);
 		}
 		
-		if ($words = Word_Model::listByTypeShort ( $type_short )) {
+		if ($words = $this -> word -> listByTypeShort ( $type_short )) {
 			$title = $type ['type_title'];
 			return array (
 					'title' => $title,
@@ -412,11 +430,11 @@ class Word_Controller implements Controller {
 			$data = array (
 					'letter' => $letter 
 			);
-			if (! (($markup = Letter_Model::cache_get_html ( $letter )) === false)) {
+			if (! (($markup = $this -> letter -> cache_get_html ( $letter )) === false)) {
 				$data ['cache'] = $markup;
 			} else {
 				/* This query is a little insane (hence caching) */
-				$data ['words'] = Word_Model::listByLetter ( $letter );
+				$data ['words'] = $this -> word -> listByLetter ( $letter );
 			}
 			$data ['title'] = "Samoan Words: " . Core::escapeHTML ( strtoUpper ( $letter ) . " " . strtolower ( $letter ) );
 			return $data;
@@ -448,8 +466,8 @@ class Word_Controller implements Controller {
 			$search = $_REQUEST ['s'];
 		}
 		
-		$searchKey = Spelling_Model::calcSearchkey ( $search );
-		$words = Word_Model::getBySpellingSearchKey ( $searchKey );
+		$searchKey = $this -> spelling -> calcSearchkey ( $search );
+		$words = $this -> word -> getBySpellingSearchKey ( $searchKey );
 		
 		return array (
 				'search' => $search,
@@ -472,8 +490,8 @@ class Word_Controller implements Controller {
 		}
 		
 		$search = $_POST ['term'];
-		$searchKey = Spelling_Model::calcSearchkey ( $search );
-		$words = Word_Model::getBySpellingSearchKey ( $searchKey, true );
+		$searchKey = $this -> spelling -> calcSearchkey ( $search );
+		$words = $this -> word -> getBySpellingSearchKey ( $searchKey, true );
 		return array (
 				'search' => $search,
 				'words' => $words,
@@ -494,13 +512,13 @@ class Word_Controller implements Controller {
 		if ($word = Word_Model::getWordBySpellingAndWordNum ( $spelling_t_style, 0 )) {
 			Word_Model::renumber ( $word ['word_id'], 1 );
 			$word_num = 2;
-		} else if ($word = Word_Model::getWordBySpellingAndWordNum ( $spelling_t_style, 1 )) {
+		} else if ($word = $this -> word -> getWordBySpellingAndWordNum ( $spelling_t_style, 1 )) {
 			/* If there is already a foo1, then don't try to make foo0! */
 			$word_num = 2;
 		}
 		
 		/* Now search for the next spare location */
-		while ( $word = Word_Model::getWordBySpellingAndWordNum ( $spelling_t_style, $word_num ) ) {
+		while ( $word = $this -> word -> getWordBySpellingAndWordNum ( $spelling_t_style, $word_num ) ) {
 			$word_num ++;
 		}
 		

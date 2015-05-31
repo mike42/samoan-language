@@ -21,7 +21,7 @@ echo Core::escapeHTML($data['example']['example_en'])."</dd></dl>";
 	echo "<hr />" ?>
 
 <form method="post" class="neattable" id="example-form"
-	action="<?echo Core::constructURL('example', 'edit', array($data['example']['example_id']), 'html'); ?>">
+	action="<?php echo Core::constructURL('example', 'edit', array($data['example']['example_id']), 'html'); ?>">
 	<input type="hidden" name="action" id="action" value="save">
 	<table>
 
@@ -37,7 +37,7 @@ echo Core::escapeHTML($data['example']['example_en'])."</dd></dl>";
 
 		<tr>
 			<td colspan=2 style="text-align: right"><? $dest = Core::constructURL('example', 'view', array($data['example']['example_id']), 'html'); ?>
-				<a href="<? echo $dest; ?>">[go back]</a> <? 	if($permissions['delete']) {
+				<a href="<?php echo $dest; ?>">[go back]</a> <? 	if($permissions['delete']) {
 					echo "<input type=\"button\" onClick=\"deleteExample()\" class=\"danger\" value=\"Delete\" />";
 				}
 				?> <input type="button" onClick="previewExample()" value="Preview" />

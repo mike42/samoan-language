@@ -3,6 +3,13 @@
 namespace SmWeb;
 
 class User_Controller implements Controller {
+	private $database;
+	private $user;
+	public function __construct(database $database) {
+		$this->database = $database;
+		$this->user = User_Model::getInstance ( $database );
+		$this->session = Session::getInstance ( $database );
+	}
 	public static function init() {
 		Core::loadClass ( 'User_Model' );
 		Core::loadClass ( 'Session' );
@@ -14,8 +21,8 @@ class User_Controller implements Controller {
 			);
 		}
 		
-		if ($user = User_Model::verifyLogin ( $_POST ['user_name'], $_POST ['user_password'] )) {
-			if (Session::loginUser ( $user )) {
+		if ($user = $this -> user -> verifyLogin ( $_POST ['user_name'], $_POST ['user_password'] )) {
+			if ($this -> session -> loginUser ( $user )) {
 				Core::redirect ( Core::constructURL ( 'page', 'view', array (
 						'home' 
 				), 'html' ) );
@@ -36,6 +43,7 @@ class User_Controller implements Controller {
 		}
 	}
 	public function logout() {
-		Session::logoutUser ();
+		$this -> session -> logoutUser ();
+		return array();
 	}
 }

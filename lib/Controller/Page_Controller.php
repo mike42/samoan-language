@@ -3,14 +3,22 @@
 namespace SmWeb;
 
 class Page_Controller implements Controller {
+	private $database;
+	private $page;
+	private $revision;
+	public function __construct(database $database) {
+		$this->database = $database;
+		$this->page = Page_Model::getInstance ( $database );
+		$this->revision = Revision_Model::getInstance ( $database );
+	}
 	public static function init() {
 		Core::loadClass ( 'Page_Model' );
 	}
 	public function view($id) {
-		if ($page = Page_Model::getByShort ( $id )) {
+		if ($page = $this->page->getByShort ( $id )) {
 			if (! ($page ['page_rel_revision'] ['revision_parse_valid'] == 1)) {
-				$page ['page_rel_revision'] ['revision_text_parsed'] = Page_Model::render ( $page );
-				Revision_Model::cache_save ( $page ['page_rel_revision'] );
+				$page ['page_rel_revision'] ['revision_text_parsed'] = $this -> page -> render ( $page );
+				$this->revision->cache_save ( $page ['page_rel_revision'] );
 			}
 			return array (
 					'title' => $page ['page_rel_revision'] ['revision_title'],
@@ -26,7 +34,7 @@ class Page_Controller implements Controller {
 		}
 	}
 	public function create($id) {
-		if ($page = Page_Model::getByShort ( $id )) {
+		if ($page = $this->page->getByShort ( $id )) {
 			/* Page already exists - redirect to it */
 			$url = Core::constructURL ( 'page', 'view', array (
 					$id 
@@ -53,7 +61,7 @@ class Page_Controller implements Controller {
 		}
 		
 		/* Create the page and go right to the edit form */
-		Page_Model::insert ( $id );
+		$this->page->insert ( $id );
 		$url = Core::constructURL ( 'page', 'edit', array (
 				$id 
 		), 'html' );
@@ -71,7 +79,7 @@ class Page_Controller implements Controller {
 			);
 		}
 		
-		if (! $page = Page_Model::getByShort ( $id )) {
+		if (! $page = $this->page->getByShort ( $id )) {
 			/* Page does not exist -- Go to create it instead */
 			$url = Core::constructURL ( 'page', 'create', array (
 					$id 
@@ -102,7 +110,7 @@ class Page_Controller implements Controller {
 		
 		if ($_POST ['action'] == "save") {
 			/* Actually submit */
-			Revision_Model::insert ( $page, $revision );
+			$this->revision->insert ( $page, $revision );
 			
 			/* Go back to the page */
 			$url = Core::constructURL ( 'page', 'view', array (
@@ -119,7 +127,7 @@ class Page_Controller implements Controller {
 				);
 			}
 			
-			Page_Model::delete ( $page ['page_id'] );
+			$this->page->delete ( $page ['page_id'] );
 			
 			/* Take the user to the (now deleted) site */
 			$url = Core::constructURL ( 'page', 'view', array (
@@ -129,7 +137,7 @@ class Page_Controller implements Controller {
 			return;
 		}
 		/* Preview type thing */
-		$page ['page_rel_revision'] ['revision_text_parsed'] = Page_Model::render ( $page );
+		$page ['page_rel_revision'] ['revision_text_parsed'] = $this -> page -> render ( $page );
 		return array (
 				'title' => "Editing '" . $page ['page_rel_revision'] ['revision_title'] . "'",
 				'id' => $id,
@@ -138,7 +146,7 @@ class Page_Controller implements Controller {
 		);
 	}
 	public function purge($id) {
-		if (! $page = Page_Model::getByShort ( $id )) {
+		if (! $page = $this->page->getByShort ( $id )) {
 			return array (
 					'title' => 'Not found',
 					'error' => '404',
@@ -146,7 +154,7 @@ class Page_Controller implements Controller {
 			);
 		}
 		
-		Revision_Model::cache_purge_page ( $page ['page_id'] );
+		$this->revision->cache_purge_page ( $page ['page_id'] );
 		$url = Core::constructURL ( 'page', 'view', array (
 				$page ['page_short'] 
 		), 'html' );

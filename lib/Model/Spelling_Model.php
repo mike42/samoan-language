@@ -3,8 +3,18 @@
 namespace SmWeb;
 
 class Spelling_Model implements Model {
+	private static $instance;
 	public static $template;
-	public static $database;
+	public $database;
+	public function __construct(database $database) {
+		$this->database = $database;
+	}
+	public static function getInstance(database $database) {
+		if (self::$instance == null) {
+			self::$instance = new self ( $database );
+		}
+		return self::$instance;
+	}
 	public static function init() {
 		Core::loadClass ( 'Database' );
 		self::$template = array (
@@ -18,7 +28,6 @@ class Spelling_Model implements Model {
 				'spelling_searchkey' => '',
 				'spelling_sortkey_sm' => '' 
 		);
-		self::$database = Database::getInstance();
 	}
 	public static function calcKStyle($name) {
 		/*
@@ -85,9 +94,9 @@ class Spelling_Model implements Model {
 	/**
 	 * Get spelling by its t-style representation
 	 */
-	public static function getBySpelling($spelling_t_style) {
+	public function getBySpelling($spelling_t_style) {
 		$query = "SELECT * FROM {TABLE}spelling WHERE spelling_t_style ='%s';";
-		if ($row = self::$database -> retrieve ( $query, 1, $spelling_t_style )) {
+		if ($row = $this->database->retrieve ( $query, 1, $spelling_t_style )) {
 			return self::fromRow ( $row );
 		}
 		return false;
@@ -98,7 +107,7 @@ class Spelling_Model implements Model {
 	 *
 	 * @param string $spelling_t_style        	
 	 */
-	public static function add($spelling_t_style) {
+	public function add($spelling_t_style) {
 		$spelling = self::$template;
 		
 		/* All the fun derived fields */
@@ -110,10 +119,10 @@ class Spelling_Model implements Model {
 		$spelling ['spelling_sortkey_sm'] = self::calcSortkeySm ( $spelling_t_style );
 		
 		$query = "INSERT INTO {TABLE}spelling (spelling_id, spelling_t_style, spelling_t_style_recorded, " . "spelling_k_style, spelling_k_style_recorded, spelling_simple, spelling_sortkey, spelling_searchkey, " . "spelling_sortkey_sm) VALUES (NULL, '%s', '0', '%s', '0', '%s', '%s', '%s', '%s');";
-		$spelling ['spelling_id'] = self::$database -> retrieve ( $query, 2, $spelling ['spelling_t_style'], $spelling ['spelling_k_style'], $spelling ['spelling_simple'], $spelling ['spelling_sortkey'], $spelling ['spelling_searchkey'], $spelling ['spelling_sortkey_sm'] );
+		$spelling ['spelling_id'] = $this->database->retrieve ( $query, 2, $spelling ['spelling_t_style'], $spelling ['spelling_k_style'], $spelling ['spelling_simple'], $spelling ['spelling_sortkey'], $spelling ['spelling_searchkey'], $spelling ['spelling_sortkey_sm'] );
 		return $spelling;
 	}
-	private static function fromRow($row, $depth = 0) {
-		return self::$database -> row_from_template ( $row, self::$template );
+	private function fromRow($row, $depth = 0) {
+		return $this->database->row_from_template ( $row, self::$template );
 	}
 }

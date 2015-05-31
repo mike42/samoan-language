@@ -44,11 +44,18 @@ class Request {
 	 */
 	private $fmt;
 	
+	private $session;
+	
 	/**
 	 *
 	 * @var string URL being requested, in canonical form.
 	 */
 	private $url;
+	
+	public static function init() {
+		core::loadClass('Session');
+		
+	}
 	
 	/**
 	 * Construct request
@@ -94,6 +101,7 @@ class Request {
 		$this->action = $action;
 		$this->fmt = $fmt;
 		$this->url = Core::constructUrl ( $controllerShortName, $action, $arg, $fmt );
+		$this -> session = Session::getInstance($database);
 	}
 	
 	/**

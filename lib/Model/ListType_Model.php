@@ -3,8 +3,18 @@
 namespace SmWeb;
 
 class ListType_Model implements Model {
+	private static $instance;
 	public static $template;
-	public static $database;
+	public $database;
+	public function __construct(database $database) {
+		$this->database = $database;
+	}
+	public static function getInstance(database $database) {
+		if (self::$instance == null) {
+			self::$instance = new self ( $database );
+		}
+		return self::$instance;
+	}
 	public static function init() {
 		Core::loadClass ( 'Database' );
 		self::$template = array (
@@ -14,20 +24,19 @@ class ListType_Model implements Model {
 				'type_title' => '',
 				'type_short' => '' 
 		);
-		self::$database = Database::getInstance();
 	}
 	
 	/**
 	 * Return a list of all word types in the database
 	 */
-	public static function listAll($tags = false) {
+	public function listAll($tags = false) {
 		$query = "SELECT * FROM {TABLE}listtype WHERE type_istag =%d ORDER BY type_name;";
-		if (! $res = self::$database -> retrieve ( $query, 0, $tags ? '1' : '0' )) {
+		if (! $res = $this->database->retrieve ( $query, 0, $tags ? '1' : '0' )) {
 			return false;
 		}
 		
 		$ret = array ();
-		while ( $row = self::$database -> get_row ( $res ) ) {
+		while ( $row = $this->database->get_row ( $res ) ) {
 			$ret [] = self::fromRow ( $row );
 		}
 		return $ret;
@@ -38,10 +47,10 @@ class ListType_Model implements Model {
 	 *
 	 * @param string $type_short        	
 	 */
-	public static function getByShort($type_short) {
+	public function getByShort($type_short) {
 		$query = "SELECT * FROM {TABLE}listtype WHERE type_short ='%s'";
 		
-		if ($row = self::$database -> retrieve ( $query, 1, $type_short )) {
+		if ($row = $this->database->retrieve ( $query, 1, $type_short )) {
 			return self::fromRow ( $row );
 		}
 		return false;
@@ -52,14 +61,14 @@ class ListType_Model implements Model {
 	 *
 	 * @param int $type_id        	
 	 */
-	public static function get($type_id) {
+	public function get($type_id) {
 		$query = "SELECT * FROM {TABLE}listtype WHERE type_id =%d";
-		if (! $row = self::$database -> retrieve ( $query, 1, $type_id )) {
+		if (! $row = $this->database->retrieve ( $query, 1, $type_id )) {
 			return false;
 		}
 		return self::fromRow ( $row );
 	}
-	private static function fromRow($row, $depth = 0) {
-		return self::$database -> row_from_template ( $row, self::$template );
+	private function fromRow($row, $depth = 0) {
+		return $this->database->row_from_template ( $row, self::$template );
 	}
 }

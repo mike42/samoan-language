@@ -4,19 +4,17 @@ namespace SmWeb;
 
 /* Manage user sessions */
 class Session {
-	private static $started;
-	private static $user;
-	private static $verified;
+	private static $instance;
+	
+	private $started;
+	private $user;
+	private $verified;
 	
 	/**
 	 * Start the session with no user details.
 	 */
 	public static function init() {
-		self::$user = null;
-		self::$verified = false;
-		
 		Core::loadClass ( 'User_Model' );
-		session_start ();
 	}
 	
 	/**
@@ -26,21 +24,21 @@ class Session {
 	 *        	The user to log in as
 	 * @return boolean True if the user was logged in successfully, false if the details don't match the database.
 	 */
-	public static function loginUser($user) {
+	public function loginUser($user) {
 		/* Use these */
 		$_SESSION ['user_id'] = $user ['user_id'];
 		$_SESSION ['user_pass'] = $user ['user_pass'];
-		return self::verifyUser ();
+		return $this->verifyUser ();
 	}
 	
 	/**
 	 * Log out current user.
 	 */
-	public static function logoutUser() {
+	public function logoutUser() {
 		unset ( $_SESSION ['user_id'] );
 		unset ( $_SESSION ['user_pass'] );
-		self::$user = null;
-		self::$verified = true;
+		$this->user = null;
+		$this->verified = true;
 		return true;
 	}
 	
@@ -49,17 +47,17 @@ class Session {
 	 *
 	 * @return string role of the current user, or 'anon' if there is no current user
 	 */
-	public static function getRole() {
-		if (! self::$verified) {
+	public function getRole() {
+		if (! $this->verified) {
 			/* Check user info before getting role */
-			self::verifyUSer ();
+			$this->verifyUser ();
 		}
-		if (self::$user != null) {
+		if ($this->user != null) {
 			/* If logged in, use user role */
-			if (self::$user ['user_role'] == '') {
+			if ($this->user ['user_role'] == '') {
 				return 'user';
 			} else {
-				return self::$user ['user_role'];
+				return $this->user ['user_role'];
 			}
 		}
 		
@@ -70,12 +68,12 @@ class Session {
 	/**
 	 * Get information about currently logged in user, or false if not logged in
 	 */
-	public static function getUser() {
-		if (! self::$verified) {
-			self::verifyUser ();
+	public function getUser() {
+		if (! $this->verified) {
+			$this->verifyUser ();
 		}
-		if (self::$user != null) {
-			return self::$user;
+		if ($this->user != null) {
+			return $this->user;
 		}
 		return false;
 	}
@@ -86,22 +84,36 @@ class Session {
 	 *
 	 * @return boolean true if the user is logged in, false if they are not
 	 */
-	private static function verifyUser() {
+	private function verifyUser() {
 		if (isset ( $_SESSION ['user_id'] ) && isset ( $_SESSION ['user_pass'] )) {
-			if ($user = User_Model::getById ( $_SESSION ['user_id'] )) {
+			if ($user = $this->userModel->getById ( $_SESSION ['user_id'] )) {
 				if ($user ['user_pass'] == $_SESSION ['user_pass']) {
-					self::$user = $user;
-					self::$verified = true;
+					$this->user = $user;
+					$this->verified = true;
 					return true;
 				}
 			}
 			/* Session set but user has probably changed password since login */
-			self::logoutUser ();
+			$this->logoutUser ();
 		}
 		
 		/* Not logged in as valid user */
-		self::$user = null;
-		self::$verified = true;
+		$this->user = null;
+		$this->verified = true;
 		return false;
+	}
+	public function __construct(Database $database) {
+		$this->userModel = User_Model::getInstance ( $database );
+		$this->user = null;
+		$this->verified = false;
+		
+		session_start ();
+	}
+	public static function getInstance(Database $database = null) {
+		if (self::$instance == null) {
+			self::$instance = new self ( $database );
+			// TODO use fake session if on CLI, to prevent "session_start(): Cannot send session cookie - headers already sent"
+		}
+		return self::$instance;
 	}
 }

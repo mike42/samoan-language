@@ -3,8 +3,18 @@
 namespace SmWeb;
 
 class User_Model implements Model {
+	private static $instance;
 	private static $template;
-	public static $database;
+	public $database;
+	public function __construct(database $database) {
+		$this->database = $database;
+	}
+	public static function getInstance(database $database) {
+		if (self::$instance == null) {
+			self::$instance = new self ( $database );
+		}
+		return self::$instance;
+	}
 	public static function init() {
 		Core::loadClass ( 'Database' );
 		
@@ -19,16 +29,15 @@ class User_Model implements Model {
 				'user_created' => '',
 				'user_role' => '' 
 		);
-		self::$database = Database::getInstance();
 	}
 	
 	/**
 	 * Get user by ID
 	 */
-	public static function getById($user_id) {
+	public function getById($user_id) {
 		$query = "SELECT * FROM {TABLE}user WHERE user_id = '%d';";
-		if ($row = self::$database -> retrieve ( $query, 1, $user_id )) {
-			return self::$database -> row_from_template ( $row, User_Model::$template );
+		if ($row = $this->database->retrieve ( $query, 1, $user_id )) {
+			return $this->database->row_from_template ( $row, User_Model::$template );
 		}
 		return false;
 	}
@@ -36,10 +45,10 @@ class User_Model implements Model {
 	/**
 	 * Get user by email address or username
 	 */
-	public static function getByNameOrEmail($name_or_email) {
+	public function getByNameOrEmail($name_or_email) {
 		$query = "SELECT * FROM {TABLE}user WHERE user_email = '%s' or user_name = '%s';";
-		if ($row = self::$database -> retrieve ( $query, 1, $name_or_email, $name_or_email )) {
-			return self::$database -> row_from_template ( $row, User_Model::$template );
+		if ($row = $this->database->retrieve ( $query, 1, $name_or_email, $name_or_email )) {
+			return $this->database->row_from_template ( $row, User_Model::$template );
 		} else {
 			return false;
 		}
@@ -57,7 +66,7 @@ class User_Model implements Model {
 	 * @param string $role
 	 *        	New role for user (probably 'user' or 'admin')
 	 */
-	public static function insert($user_name, $user_email, $password, $role = 'user') {
+	public function insert($user_name, $user_email, $password, $role = 'user') {
 		if ($user = self::getByNameOrEmail ( $user_name ) || $user = self::getByNameOrEmail ( $user_email )) {
 			/* Skip if a user already has this name or email */
 			return false;
@@ -78,13 +87,13 @@ class User_Model implements Model {
 		$user = self::$template;
 		$user ['user_name'] = $user_name;
 		$user ['user_email'] = $user_email;
-		$user ['user_salt'] = self::gen_salt ();
-		$user ['user_pass'] = self::gen_password_encoded ( $password, $user ['user_salt'] );
+		$user ['user_salt'] = $this->gen_salt ();
+		$user ['user_pass'] = $this->gen_password_encoded ( $password, $user ['user_salt'] );
 		$user ['user_role'] = $role;
 		
 		/* Insert */
 		$sql = "INSERT INTO {TABLE}user (user_id, user_name, user_pass, user_salt, user_token, user_email, user_email_confirmed, user_created, user_role) " . "VALUES (NULL , '%s', '%s', '%s', '', '%s', '0', CURRENT_TIMESTAMP , '%s');";
-		return self::$database -> retrieve ( $sql, 2, $user ['user_name'], $user ['user_pass'], $user ['user_salt'], $user ['user_email'], $user ['user_role'] );
+		return $this->database->retrieve ( $sql, 2, $user ['user_name'], $user ['user_pass'], $user ['user_salt'], $user ['user_email'], $user ['user_role'] );
 	}
 	
 	/**
@@ -96,29 +105,29 @@ class User_Model implements Model {
 	 * @param string $password
 	 *        	user's claimed password
 	 */
-	public static function verifyLogin($user_name, $password) {
+	public function verifyLogin($user_name, $password) {
 		if ($user = self::getByNameOrEmail ( $user_name )) {
-			if ($user ['user_pass'] == self::gen_password_encoded ( $password, $user ['user_salt'] )) {
+			if ($user ['user_pass'] == $this->gen_password_encoded ( $password, $user ['user_salt'] )) {
 				return $user;
 			}
 		}
 		/* No such user or wrong password */
 		return false;
 	}
-	private static function gen_password_encoded($password_plaintext, $salt) {
+	protected function gen_password_encoded($password_plaintext, $salt) {
 		/* Join password and salt, then hash them for the password field (or to compare with a password field) */
 		$password_plaintext = trim ( $password_plaintext );
 		return hash ( 'sha256', $salt . ":" . $password_plaintext );
 	}
-	private static function gen_salt() {
+	protected function gen_salt() {
 		/* Make a salt for our string (hash some random data) */
-		return hash ( 'sha256', self::gen_random_chars ( 1024 ) );
+		return hash ( 'sha256', $this->gen_random_chars ( 1024 ) );
 	}
-	private static function gen_token() {
+	protected function gen_token() {
 		/* Tokens look the same as salts at the moment */
 		return self::gen_salt ();
 	}
-	private static function gen_random_chars($len, $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^*()1234567890-_+=,.<>") {
+	protected function gen_random_chars($len, $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^*()1234567890-_+=,.<>") {
 		/* Return random characters from a string, to a specified length (use for generating passwords, salts, tokens */
 		$char_count = strlen ( $chars );
 		for($i = 0; $i < $len; $i ++) {

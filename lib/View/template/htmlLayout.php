@@ -8,7 +8,7 @@ $siteTitle = "Samoan Language Resources";
 $pageTitle = $data['title'];
 $pagePermalink = $data['url'];
 /* For the tab title */
-$titleLong = isset($data['titlebar']) ? $data['titlebar'] : (isset($data['title']) ? $data['title'] . " - $siteTitle" : $siteTitle);
+$titleLong = isset($data['titlebar']) ? $data['titlebar'] : (isset($data['title']) && $data['title'] != $siteTitle ? $data['title'] . " - $siteTitle" : $siteTitle);
 
 function text($text) {
 	echo Core::escapeHTML($text);
@@ -171,7 +171,7 @@ function text($text) {
 		<p>
 		<a href="<?php text(Core::constructURL('page', 'view', array('about'), 'html')); ?>">about this project</a> |
 		<?php 
-			if($user = Session::getUser()) {
+			if($user = Session::getInstance() -> getUser()) {
 				echo "logged in as ";
 				text(Core::escapeHTML($user['user_name']));
 				echo " (<a href=\"";

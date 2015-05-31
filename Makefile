@@ -1,5 +1,5 @@
 # This compiles & minifies the stylesheets
-
+.PHONY: coverage
 THEME=vendor/zbench
 STYLE=public/style
 
@@ -16,6 +16,10 @@ $(STYLE)/style.min.css: $(STYLE)/style.css
 $(STYLE)/images/%: $(THEME)/images/%
 	cp $< $@
 
+coverage:
+	php vendor/bin/phpunit --coverage-html coverage/ tests
+
 clean:
 	rm -f $(TARGETS)
+	rm --preserve-root -Rf coverage/
 

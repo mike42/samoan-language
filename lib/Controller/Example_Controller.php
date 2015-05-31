@@ -3,6 +3,16 @@
 namespace SmWeb;
 
 class Example_Controller implements Controller {
+	private $database;
+	private $example;
+	private $word;
+	
+	public function __construct(database $database) {
+		$this -> database =  $database;
+		$this -> example = Example_Model::getInstance($database);
+		$this -> word = Word_Model::getInstance($database);
+	}
+	
 	public static function init() {
 		Core::loadClass ( 'Example_Model' );
 		Core::loadClass ( 'Word_Model' );
@@ -13,7 +23,7 @@ class Example_Controller implements Controller {
 					'' 
 			), 'html' ) );
 			return array ();
-		} elseif ($example = Example_Model::getById ( $example_id )) {
+		} elseif ($example = $this -> example -> getById ( $example_id )) {
 			return array (
 					'example' => $example 
 			);
@@ -28,8 +38,8 @@ class Example_Controller implements Controller {
 			$word = $_GET ['s'];
 		}
 		$word = trim ( $word );
-		$part = Word_Model::getSpellingAndNumberFromStr ( $word );
-		$example_list = Example_Model::listByWordMention ( $part ['spelling'], $part ['number'] );
+		$part = $this -> word -> getSpellingAndNumberFromStr ( $word );
+		$example_list = $this -> example -> listByWordMention ( $part ['spelling'], $part ['number'] );
 		return array (
 				'search' => $word,
 				'examples' => $example_list 
@@ -44,7 +54,7 @@ class Example_Controller implements Controller {
 		}
 		
 		if (isset ( $_REQUEST ['example_en'] ) && isset ( $_REQUEST ['example_str'] )) {
-			$example_id = Example_Model::insert ( $_REQUEST ['example_str'], $_REQUEST ['example_en'] );
+			$example_id = $this -> example -> insert ( $_REQUEST ['example_str'], $_REQUEST ['example_en'] );
 			Core::redirect ( Core::constructURL ( 'example', 'edit', array (
 					$example_id 
 			), 'html' ) );
@@ -61,7 +71,7 @@ class Example_Controller implements Controller {
 			);
 		}
 		
-		if (! $example = Example_Model::getById ( $example_id )) {
+		if (! $example = $this -> example -> getById ( $example_id )) {
 			/* No such example */
 			return array (
 					'error' => '404' 
@@ -96,7 +106,7 @@ class Example_Controller implements Controller {
 				);
 			}
 			
-			Example_Model::delete ( $example ['example_id'] );
+			$this -> example -> delete ( $example ['example_id'] );
 			$dest = Core::constructURL ( 'example', 'view', array (
 					'' 
 			) );
@@ -104,7 +114,7 @@ class Example_Controller implements Controller {
 			return;
 		} else if ($action == 'save') {
 			/* Save the page */
-			Example_Model::update ( $example );
+			$this -> example -> update ( $example );
 			$dest = Core::constructURL ( 'example', 'view', array (
 					$example ['example_id'] 
 			), 'html' );

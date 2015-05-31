@@ -74,7 +74,7 @@ echo "</ul>";
 
 <h4>Add a different example</h4>
 
-<form class="neattable" method="post" action="<? echo $formdest; ?>">
+<form class="neattable" method="post" action="<?php echo $formdest; ?>">
 	<input type="hidden" name="action" value="add" />
 	<table>
 		<tr>

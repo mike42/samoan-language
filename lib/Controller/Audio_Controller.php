@@ -4,21 +4,34 @@ namespace SmWeb;
 
 class Audio_Controller implements Controller {
 	static $audioDir;
+	
+	private $spelling;
+	private $spellingAudio;
+	private $database;
+	
 	public static function init() {
 		Core::loadClass ( "SpellingAudio_Model" );
 		Core::loadClass ( "Spelling_Model" );
 	}
+	
+	
+	public function __construct(database $database) {
+		$this->database = $database;
+		$this->spelling = Spelling_Model::getInstance( $database );
+		$this->spellingAudio = SpellingAudio_Model::getInstance ( $database );
+	}
+	
 	public function view($type = false, $id = false) {
 		switch ($type) {
 			case 'spelling' :
-				if (! $spelling = Spelling_Model::getBySpelling ( $id )) {
+				if (! $spelling = $this -> spelling -> getBySpelling ( $id )) {
 					/* Spelling does not actually exist! good luck */
 					return array (
 							"error" => "404" 
 					);
 				}
 				
-				if ($spellingaudio = SpellingAudio_Model::getRowBySpellingTStyle ( $id, 0 )) {
+				if ($spellingaudio = $this -> spellingAudio -> getRowBySpellingTStyle ( $id, 0 )) {
 					return array (
 							'spelling' => $spelling,
 							'spellingaudio' => $spellingaudio 
@@ -44,7 +57,7 @@ class Audio_Controller implements Controller {
 	public function listen($type = false, $id = false) {
 		switch ($type) {
 			case 'spelling' :
-				if ($spellingaudio = SpellingAudio_Model::getRowBySpellingTStyle ( $id, 0 )) {
+				if ($spellingaudio = $this -> spellingAudio -> getRowBySpellingTStyle ( $id, 0 )) {
 					/* Just look for recording */
 					return array (
 							"fn" => $spellingaudio ['spelling_id'],
@@ -54,14 +67,14 @@ class Audio_Controller implements Controller {
 				break;
 			
 			case 'spelling-k' :
-				if ($spellingaudio = SpellingAudio_Model::getRowBySpellingTStyle ( $id, 1 )) {
+				if ($spellingaudio = $this -> spellingAudio -> getRowBySpellingTStyle ( $id, 1 )) {
 					return array (
 							"fn" => $spellingaudio ['spelling_id'],
 							"type" => "spelling-k" 
 					);
 				}
 				
-				if (! $spelling = Spelling_Model::getBySpelling ( $id )) {
+				if (! $spelling = $this -> spelling -> getBySpelling ( $id )) {
 					/* Spelling does not actually exist! good luck */
 					return array (
 							"error" => "404" 
@@ -75,7 +88,7 @@ class Audio_Controller implements Controller {
 					);
 				}
 				
-				if ($spellingaudio = SpellingAudio_Model::getRowBySpellingTStyle ( $id, 0 )) {
+				if ($spellingaudio = $this -> spellingAudio -> getRowBySpellingTStyle ( $id, 0 )) {
 					/* Attempt to fall back on similar T-style recording if no K-style one was found */
 					return array (
 							"fn" => $spellingaudio ['spelling_id'],

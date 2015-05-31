@@ -27,6 +27,28 @@ Then follow the instructions in maintenance/help.html, which will show you how t
 * Set up apache with htaccess.
 * Add a user
 
+Development
+-----------
+For development, you will need:
+* yui-compressor
+* GNU make
+* phpunit
+* composer (suggested for Eclipse users)
+
+To re-compile the CSS, run:
+
+    make
+
+To run unit tests, use:
+
+    phpunit tests/
+
+And to generate a HTML code coverage report:
+
+	phpunit --coverage-html coverage/ tests/
+    # or..
+    make coverage
+
 Credit
 ------
 * Uses modified version of [zBench](https://wordpress.org/themes/zbench/) wordpress theme (GPL v2 or newer)

@@ -11,7 +11,6 @@
          convertWarningsToExceptions="true"
          forceCoversAnnotation="false"
          mapTestClassNameToCoveredClassName="false"
-         printerClass="PHPUnit_TextUI_ResultPrinter"
          processIsolation="false"
          stopOnError="false"
          stopOnFailure="false"
@@ -22,4 +21,12 @@
          timeoutForMediumTests="10"
          timeoutForLargeTests="60"
          verbose="false">
+         <filter>
+           <blacklist>
+             <file>lib/config.php</file>
+             <exclude>
+               <directory>vendor/</directory>
+             </exclude>
+           </blacklist>
+         </filter>
 </phpunit>

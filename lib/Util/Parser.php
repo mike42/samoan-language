@@ -9,6 +9,14 @@ require_once (dirname ( __FILE__ ) . "/../../vendor/wikitext/wikitext.php");
  * The custom behaviour of templates/links are defined here:
  */
 class SmParserBackend extends \DefaultParserBackend {
+	private $word;
+	private $page;
+	
+	public function __construct(Database $database) {
+		$this -> word = Word_Model::getInstance($database);
+		$this -> page = Page_Model::getInstance($database);
+	}
+	
 	public function getInternalLinkInfo($info) {
 		switch ($info ['namespace']) {
 			case 'word':
@@ -22,7 +30,7 @@ class SmParserBackend extends \DefaultParserBackend {
 				}
 				
 				$newinfo = $info;
-				$wlpart = Word_Model::getSpellingAndNumberFromStr ( $info ['target'] );
+				$wlpart = $this -> word -> getSpellingAndNumberFromStr ( $info ['target'] );
 				
 				if ($info ['title'] == $info ['caption']) {
 					/* Change caption if user hasn't set their own */
@@ -33,8 +41,8 @@ class SmParserBackend extends \DefaultParserBackend {
 				}
 				
 				/* Figure out ID string and look it up */
-				$idstr = Word_Model::getIdStrBySpellingNum ( $wlpart ['spelling'], $wlpart ['number'] );
-				if (Word_Model::getWordIDfromStr ( $idstr ) === false) {
+				$idstr = $this -> word -> getIdStrBySpellingNum ( $wlpart ['spelling'], $wlpart ['number'] );
+				if ($this -> word -> getWordIDfromStr ( $idstr ) === false) {
 					$newinfo ['exists'] = false;
 					$newinfo ['title'] = $idstr . " (definition not known)";
 				} else {
@@ -49,7 +57,7 @@ class SmParserBackend extends \DefaultParserBackend {
 			default :
 				if ($info ['namespace'] == "") {
 					/* Only look at non-namespaced links to avoid breaking interwiki links */
-					if (! $page = Page_Model::getByShort ( $info ['target'] )) {
+					if (! $page = $this -> page -> getByShort ( $info ['target'] )) {
 						/* Red-link pages which don't exist */
 						$info ['exists'] = false;
 					}
@@ -66,7 +74,7 @@ class SmParserBackend extends \DefaultParserBackend {
 			$part [1] = trim ( $part [1] );
 			switch (trim ( $part [0] )) {
 				case 'word' :
-					if ($word = Word_Model::getByStr ( $part [1] )) {
+					if ($word = $this -> word -> getByStr ( $part [1] )) {
 						return Word_View::linkToWord ( $word, true, false, true );
 					}
 					break;
@@ -78,7 +86,7 @@ class SmParserBackend extends \DefaultParserBackend {
 			}
 		}
 		/* If it's not one of the above, try loading it */
-		if ($page = Page_Model::getByShort ( $template )) {
+		if ($page = $this -> page -> getByShort ( $template )) {
 			return $page ['page_rel_revision'] ['revision_text'];
 		}
 		return "[[$template]]";
@@ -94,6 +102,8 @@ class SmParserBackend extends \DefaultParserBackend {
  * Simple wrapper for init()
  */
 class Parser {
+	private static $instance;
+	
 	public static $conf; /* Config */
 	public static function init() {
 		self::$conf = Core::getConfig ( 'parser' );
@@ -104,8 +114,21 @@ class Parser {
 		Core::loadClass ( "Word_View" );
 		Core::loadClass ( "Example_Model" );
 		Core::loadClass ( "Example_View" );
-		
+	}
+	
+	public static function getInstance(Database $database) {
+		if (self::$instance == null) {
+			self::$instance = new self ( $database );
+		}
+		return self::$instance;
+	}
+	
+	public function __construct(Database $database) {
 		\WikitextParser::init ();
-		\WikitextParser::$backend = new SmParserBackend ();
+		\WikitextParser::$backend = new SmParserBackend ($database);
+	}
+	
+	public function parse($text) {
+		return \WikitextParser::parse ($text);
 	}
 }

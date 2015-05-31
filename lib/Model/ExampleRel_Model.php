@@ -3,9 +3,20 @@
 namespace SmWeb;
 
 class ExampleRel_Model implements Model {
+	private static $instance;
 	private static $template;
-	public static $database;
-	
+	public $database;
+	private $example;
+	public function __construct(database $database) {
+		$this->database = $database;
+		$this->example = Example_Model::getInstance ( $database );
+	}
+	public static function getInstance(database $database) {
+		if (self::$instance == null) {
+			self::$instance = new self ( $database );
+		}
+		return self::$instance;
+	}
 	public static function init() {
 		Core::loadClass ( 'Database' );
 		Core::loadClass ( 'Example_Model' );
@@ -15,10 +26,9 @@ class ExampleRel_Model implements Model {
 				'example_rel_example_id' => '0',
 				'example_rel_def_id' => '0' 
 		);
-		self::$database = Database::getInstance();
 	}
-	public static function add($example_id, $word_id, $def_id) {
-		if (! $example = Example_Model::getById ( $example_id )) {
+	public function add($example_id, $word_id, $def_id) {
+		if (! $example = $this->example->getById ( $example_id )) {
 			/* No such example */
 			return false;
 		}
@@ -34,11 +44,11 @@ class ExampleRel_Model implements Model {
 		}
 		
 		$query = "INSERT INTO {TABLE}examplerel (example_rel_example_id, example_rel_def_id) VALUES (%d, %d);";
-		self::$database -> retrieve ( $query, 0, ( int ) $example_id, ( int ) $def_id );
+		$this->database->retrieve ( $query, 0, ( int ) $example_id, ( int ) $def_id );
 		return true;
 	}
-	public static function delete($example_id, $word_id, $def_id) {
-		if (! $example = Example_Model::getById ( $example_id )) {
+	public function delete($example_id, $word_id, $def_id) {
+		if (! $example = $this->example->getById ( $example_id )) {
 			/* No such example */
 			return false;
 		}
@@ -54,15 +64,15 @@ class ExampleRel_Model implements Model {
 		}
 		
 		$query = "DELETE FROM {TABLE}examplerel WHERE example_rel_example_id =%d AND example_rel_def_id =%d;";
-		self::$database -> retrieve ( $query, 0, ( int ) $example_id, ( int ) $def_id );
+		$this->database->retrieve ( $query, 0, ( int ) $example_id, ( int ) $def_id );
 		return true;
 	}
-	public static function get($def_id, $example_id) {
+	public function get($def_id, $example_id) {
 		$query = "SELECT * FROM {TABLE}examplerel WHERE example_rel_example_id =%d AND example_rel_def_id =%d;";
-		$res = self::$database -> retrieve ( $query, 0, ( int ) $example_id, ( int ) $def_id );
+		$res = $this->database->retrieve ( $query, 0, ( int ) $example_id, ( int ) $def_id );
 		
-		if ($row = self::$database -> get_row ( $res )) {
-			$examplerel = self::$database -> row_from_template ( $row, self::$template );
+		if ($row = $this->database->get_row ( $res )) {
+			$examplerel = $this->database->row_from_template ( $row, self::$template );
 			return $examplerel;
 		}
 		return false;

@@ -35,7 +35,8 @@ function showLetter($data, $internal) {
 	$lm = Letter_Model::$template;
 	$lm['letter_id'] = $data['letter'];
 	$lm['letter_html'] = $outp;
-	Letter_Model::cache_save($lm);
+	// TODO should not be using database instance here
+	Letter_Model::getInstance(Database::getInstance()) -> cache_save($lm);
 	echo $outp;
 }
 ?>
