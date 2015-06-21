@@ -2,15 +2,17 @@
 namespace SmWeb;
 
 class Web_Test extends \PHPUnit_Extensions_Selenium2TestCase {
+	private $listener;
+	
 	public static $browsers = array (
-			// array (
-			// 'name' => 'Firefox on Linux',
-			// 'browser' => '*firefox /usr/bin/firefox',
-			// 'host' => 'localhost',
-			// 'port' => 4444,
-			// 'timeout' => 30000,
-			// 'browserName' => 'firefox'
-			// ),
+			array (
+					'name' => 'Firefox on Linux',
+					'browser' => '*firefox /usr/bin/firefox',
+					'host' => 'localhost',
+					'port' => 4444,
+					'timeout' => 30000,
+					'browserName' => 'firefox'
+			),
 			array (
 					'name' => 'Chrome on Linux',
 					'browser' => '*chrome /usr/bin/chromium',
@@ -21,10 +23,9 @@ class Web_Test extends \PHPUnit_Extensions_Selenium2TestCase {
 			) 
 	);
 	protected function setUp() {
-		// TODO database setup
-		
 		$this->setBrowserUrl ( 'https://localhost/sm/' );
 	}
+	
 	public function testMainPage() {
 		$this->url ( 'https://localhost/samoan/' );
 		$this->assertEquals ( 'Samoan Language Resources', $this->title () );
