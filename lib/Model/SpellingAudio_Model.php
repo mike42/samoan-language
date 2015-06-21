@@ -4,9 +4,9 @@ namespace SmWeb;
 
 class SpellingAudio_Model implements Model {
 	private static $instance;
-	private static $template;
+	public static $template;
 	public $database;
-	public function __construct(database $database) {
+	public function __construct(Database $database) {
 		$this->database = $database;
 	}
 	public static function getInstance(database $database) {

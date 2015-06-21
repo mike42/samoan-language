@@ -13,14 +13,18 @@ class Audio_Controller implements Controller {
 		Core::loadClass ( "SpellingAudio_Model" );
 		Core::loadClass ( "Spelling_Model" );
 	}
-	
-	
-	public function __construct(database $database) {
-		$this->database = $database;
-		$this->spelling = Spelling_Model::getInstance( $database );
-		$this->spellingAudio = SpellingAudio_Model::getInstance ( $database );
+
+	public function __construct(Database $database) {
+		$this -> database = $database;
+		$this -> spelling = Spelling_Model::getInstance( $database );
+		$this -> spellingAudio = SpellingAudio_Model::getInstance ( $database );
 	}
-	
+
+	/**
+	 * @param string $type Type of audio to view.
+	 * @param string $id ID of audio to view.
+	 * @return mixed Values for the corresponding view
+	 */
 	public function view($type = false, $id = false) {
 		switch ($type) {
 			case 'spelling' :
@@ -37,22 +41,20 @@ class Audio_Controller implements Controller {
 							'spellingaudio' => $spellingaudio 
 					);
 				}
-				
 				return array (
 						'spelling' => $spelling 
 				);
 		}
-		
 		return array (
 				"error" => "404" 
 		);
 	}
-	
+
 	/**
 	 * Dish out an audio file to the user if one can be found
 	 *
-	 * @param string $type        	
-	 * @param string $id        	
+	 * @param string $type type of audio file (example, spelling of word, etc)
+	 * @param string $id key for finding the file
 	 */
 	public function listen($type = false, $id = false) {
 		switch ($type) {
@@ -105,9 +107,22 @@ class Audio_Controller implements Controller {
 				// TODO
 				break;
 		}
-		
 		return array (
 				"error" => "404" 
 		);
+	}
+
+	/**
+	 * @param Spelling_Model $spelling
+	 */
+	public function setSpelling(Spelling_Model $spelling) {
+		$this -> spelling = $spelling;
+	}
+
+	/**
+	 * @param SpellingAudio_Model $spellingAudio
+	 */
+	public function setSpellingAudio(SpellingAudio_Model $spellingAudio) {
+		$this -> spellingAudio = $spellingAudio;
 	}
 }

@@ -245,13 +245,13 @@ class InternalServerErrorException extends WebException {
 		parent::__construct ( $message, WebException::INTERNAL_SERVER_ERROR );
 	}
 }
-interface controller {
-	public function __construct(database $database);
+interface Controller {
+	public function __construct(Database $database);
 }
 
-interface view {
+interface View {
 }
 
-interface model {
-	public function __construct(database $database);
+interface Model {
+	public function __construct(Database $database);
 }

@@ -2,8 +2,6 @@
 
 namespace SmWeb;
 
-use Exception;
-
 require_once ("lib/Core.php");
 
 try {
@@ -21,6 +19,6 @@ try {
 	$request->execute ();
 } catch ( WebException $e ) {
 	Core::fatalError ( $e );
-} catch ( Exception $e ) {
+} catch ( \Exception $e ) {
 	Core::fatalError ( new InternalServerErrorException ( "Unexpected error while processing request: " . $e->getMessage () ) );
 }

@@ -90,10 +90,7 @@ abstract class Session {
 	abstract public function logoutUser();
 	
 	/**
-	 * Check that the user stored in the session has the same password hash as the corresponding database user.
-	 * Effectively logs out other sessions on password change.
-	 *
-	 * @return boolean true if the user is logged in, false if they are not
+	 * Verify 
 	 */
 	abstract protected function verifyUser();
 }

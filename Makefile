@@ -17,7 +17,7 @@ $(STYLE)/images/%: $(THEME)/images/%
 	cp $< $@
 
 coverage:
-	php vendor/bin/phpunit --coverage-html coverage/ tests
+	php vendor/bin/phpunit --coverage-html coverage/ tests/unit tests/integration
 
 clean:
 	rm -f $(TARGETS)
