@@ -7,4 +7,3 @@ RewriteRule ^/?samoan/js(.*)$ /sm/public/js/$1 [PT,L,QSA]
 RewriteRule /?samoan$ /samoan/ [R,L]
 RewriteRule ^/?samoan/(.*)$ /sm/index.php?p=$1 [PT,L,QSA]
 
-
