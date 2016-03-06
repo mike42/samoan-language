@@ -1,6 +1,6 @@
 <?php
 
-$config['core']['webroot']					= isset($_SERVER['HTTP_HOST'])? 'http://'.$_SERVER['HTTP_HOST'].'/samoan/' : '';
+$config['core']['webroot']					= isset($_SERVER['HTTP_HOST'])? 'https://'.$_SERVER['HTTP_HOST'].'/samoan/' : '';
 $config['core']['default']['controller']	= 'page';
 $config['core']['default']['action']		= 'view';
 $config['core']['default']['arg']			= array('home');
@@ -14,8 +14,8 @@ $config['database']['host'] = 'localhost';
 $config['database']['name'] = '';
 $config['database']['prefix'] = 'sm_';
 
-$config['audio']['extern'] = isset($_SERVER['HTTP_HOST'])? 'http://'.$_SERVER['HTTP_HOST'].'/sm/data/audio/' : '';
-$config['parser']['imgextern'] = isset($_SERVER['HTTP_HOST']) ? 'http://'.$_SERVER['HTTP_HOST'].'/sm/data/images/' : '';
+$config['audio']['extern'] = isset($_SERVER['HTTP_HOST'])? 'https://'.$_SERVER['HTTP_HOST'].'/sm/data/audio/' : '';
+$config['parser']['imgextern'] = isset($_SERVER['HTTP_HOST']) ? 'https://'.$_SERVER['HTTP_HOST'].'/sm/data/images/' : '';
 
 /* Permissions */
 $config['session'] = array(

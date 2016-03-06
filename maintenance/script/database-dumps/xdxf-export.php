@@ -45,7 +45,7 @@ echo "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n";
 	<meta_info>
 		<title>Samoan Language Vocabulary</title>
 		<full_title>Samoan Language Vocabulary</full_title>
-		<description>Samoan language words with English meanings, collected by Michael Billington. See http://http://mike.bitrevision.com/samoan/</description>
+		<description>Samoan language words with English meanings, collected by Michael Billington. See https://mike.bitrevision.com/samoan/</description>
 		<abbreviations>
 <?
 		foreach($abbr as $a) {
