@@ -1,3 +1,5 @@
+Options -Indexes
+
 # Hide version-control related files
 RedirectMatch 404 /\.git
 
