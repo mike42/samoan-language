@@ -1,4 +1,4 @@
-Samoan
+Samoan Language Resources (Web App)
 ======
 This is a web app for managing Samoan Language Resources. It is a wiki-like CMS, with many features to support this:
 - Multiple users with customisable permissions.
