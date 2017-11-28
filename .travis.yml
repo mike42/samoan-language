@@ -13,10 +13,11 @@ addons:
     - sourceline: 'ppa:ansible/ansible'
     packages:
     - ansible
-  mariadb: '10.0'
 
 #install:
 #  - composer install
 
 script:
+- rm -f /var/lib/mysql/debian-*.flag
+- apt-get -y remove mariadb*
 - (cd maintenance/demo-install && ansible-playbook -i inventory.local site.yml)
