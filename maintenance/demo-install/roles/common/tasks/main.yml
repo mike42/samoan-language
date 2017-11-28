@@ -1,0 +1,9 @@
+---
+- name: ntp is installed
+  apt: package=ntp state=present
+  tags: ntp
+
+- name: ntp is running and enabled
+  service: name=ntp state=started enabled=yes
+  tags: ntp
+

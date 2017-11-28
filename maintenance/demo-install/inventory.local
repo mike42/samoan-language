@@ -1,0 +1,15 @@
+[auth-server]
+# The server to installl Auth on.
+localhost ansible_connection=local ansible_become=true ansible_become_user=root
+
+[all:vars]
+# Use something like `openssl rand -base64 15` to generate your own passwords
+# prior to deployment.
+
+# MariaDB server
+mariadb_host = localhost
+mariadb_root_password = 7bMM6PCR6xDirEPdJShm
+app_db_name = sm
+app_db_user = sm
+app_db_pass = sxxdlDpyCbb7IgAx6ugT
+

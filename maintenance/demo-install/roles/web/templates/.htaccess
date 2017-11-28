@@ -1,0 +1,16 @@
+Options -Indexes
+
+RewriteEngine On
+RewriteCond %{HTTPS} !=on
+RewriteRule ^/?(.*) https://samoan.ws/$1 [R,L]
+
+# Re-write rules based on MediaWiki
+RewriteCond %{DOCUMENT_ROOT}/%{REQUEST_FILENAME} !-f
+RewriteCond %{DOCUMENT_ROOT}/%{REQUEST_FILENAME} !-d
+RewriteRule ^/?style(.*)$ /sm/public/style/$1 [PT,L,QSA]
+RewriteRule ^/?js(.*)$ /sm/public/js/$1 [PT,L,QSA]
+
+# Re-write rules based on MediaWiki
+RewriteCond %{REQUEST_URI} !^/sm
+RewriteRule ^(.*)$ /sm/index.php?p=$1 [PT,L,QSA]
+
