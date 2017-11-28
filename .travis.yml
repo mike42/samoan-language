@@ -13,6 +13,7 @@ addons:
     - sourceline: 'ppa:ansible/ansible'
     packages:
     - ansible
+  mariadb: '10.0'
 
 #install:
 #  - composer install
