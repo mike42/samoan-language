@@ -18,7 +18,7 @@ addons:
 #  - composer install
 
 script:
-- sudo rm -f /var/lib/mysql/debian-*.flag || true
-- sudo apt-get -y remove mariadb* || true
-- sudo apt-get -y remove mysql* || true
+- sudo systemctl stop mysql-server || true
+- sudo apt-get -y remove --purge mariadb* mysql* || true
+- sudo rm -Rf /var/lib/mysql/ || true
 - (cd maintenance/demo-install && ansible-playbook -i inventory.local site.yml)
