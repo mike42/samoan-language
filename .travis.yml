@@ -20,4 +20,5 @@ addons:
 script:
 - sudo rm -f /var/lib/mysql/debian-*.flag || true
 - sudo apt-get -y remove mariadb* || true
+- sudo apt-get -y remove mysql* || true
 - (cd maintenance/demo-install && ansible-playbook -i inventory.local site.yml)
