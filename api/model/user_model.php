@@ -21,8 +21,8 @@ class user_model {
 	 * Get user by ID
 	 */
 	public static function getById($user_id) {
-		$query = "SELECT * FROM {TABLE}user WHERE user_id = '%d';";
-		if($row = database::retrieve($query, 1, $user_id)) {
+		$query = "SELECT * FROM sm_user WHERE user_id = ?;";
+		if($row = database::get_row(database::retrieve($query, [$user_id]))) {
 			return database::row_from_template($row, user_model::$template);
 		}
 		return false;
@@ -32,8 +32,8 @@ class user_model {
 	 * Get user by email address or username
 	 */
 	public static function getByNameOrEmail($name_or_email) {
-		$query = "SELECT * FROM {TABLE}user WHERE user_email = '%s' or user_name = '%s';";
-		if($row = database::retrieve($query, 1, $name_or_email, $name_or_email)) {
+		$query = "SELECT * FROM sm_user WHERE user_email = ? or user_name = ?;";
+		if($row = database::get_row(database::retrieve($query, [$name_or_email, $name_or_email]))) {
 			return database::row_from_template($row, user_model::$template);
 		} else {
 			return false;
@@ -74,9 +74,9 @@ class user_model {
 		$user['user_role'] = $role;
 
 		/* Insert */
-		$sql = "INSERT INTO {TABLE}user (user_id, user_name, user_pass, user_salt, user_token, user_email, user_email_confirmed, user_created, user_role) " .
-				"VALUES (NULL , '%s', '%s', '%s', '', '%s', '0', CURRENT_TIMESTAMP , '%s');";
-		return database::retrieve($sql, 2, $user['user_name'], $user['user_pass'], $user['user_salt'], $user['user_email'], $user['user_role']);
+		$sql = "INSERT INTO sm_user (user_id, user_name, user_pass, user_salt, user_token, user_email, user_email_confirmed, user_created, user_role) " .
+				"VALUES (NULL , ?, ?, ?, '', ?, '0', CURRENT_TIMESTAMP , ?);";
+		return database::insert($sql, [$user['user_name'], $user['user_pass'], $user['user_salt'], $user['user_email'], $user['user_role']]);
 	}
 
 	/**

@@ -6,8 +6,8 @@ core::loadClass("database");
 
 /* Delete spellings which aren't used */
 echo "Clearing orphaned spellings ...";
-$query = "DELETE {TABLE}spelling FROM {TABLE}spelling LEFT JOIN {TABLE}word ON spelling_id = word_spelling WHERE word_id IS NULL;";
-database::retrieve($query, 0);
+$query = "DELETE sm_spelling FROM sm_spelling LEFT JOIN sm_word ON spelling_id = word_spelling WHERE word_id IS NULL;";
+database::delete($query);
 echo " done\n";
 
 /* Spot spellings which are incorrectly numbered:

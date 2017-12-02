@@ -13,8 +13,8 @@ class listlang_model {
 	 * Return a list of all languages in the database
 	 */
 	public static function listAll() {
-		$query = "SELECT * FROM {TABLE}listlang ORDER BY lang_name;";
-		if(!$res = database::retrieve($query, 0)) {
+		$query = "SELECT * FROM sm_listlang ORDER BY lang_name;";
+		if(!$res = database::retrieve($query)) {
 			return false;
 		}
 
@@ -29,8 +29,8 @@ class listlang_model {
 	 * Get a single language from its ID
 	 */
 	public static function get($lang_id) {
-		$query = "SELECT * FROM {TABLE}listlang WHERE lang_id ='%s'";
-		if(!$row = database::retrieve($query, 1, $lang_id)) {
+		$query = "SELECT * FROM sm_listlang WHERE lang_id =?";
+		if(!$row = database::get_row(database::retrieve($query, [$lang_id]))) {
 			return false;
 		}
 		return self::fromRow($row);

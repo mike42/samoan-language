@@ -16,8 +16,8 @@ class listtype_model {
 	 * Return a list of all word types in the database
 	 */
 	public static function listAll($tags = false) {
-		$query = "SELECT * FROM {TABLE}listtype WHERE type_istag =%d ORDER BY type_name;";
-		if(!$res = database::retrieve($query, 0, $tags ? '1' : '0')) {
+		$query = "SELECT * FROM sm_listtype WHERE type_istag =? ORDER BY type_name;";
+		if(!$res = database::retrieve($query, [$tags ? '1' : '0'])) {
 			return false;
 		}
 
@@ -34,9 +34,9 @@ class listtype_model {
 	 * @param string $type_short
 	 */
 	public static function getByShort($type_short) {
-		$query = "SELECT * FROM {TABLE}listtype WHERE type_short ='%s'";
+		$query = "SELECT * FROM sm_listtype WHERE type_short =?";
 
-		if($row = database::retrieve($query, 1, $type_short)) {
+		if($row = database::get_row(database::retrieve($query, [$type_short]))) {
 			return self::fromRow($row);
 		}
 		return false;
@@ -48,8 +48,8 @@ class listtype_model {
 	 * @param int $type_id
 	 */
 	public static function get($type_id) {
-		$query = "SELECT * FROM {TABLE}listtype WHERE type_id =%d";
-		if(!$row = database::retrieve($query, 1, $type_id)) {
+		$query = "SELECT * FROM sm_listtype WHERE type_id =?";
+		if(!$row = database::get_row(database::retrieve($query, [$type_id]))) {
 			return false;
 		}
 		return self::fromRow($row);

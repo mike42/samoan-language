@@ -16,8 +16,8 @@ class spellingaudio_model {
 	 * @return number Total number of audio recordings currently stored.
 	 */
 	public static function countAudio() {
-		$query = "SELECT (SELECT count(spelling_id) FROM {TABLE}spellingaudio) + (SELECT count(example_id) FROM {TABLE}exampleaudio);";
-		if($row = database::retrieve($query, 1)) {
+		$query = "SELECT (SELECT count(spelling_id) FROM sm_spellingaudio) + (SELECT count(example_id) FROM sm_exampleaudio);";
+		if($row = database::get_row(database::retrieve($query))) {
 			return (int)$row[0];
 		}
 		return 0;
@@ -30,10 +30,10 @@ class spellingaudio_model {
 	 * @param int $audio_k_style
 	 */
 	public static function getRowBySpellingTStyle($spelling_t_style, $audio_k_style = 0) {
-		$query = "SELECT {TABLE}spellingaudio.* FROM sm_spellingaudio " .
-				"JOIN sm_spelling ON {TABLE}spelling.spelling_id ={TABLE}spellingaudio.spelling_id " .
-				"WHERE spelling_t_style='%s' AND audio_k_style =%d";
-		if($row = database::retrieve($query, 1, $spelling_t_style, (int)$audio_k_style)) {
+		$query = "SELECT sm_spellingaudio.* FROM sm_spellingaudio " .
+				"JOIN sm_spelling ON sm_spelling.spelling_id =sm_spellingaudio.spelling_id " .
+				"WHERE spelling_t_style=? AND audio_k_style =?";
+		if($row = database::get_row(database::retrieve($query, [$spelling_t_style, (int)$audio_k_style]))) {
 			return database::row_from_template($row, self::$template);
 		}
 		return false;

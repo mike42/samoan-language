@@ -19,9 +19,9 @@ class def_model {
 
 	public static function get($word_id, $def_id) {
 		$query = "SELECT * FROM sm_def " .
-				"LEFT JOIN {TABLE}listtype ON def_type = type_id " .
-				"WHERE def_word_id =%d AND def_id =%d;";
-		if(!$res = database::retrieve($query, 0, (int)$word_id, (int)$def_id)) {
+				"LEFT JOIN sm_listtype ON def_type = type_id " .
+				"WHERE def_word_id =? AND def_id =?;";
+		if(!$res = database::retrieve($query, [(int)$word_id, (int)$def_id])) {
 			return false;
 		}
 
@@ -37,11 +37,11 @@ class def_model {
 
 	public static function listByWord($word_id) {
 		$query = "SELECT * FROM sm_def " .
-				"LEFT JOIN {TABLE}listtype ON def_type = type_id " .
-				"WHERE def_word_id =%d;";
+				"LEFT JOIN sm_listtype ON def_type = type_id " .
+				"WHERE def_word_id =?;";
 
 		$ret = array();
-		if($res = database::retrieve($query, 0, (int)$word_id)) {
+		if($res = database::retrieve($query, [(int)$word_id])) {
 			while($row = database::get_row($res)) {
 				/* Load def and associated type */
 				$def = database::row_from_template($row, self::$template);
@@ -58,13 +58,13 @@ class def_model {
 	 * @param int $word_id
 	 */
 	public static function add($word_id) {
-		$query = "INSERT INTO  {TABLE}def (def_id, def_word_id, def_type, def_en) VALUES (NULL, %d,  '0',  '');";
-		return database::retrieve($query, 2, (int)$word_id);
+		$query = "INSERT INTO  sm_def (def_id, def_word_id, def_type, def_en) VALUES (NULL, ?,  '0',  '');";
+		return database::insert($query, [(int)$word_id]);
 	}
 
 	public static function update($def) {
-		$query = "UPDATE {TABLE}def SET def_type =%d, def_en ='%s' WHERE def_id =%d;";
-		return database::retrieve($query, 0, (int)$def['def_type'], $def['def_en'], (int)$def['def_id']);
+		$query = "UPDATE sm_def SET def_type =?, def_en =? WHERE def_id =?;";
+		return database::retrieve($query, [(int)$def['def_type'], $def['def_en'], (int)$def['def_id']]);
 	}
 
 	/**
@@ -74,12 +74,12 @@ class def_model {
 	 */
 	public static function delete($def_id) {
 		/* Delete linked examples */
-		$query = "DELETE FROM {TABLE}examplerel WHERE example_rel_def_id =%d;";
-		database::retrieve($query, 0, (int)$def_id);
+		$query = "DELETE FROM sm_examplerel WHERE example_rel_def_id =?;";
+		database::retrieve($query, [(int)$def_id]);
 
 		/* Delete definition itself */
-		$query = "DELETE FROM {TABLE}def WHERE def_id =%d;";
-		return database::retrieve($query, 0, (int)$def_id);
+		$query = "DELETE FROM sm_def WHERE def_id =?;";
+		return database::retrieve($query, [(int)$def_id]);
 	}
 }
 ?>

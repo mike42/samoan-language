@@ -21,6 +21,7 @@
 
 - name: Synchronize app code
   synchronize: src=../../../../../ dest=/var/www/html/sm
+  tags: sync
 
 - name: Disable default site
   command: a2dissite 000-default

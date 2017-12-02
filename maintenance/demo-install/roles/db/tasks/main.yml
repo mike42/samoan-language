@@ -8,9 +8,9 @@
   apt: package=python-mysqldb state=present
   tags: mariadb
 
-#- name: mariadb server is enabled
-#  service: name=mysql enabled=yes state=started
-#  tags: mariadb
+- name: mariadb server is enabled
+  service: name=mariadb enabled=yes state=started
+  tags: mariadb
 
 - name: mariadb root password is set for all root accounts
   mysql_user: name=root host={{ item }} password={{ mariadb_root_password }} priv=*.*:ALL,GRANT
