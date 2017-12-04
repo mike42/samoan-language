@@ -144,8 +144,8 @@ class word_model {
 		$query = "SELECT * FROM sm_word " .
 				"JOIN sm_spelling ON word_spelling = spelling_id " .
 				"LEFT JOIN sm_listlang ON word_origin_lang = lang_id " .
-				"WHERE spelling_simple LIKE '?%%' ORDER BY spelling_sortkey, word_num;";
-		if($res = database::retrieve($query, [$letter])) {
+				"WHERE spelling_simple LIKE ? ORDER BY spelling_sortkey, word_num;";
+		if($res = database::retrieve($query, [$letter . '%'])) {
 			$ret = array();
 			while($row = database::get_row($res)) {
 				$ret[] = self::fromRow($row);

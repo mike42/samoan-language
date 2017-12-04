@@ -1,7 +1,12 @@
 <?php
 require_once("api/core.php");
 
+/*
+ * Load config and begin page rendering
+ */
 $config = core::getConfig('core');
+// TODO enable this, test, then fix all the warnings.
+//set_error_handler('core::exceptions_error_handler');
 
 /* Get page (or go to default if none is specified) */
 if(isset($_GET['p']) && $_GET['p'] != '') {
@@ -66,6 +71,6 @@ try {
 	}
 	$ret = call_user_func_array(array($viewClassName, $viewMethodName), array($ret));
 } catch(Exception $e) {
-	core::fizzle("Failed to run controller: " . $e);
+	core::fizzle($e -> getMessage());
 }
 ?>

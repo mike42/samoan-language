@@ -54,9 +54,9 @@ class example_model {
 	 */
 	public static function listByWordMention($spelling_t_style, $word_num) {
 		$id = word_model::getIdStrBySpellingNum($spelling_t_style, $word_num);
-		$query = "SELECT * FROM sm_example WHERE example_str like '%%[?|%%' or example_str like '%%[?]%%';";
+		$query = "SELECT * FROM sm_example WHERE example_str LIKE ? or example_str LIKE ?;";
 		$ret = array();
-		if($res = database::retrieve($query, [$id, $id])) {
+		if($res = database::retrieve($query, ['%[' . $id . '|%', '%[' . $id . ']%'])) {
 			while($row = database::get_row($res)) {
 				/* Load examples */
 				$example = database::row_from_template($row, self::$template);

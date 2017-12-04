@@ -37,17 +37,17 @@ class database {
 		return self::doQuery($query, $arg);
 	}
 
-	public static function insert($query, array $arg) {
+	public static function insert($query, array $arg = []) {
 		$res = self::doQuery($query, $arg);
 		return self::insert_id();
 	}
 
-	public static function delete($query, array $arg) {
+	public static function delete($query, array $arg = []) {
 		$res = self::doQuery($query, $arg);
 		return true;
 	}
 
-	public static function update($query, array $arg) {
+	public static function update($query, array $arg = []) {
 		$res = self::doQuery($query, $arg);
 		return true;
 	}
@@ -57,6 +57,8 @@ class database {
 			self::init();
 		}
 		/* Query wrapper to be sure everything is escaped. All SQL must go through here! */
+		// Can be un-commented for database query logging
+		//error_log("database::doQuery: " . $query . " " . json_encode($arg), 0);
 		$stmt = self::$conn -> prepare($query);
 		$stmt -> execute($arg);
 		return $stmt;

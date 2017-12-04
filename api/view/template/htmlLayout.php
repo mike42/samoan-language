@@ -19,6 +19,12 @@ function text($text) {
 	<title><?php text($titleLong); ?></title>
 	<link rel="stylesheet" type="text/css" media="all" href="<?php echo self::$config['webroot']; ?>style/style.min.css">
 	<meta name="viewport" content="width=device-width"/><!-- for mobile -->
+<?php 
+if($user = session::getUser()) {
+    /* jQuery is used for editing */
+    echo "<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js\"></script>";
+}
+?>
 </head>
 <body class="home blog">
 	<div id="nav">
@@ -183,7 +189,6 @@ function text($text) {
 		<span id="back-to-top">&uarr; <a href="#" rel="nofollow" title="Back to top">Top</a></span>
 	</div>
 </div><!--footer-->
-
 <script type="text/javascript">
 	//////// Handles toggling the navigation menu for small screens
 	( function() {
