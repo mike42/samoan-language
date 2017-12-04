@@ -14,6 +14,7 @@ class database {
 
 	private static function connect() {
 		self::$conn = new PDO("mysql:host=" . self::$conf['host'] . ";dbname=" . self::$conf['name'] . ";charset=utf8mb4", self::$conf['user'], self::$conf['password']);
+		self::$conn -> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	}
 
 	public static function get_row($result) {
@@ -60,7 +61,12 @@ class database {
 		// Can be un-commented for database query logging
 		//error_log("database::doQuery: " . $query . " " . json_encode($arg), 0);
 		$stmt = self::$conn -> prepare($query);
-		$stmt -> execute($arg);
+		try {
+		  $stmt -> execute($arg);
+		} catch (PDOException $e) {
+		    error_log("database::doQuery(): " . $e, 0);
+		    throw new Exception("A database query failed.");
+		}
 		return $stmt;
 	}
 
