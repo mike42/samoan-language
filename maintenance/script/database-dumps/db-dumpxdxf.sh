@@ -1,4 +1,6 @@
 #!/bin/bash
+set -eu
+
 # Setup
 date=`date --rfc-3339=date`
 mkdir -p ../../../data/xdxf/

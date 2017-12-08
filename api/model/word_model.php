@@ -389,9 +389,9 @@ class word_model {
 	 * @return number Total number of words currently stored.
 	 */
 	public static function countWords() {
-		$query = "SELECT COUNT(word_id) FROM  sm_word;";
+		$query = "SELECT COUNT(word_id) as word_count FROM sm_word;";
 		if($row = database::get_row(database::retrieve($query))) {
-			return (int)$row[0];
+			return (int)$row['word_count'];
 		}
 		return 0;
 	}

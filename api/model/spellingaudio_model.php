@@ -16,9 +16,9 @@ class spellingaudio_model {
 	 * @return number Total number of audio recordings currently stored.
 	 */
 	public static function countAudio() {
-		$query = "SELECT (SELECT count(spelling_id) FROM sm_spellingaudio) + (SELECT count(example_id) FROM sm_exampleaudio);";
+		$query = "SELECT (SELECT count(spelling_id) FROM sm_spellingaudio) + (SELECT count(example_id) FROM sm_exampleaudio) as audio_count;";
 		if($row = database::get_row(database::retrieve($query))) {
-			return (int)$row[0];
+			return (int)$row['audio_count'];
 		}
 		return 0;
 	}
