@@ -50,7 +50,9 @@ class page_model {
 
 	public static function render($page) {
 		core::loadClass('parser');
-		return wikitextParser::parse($page['page_rel_revision']['revision_text']);
+		$text = $page['page_rel_revision']['revision_text'];
+		$parser = new WikitextParser($text);
+		return $parser -> result;
 	}
 
 	public static function delete($id) {
