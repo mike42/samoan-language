@@ -6,7 +6,7 @@ require_once(dirname(__FILE__) . "/../../../api/core.php");
 set_error_handler('core::exceptions_error_handler');
 core::loadClass("database");
 
-$query = "SELECT spelling_t_style FROM sm_spelling` WHERE 1 ORDER BY spelling_sortkey_sm;";
+$query = "SELECT spelling_t_style FROM sm_spelling WHERE 1 ORDER BY spelling_sortkey_sm;";
 $res = database::retrieve($query);
 while($row = database::get_row($res)) {
 	echo $row['spelling_t_style'] . "\n";
