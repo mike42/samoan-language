@@ -13,7 +13,7 @@ class database {
 	}
 
 	private static function connect() {
-		self::$conn = new PDO("mysql:host=" . self::$conf['host'] . ";dbname=" . self::$conf['name'] . ";charset=utf8mb4", self::$conf['user'], self::$conf['password']);
+		self::$conn = new PDO("mysql:host=" . self::$conf['host'] . ";dbname=" . self::$conf['name'] . ";charset=latin1", self::$conf['user'], self::$conf['password']);
 		self::$conn -> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	}
 

@@ -100,7 +100,7 @@ class Parser {
 		core::loadClass("example_view");
 
 		WikitextParser::init();
-		WikitextParser::$backend = new SmParserBackend;
+		WikitextParser::$backend = new SmParserBackend();
 	}
 
 }
