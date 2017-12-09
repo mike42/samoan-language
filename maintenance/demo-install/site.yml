@@ -1,0 +1,8 @@
+---
+- name: Install app, php, apache, mariadb
+  hosts: auth-server
+  roles:
+    - common
+    - db
+    - web
+

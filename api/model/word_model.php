@@ -45,11 +45,11 @@ class word_model {
 	 * @return The word, or false if no such word exists
 	 */
 	public static function getByID($id, $depth = 0) {
-		$query = "SELECT * FROM {TABLE}word " .
-				"JOIN {TABLE}spelling ON word_spelling = spelling_id " .
-				"LEFT JOIN {TABLE}listlang ON word_origin_lang = lang_id " .
-				"WHERE word_id =%d";
-		if($row = database::retrieve($query, 1, (int)$id)) {
+		$query = "SELECT * FROM sm_word " .
+				"JOIN sm_spelling ON word_spelling = spelling_id " .
+				"LEFT JOIN sm_listlang ON word_origin_lang = lang_id " .
+				"WHERE word_id =?";
+		if($row = database::get_row(database::retrieve($query, [(int)$id]))) {
 			return self::fromRow($row, $depth);
 		}
 		return false;
@@ -109,10 +109,10 @@ class word_model {
 	 * @return number|boolean The ID of the word, or false if it does not exist
 	 */
 	private static function getWordIDfromSpellingAndWordNum($spelling, $word_num) {
-		$query = "SELECT word_id FROM {TABLE}word " .
-				"JOIN {TABLE}spelling ON word_spelling = spelling_id " .
-				"WHERE spelling_t_style='%s' and word_num='%d'";
-		if($row = database::retrieve($query, 1, $spelling, (int)$word_num)) {
+		$query = "SELECT word_id FROM sm_word " .
+				"JOIN sm_spelling ON word_spelling = spelling_id " .
+				"WHERE spelling_t_style=? and word_num=?";
+		if($row = database::get_row(database::retrieve($query, [$spelling, (int)$word_num]))) {
 			return (int)$row['word_id'];
 		}
 		return false;
@@ -127,11 +127,11 @@ class word_model {
 	 * @return unknown The word, or false if it does not exist
 	 */
 	public static function getWordBySpellingAndWordNum($spelling, $word_num) {
-		$query = "SELECT * FROM {TABLE}word " .
-				"JOIN {TABLE}spelling ON word_spelling = spelling_id " .
-				"LEFT JOIN {TABLE}listlang ON word_origin_lang = lang_id " .
-				"WHERE spelling_t_style='%s' and word_num='%d'";
-		if($row = database::retrieve($query, 1, $spelling, (int)$word_num)) {
+		$query = "SELECT * FROM sm_word " .
+				"JOIN sm_spelling ON word_spelling = spelling_id " .
+				"LEFT JOIN sm_listlang ON word_origin_lang = lang_id " .
+				"WHERE spelling_t_style=? and word_num=?";
+		if($row = database::get_row(database::retrieve($query, [$spelling, (int)$word_num]))) {
 			return self::fromRow($row);
 		}
 		return false;
@@ -141,11 +141,11 @@ class word_model {
 		if(strlen($letter) != 1) { /* Single letter strings only */
 			return false;
 		}
-		$query = "SELECT * FROM {TABLE}word " .
-				"JOIN {TABLE}spelling ON word_spelling = spelling_id " .
-				"LEFT JOIN {TABLE}listlang ON word_origin_lang = lang_id " .
-				"WHERE spelling_simple LIKE '%s%%' ORDER BY spelling_sortkey, word_num;";
-		if($res = database::retrieve($query, 0, $letter)) {
+		$query = "SELECT * FROM sm_word " .
+				"JOIN sm_spelling ON word_spelling = spelling_id " .
+				"LEFT JOIN sm_listlang ON word_origin_lang = lang_id " .
+				"WHERE spelling_simple LIKE ? ORDER BY spelling_sortkey, word_num;";
+		if($res = database::retrieve($query, [$letter . '%'])) {
 			$ret = array();
 			while($row = database::get_row($res)) {
 				$ret[] = self::fromRow($row);
@@ -156,11 +156,11 @@ class word_model {
 	}
 
 	public static function listByTypeShort($type_short) {
-		$query = "select * from (select distinct def_word_id from {TABLE}def " .
-				"join {TABLE}listtype on def_type = type_id where type_short ='%s') sm_def " .
-				"join {TABLE}word on def_word_id = word_id " .
-				"join {TABLE}spelling on word_spelling = spelling_id ORDER BY spelling_sortkey, word_num;";
-		if($res = database::retrieve($query, 0, $type_short)) {
+		$query = "select * from (select distinct def_word_id from sm_def " .
+				"join sm_listtype on def_type = type_id where type_short =?) sm_def " .
+				"join sm_word on def_word_id = word_id " .
+				"join sm_spelling on word_spelling = spelling_id ORDER BY spelling_sortkey, word_num;";
+		if($res = database::retrieve($query, [$type_short])) {
 			$ret = array();
 			while($row = database::get_row($res)) {
 				$ret[] = self::fromRow($row);
@@ -171,13 +171,13 @@ class word_model {
 	}
 
 	private static function getRelativesByID($id) {
-		$query = "SELECT * FROM {TABLE}wordrel ".
-				"JOIN {TABLE}listreltype ON wordrel_type = rel_type_id " .
-				"JOIN {TABLE}word ON wordrel_target = word_id " .
-				"JOIN {TABLE}spelling ON word_spelling = spelling_id ".
-				"WHERE wordrel_word_id =%d " .
+		$query = "SELECT * FROM sm_wordrel ".
+				"JOIN sm_listreltype ON wordrel_type = rel_type_id " .
+				"JOIN sm_word ON wordrel_target = word_id " .
+				"JOIN sm_spelling ON word_spelling = spelling_id ".
+				"WHERE wordrel_word_id =? " .
 				"ORDER BY wordrel_id";
-		if(!$res = database::retrieve($query, 0, (int)$id)) {
+		if(!$res = database::retrieve($query, [(int)$id])) {
 			return false;
 		}
 
@@ -211,11 +211,11 @@ class word_model {
 	}
 
 	public static function getBySpellingSearchKey($spelling_searchkey, $prefix_only = false) {
-		$query = "SELECT * FROM {TABLE}word " .
-				"JOIN {TABLE}spelling ON word_spelling = spelling_id " .
-				"LEFT JOIN {TABLE}listlang ON word_origin_lang = lang_id " .
-				"WHERE spelling_searchkey ".($prefix_only ? " LIKE '%s%%'" : " ='%s'")." ORDER BY spelling_sortkey, word_num LIMIT 0,50";
-		if($res = database::retrieve($query, 0, $spelling_searchkey)) {
+		$query = "SELECT * FROM sm_word " .
+				"JOIN sm_spelling ON word_spelling = spelling_id " .
+				"LEFT JOIN sm_listlang ON word_origin_lang = lang_id " .
+				"WHERE spelling_searchkey ".($prefix_only ? " LIKE '?%%'" : " =?")." ORDER BY spelling_sortkey, word_num LIMIT 0,50";
+		if($res = database::retrieve($query, [$spelling_searchkey])) {
 			$ret = array();
 			while($row = database::get_row($res)) {
 				$ret[] = self::fromRow($row);
@@ -238,8 +238,8 @@ class word_model {
 	 * @return boolean True always
 	 */
 	public static function renumber($word_id, $word_num) {
-		$query = "UPDATE {TABLE}word SET word_num =%d WHERE word_id =%d;";
-		database::retrieve($query, 0, (int)$word_num, (int)$word_id);
+		$query = "UPDATE sm_word SET word_num =? WHERE word_id =?;";
+		database::retrieve($query, [(int)$word_num, (int)$word_id]);
 		return true;
 	}
 
@@ -253,8 +253,8 @@ class word_model {
 		$word = self::$template;
 		$word['word_spelling'] = $spelling_id;
 		$word['word_num'] = $word_num;
-		$query = "INSERT INTO {TABLE}word (word_id, word_spelling, word_num) VALUES (NULL, %d, %d);";
-		$word['word_id'] = database::retrieve($query, 2, (int)$spelling_id, (int)$word_num);
+		$query = "INSERT INTO sm_word (word_id, word_spelling, word_num) VALUES (NULL, ?, ?);";
+		$word['word_id'] = database::insert($query, [(int)$spelling_id, (int)$word_num]);
 		return word_model::getByID($word['word_id']);
 	}
 
@@ -265,24 +265,24 @@ class word_model {
 	 */
 	public static function delete($word_id) {
 		/* Remove wordrel references */
-		$query = "DELETE FROM {TABLE}wordrel WHERE wordrel_word_id =%d OR wordrel_target =%d;";
-		database::retrieve($query, 0, (int)$word_id, (int)$word_id);
+		$query = "DELETE FROM sm_wordrel WHERE wordrel_word_id =? OR wordrel_target =?;";
+		database::retrieve($query, [(int)$word_id, (int)$word_id]);
 
 		/* Blank any redirects that pint here */
-		$query = "UPDATE {TABLE}word SET word_redirect_to =0 WHERE word_redirect_to =%d;";
-		database::retrieve($query, 0, (int)$word_id);
+		$query = "UPDATE sm_word SET word_redirect_to =0 WHERE word_redirect_to =?;";
+		database::retrieve($query, [(int)$word_id]);
 
 		/* Delete example links in definitions*/
-		$query = "DELETE {TABLE}examplerel FROM {TABLE}examplerel INNER JOIN {TABLE}def ON example_rel_def_id = def_id WHERE def_word_id =%d;";
-		database::retrieve($query, 0, (int)$word_id);
+		$query = "DELETE sm_examplerel FROM sm_examplerel INNER JOIN sm_def ON example_rel_def_id = def_id WHERE def_word_id =?;";
+		database::retrieve($query, [(int)$word_id]);
 
 		/* Delete definitions themselves */
-		$query = "DELETE FROM {TABLE}def WHERE def_word_id =%d";
-		database::retrieve($query, 0, (int)$word_id);
+		$query = "DELETE FROM sm_def WHERE def_word_id =?";
+		database::retrieve($query, [(int)$word_id]);
 
 		/* Remove the word */
-		$query = "DELETE FROM {TABLE}word WHERE word_id =%d;";
-		database::retrieve($query, 0, (int)$word_id);
+		$query = "DELETE FROM sm_word WHERE word_id =?;";
+		database::retrieve($query, [(int)$word_id]);
 		return true;
 	}
 
@@ -292,12 +292,12 @@ class word_model {
 	public static function setOrigin($word) {
 		if($word['word_origin_lang'] == '') {
 			/* Clear origin */
-			$query = "UPDATE {TABLE}word SET word_origin_lang =NULL, word_origin_word ='' WHERE word_id =%d;";
-			return database::retrieve($query, 0, (int)$word['word_id']);
+			$query = "UPDATE sm_word SET word_origin_lang =NULL, word_origin_word ='' WHERE word_id =?;";
+			return database::retrieve($query, [(int)$word['word_id']]);
 		} else {
 			/* Set origin */
-			$query = "UPDATE {TABLE}word SET word_origin_lang ='%s', word_origin_word ='%s' WHERE word_id =%d;";
-			return database::retrieve($query, 0, $word['word_origin_lang'], $word['word_origin_word'], (int)$word['word_id']);
+			$query = "UPDATE sm_word SET word_origin_lang =?, word_origin_word =? WHERE word_id =?;";
+			return database::retrieve($query, [$word['word_origin_lang'], $word['word_origin_word'], (int)$word['word_id']]);
 		}
 	}
 
@@ -307,12 +307,12 @@ class word_model {
 	public static function setRedirect($word) {
 		if((int)$word['word_redirect_to'] == 0) {
 			/* Clear redirect */
-			$query = "UPDATE {TABLE}word SET word_redirect_to =NULL WHERE word_id =%d;";
-			return database::retrieve($query, 0, (int)$word['word_id']);
+			$query = "UPDATE sm_word SET word_redirect_to =NULL WHERE word_id =?;";
+			return database::retrieve($query, [(int)$word['word_id']]);
 		} else {
 			/* Set redirect */
-			$query = "UPDATE {TABLE}word SET word_redirect_to =%d WHERE word_id =%d;";
-			return database::retrieve($query, 0, (int)$word['word_redirect_to'], (int)$word['word_id']);
+			$query = "UPDATE sm_word SET word_redirect_to =? WHERE word_id =?;";
+			return database::retrieve($query, [(int)$word['word_redirect_to'], (int)$word['word_id']]);
 		}
 	}
 
@@ -322,16 +322,16 @@ class word_model {
 	 * @param int $word_num
 	 */
 	public static function move($word_id, $spelling_id, $word_num) {
-		$query = "UPDATE {TABLE}word SET word_spelling =%d, word_num =%d WHERE word_id =%d;";
-		return database::retrieve($query, 0, (int)$spelling_id, (int)$word_num, (int)$word_id);
+		$query = "UPDATE sm_word SET word_spelling =?, word_num =? WHERE word_id =?;";
+		return database::retrieve($query, [(int)$spelling_id, (int)$word_num, (int)$word_id]);
 	}
 
 	/**
 	 * Return a list of word-relation types for use in a form etc.
 	 */
 	public static function listRelType() {
-		$query = "SELECT * FROM {TABLE}listreltype;";
-		if(!$res = database::retrieve($query, 0)) {
+		$query = "SELECT * FROM sm_listreltype;";
+		if(!$res = database::retrieve($query)) {
 			return false;
 		}
 
@@ -349,8 +349,8 @@ class word_model {
 	 * @return boolean
 	 */
 	public function relTypeExists($rel_type_id) {
-		$query = "SELECT * FROM {TABLE}listreltype where rel_type_id ='%s';";
-		if(!$row = database::retrieve($query, 1, $rel_type_id)) {
+		$query = "SELECT * FROM sm_listreltype where rel_type_id =?;";
+		if(!$row = database::get_row(database::retrieve($query, [$rel_type_id]))) {
 			return false;
 		}
 		return true;
@@ -360,17 +360,17 @@ class word_model {
 	 * Relate two words
 	 */
 	public function relateWords($wordrel_word_id, $wordrel_type, $wordrel_target) {
-		$query = "INSERT INTO {TABLE}wordrel (wordrel_id, wordrel_word_id, wordrel_type, " .
-				"wordrel_target) VALUES (NULL, %d, '%s', %d);";
-		return database::retrieve($query, 2, (int)$wordrel_word_id, $wordrel_type, (int)$wordrel_target);
+		$query = "INSERT INTO sm_wordrel (wordrel_id, wordrel_word_id, wordrel_type, " .
+				"wordrel_target) VALUES (NULL, ?, ?, ?);";
+		return database::insert($query, [(int)$wordrel_word_id, $wordrel_type, (int)$wordrel_target]);
 	}
 
 	/**
 	 * Un-relate two words
 	 */
 	public function unRelateWords($wordrel_word_id, $wordrel_type, $wordrel_target) {
-		$query = "DELETE FROM {TABLE}wordrel WHERE wordrel_word_id =%d AND wordrel_type ='%s' AND wordrel_target =%d;";
-		return database::retrieve($query, 0, (int)$wordrel_word_id, $wordrel_type, (int)$wordrel_target);
+		$query = "DELETE FROM sm_wordrel WHERE wordrel_word_id =? AND wordrel_type =? AND wordrel_target =?;";
+		return database::retrieve($query, [(int)$wordrel_word_id, $wordrel_type, (int)$wordrel_target]);
 	}
 
 	/**
@@ -378,8 +378,8 @@ class word_model {
 	 * @return boolean
 	 */
 	public function isRelated($wordrel_word_id, $wordrel_type, $wordrel_target) {
-		$query = "SELECT * FROM {TABLE}wordrel WHERE wordrel_word_id =%d AND wordrel_type ='%s' AND wordrel_target =%d;";
-		if(!$row = database::retrieve($query, 1, (int)$wordrel_word_id, $wordrel_type, (int)$wordrel_target)) {
+		$query = "SELECT * FROM sm_wordrel WHERE wordrel_word_id =? AND wordrel_type =? AND wordrel_target =?;";
+		if(!$row = database::get_row(database::retrieve($query, [(int)$wordrel_word_id, $wordrel_type, (int)$wordrel_target]))) {
 			return false;
 		}
 		return true;
@@ -389,9 +389,9 @@ class word_model {
 	 * @return number Total number of words currently stored.
 	 */
 	public static function countWords() {
-		$query = "SELECT COUNT(word_id) FROM  {TABLE}word;";
-		if($row = database::retrieve($query, 1)) {
-			return (int)$row[0];
+		$query = "SELECT COUNT(word_id) as word_count FROM sm_word;";
+		if($row = database::get_row(database::retrieve($query))) {
+			return (int)$row['word_count'];
 		}
 		return 0;
 	}

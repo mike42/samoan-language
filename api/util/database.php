@@ -1,89 +1,73 @@
 <?php
+/**
+ *	Wrapper for mySQL extension to manage connection and avoid injection.
+ */
 class database {
-	private static $conn; /* Database connection */
-	private static $conf; /* Config */
+	private static $conn = null; /* Database connection */
+	private static $conf = null; /* Config */
 
 	public static function init() {
 		/* Get configuration for this class and connect to the database */
-		database::$conf = core::getConfig(__CLASS__);
-		if(!database::connect()) {
-			core::fizzle("Failed to connect to database: " . mysql_error());
-		}
+		self::$conf = core::getConfig(__CLASS__);
+		self::connect();
 	}
 
 	private static function connect() {
-		if(!database::$conn = mysql_connect(database::$conf['host'], database::$conf['user'], database::$conf['password'])) {
-			return false;
-		}
-		return mysql_select_db(database::$conf['name']);
-	}
-
-	private static function query($query) {
-		return mysql_query($query);
+		self::$conn = new PDO("mysql:host=" . self::$conf['host'] . ";dbname=" . self::$conf['name'] . ";charset=latin1", self::$conf['user'], self::$conf['password']);
+		self::$conn -> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	}
 
 	public static function get_row($result) {
-		if($result == false) {
+		if(!$result) {
 			return false;
-		} else {
-			return mysql_fetch_array($result);
 		}
+		return $result -> fetch(PDO::FETCH_ASSOC);
 	}
 
-	public static function escape($str) {
-		return mysql_real_escape_string($str);
-	}
-
-	public function insert_id() {
-		return mysql_insert_id();
+	public static function insert_id() {
+		return self::$conn -> lastInsertId();
 	}
 
 	public static function close() {
 		/* Close connection */
-		return mysql_close(Database::$conn);
+		self::$conn = null;
+		return true;
 	}
 
-	static function retrieve($query, $return_type = 0,
-			$a1  = null, $a2  = null, $a3  = null, $a4  = null, $a5  = null,
-			$a6  = null, $a7  = null, $a8  = null, $a9  = null, $a10 = null,
-			$a11 = null, $a12 = null, $a13 = null, $a14 = null, $a15 = null) {
+	public static function retrieve($query, array $arg = []) {
+		return self::doQuery($query, $arg);
+	}
+
+	public static function insert($query, array $arg = []) {
+		$res = self::doQuery($query, $arg);
+		return self::insert_id();
+	}
+
+	public static function delete($query, array $arg = []) {
+		$res = self::doQuery($query, $arg);
+		return true;
+	}
+
+	public static function update($query, array $arg = []) {
+		$res = self::doQuery($query, $arg);
+		return true;
+	}
+
+	private static function doQuery($query, array $arg) {
+		if(!self::$conn) {
+			self::init();
+		}
 		/* Query wrapper to be sure everything is escaped. All SQL must go through here! */
-		$query = str_replace("{TABLE}", database::$conf['prefix'], $query);
-		$query = sprintf($query,
-				Database::retrieve_arg($a1),		Database::retrieve_arg($a2),
-				Database::retrieve_arg($a3),		Database::retrieve_arg($a4),
-				Database::retrieve_arg($a5),		Database::retrieve_arg($a6),
-				Database::retrieve_arg($a7),		Database::retrieve_arg($a8),
-				Database::retrieve_arg($a9),		Database::retrieve_arg($a10),
-				Database::retrieve_arg($a11),		Database::retrieve_arg($a12),
-				Database::retrieve_arg($a13),		Database::retrieve_arg($a14),
-				Database::retrieve_arg($a15));
-
-		$res = Database::query($query);
-
-		/* Die on database errors */
-		if(!$res) {
-			$errmsg = 'Query failed:' . $query." ". mysql_error();;
-			Core::fizzle($errmsg);
+		// Can be un-commented for database query logging
+		//error_log("database::doQuery: " . $query . " " . json_encode($arg), 0);
+		$stmt = self::$conn -> prepare($query);
+		try {
+		  $stmt -> execute($arg);
+		} catch (PDOException $e) {
+		    error_log("database::doQuery(): " . $e, 0);
+		    throw new Exception("A database query failed.");
 		}
-
-		/* Return methods: Return a result set, or return a row if only one is expected */
-		switch($return_type) {
-			case 0;
-			return $res;
-			case 1;
-			return Database::get_row($res);
-			case 2;
-			return Database::insert_id($res);
-		}
-	}
-
-	function retrieve_arg($arg) {
-		/* Escape an argument for an SQL query, or return false if there was none */
-		if($arg) {
-			return Database::escape($arg);
-		}
-		return false;
+		return $stmt;
 	}
 
 	static function row_from_template($row, $template) {
@@ -96,8 +80,6 @@ class database {
 		}
 		return $res;
 	}
-
-
 }
 
 ?>

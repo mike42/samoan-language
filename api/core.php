@@ -8,7 +8,7 @@ class core {
 	
 	private static $config = null;
 
-	function __autoload($className) {
+	static function __autoload($className) {
 		$sp = explode("_", $className);
 
 		if(count($sp) == 1) {
@@ -146,5 +146,15 @@ class core {
 		$permission = core::getConfig('session');
 		return $permission[session::getRole()][$area];
 	}
+	
+	public static function exceptions_error_handler($severity, $message, $filename, $lineno) {
+	    /*
+	     * Translate errors into non-specific exceptions, but log the details
+	     */
+	    $ex = new ErrorException($message, 0, $severity, $filename, $lineno);
+	    error_log($ex, 0);
+	    throw new Exception("An internal error has occured.");
+	}
+	
 }
 ?>

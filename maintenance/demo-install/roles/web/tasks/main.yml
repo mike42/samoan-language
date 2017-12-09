@@ -1,0 +1,66 @@
+---
+- name: Install http and php etc
+  apt: name={{ item }} state=present
+  with_items:
+   - apache2
+   - libapache2-mod-php7.0
+   - php7.0-cli
+   - php7.0-mbstring
+   - php7.0-mysql
+   - php7.0
+   - git
+   - openssl
+   - ldap-utils
+
+- name: apache modules are enabled
+  apache2_module: state=present name={{ item }}
+  with_items:
+    - ssl
+    - rewrite
+  notify: restart apache
+
+- name: Synchronize app code
+  synchronize: src=../../../../../ dest=/var/www/html/sm
+  tags: sync
+
+- name: Disable default site
+  command: a2dissite 000-default
+  args:
+    removes: /etc/apache2/sites-enabled/000-default.conf
+  notify: reload apache
+
+- name: Add auth-web apache conf
+  template: src=sm-language-web.conf dest=/etc/apache2/sites-available/sm-language-web.conf owner=www-data group=www-data mode=0644
+  notify: reload apache
+
+- name: Enable sm-language-web site
+  command: a2ensite sm-language-web
+  args:
+    creates: /etc/apache2/sites-enabled/sm-language-web.conf
+
+- name: default webpage is removed
+  file: path=/var/www/html/index.html state=absent
+
+- name: setup files are present in webroot
+  template: src={{ item }} dest=/var/www/html/{{ item }} owner=www-data group=www-data mode=0644
+  with_items:
+    - .htaccess
+
+- name: site is configured
+  template: src=config.php.j2 dest=/var/www/html/sm/api/config.php owner=www-data group=www-data mode=0640
+
+- name: test for schema existing
+  command: mysql "{{ app_db_name }}" -e "desc sm_def;"
+  changed_when: false
+  ignore_errors: true
+  register: result
+
+- name: database schema is loaded
+  mysql_db: state=import name="{{ app_db_name }}" target="/var/www/html/sm/maintenance/files/samoan-schema.sql"
+  when: result|failed
+
+# TODO no defaults are available
+#- name: database default data is loaded
+#  mysql_db: state=import name="{{ app_db_name }}" target="/var/www/html/sm/maintenance/files/defaults.sql"
+#  when: result|failed
+

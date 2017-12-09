@@ -1,0 +1,23 @@
+---
+sudo: required
+dist: trusty
+
+language: php
+
+php:
+  - 7.0
+
+addons:
+  apt:
+    packages:
+    - yui-compressor
+
+install:
+# Not yet a composer project
+# - composer install
+  - make
+
+script:
+  - true
+# Test deploy not working in Travis CI Ubuntu Trusty.
+#- (cd maintenance/demo-install && ansible-playbook -i inventory.local site.yml)

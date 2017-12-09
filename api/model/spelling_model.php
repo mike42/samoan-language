@@ -80,8 +80,8 @@ class spelling_model {
 	 * Get spelling by its t-style representation
 	 */
 	public static function getBySpelling($spelling_t_style) {
-		$query = "SELECT * FROM {TABLE}spelling WHERE spelling_t_style ='%s';";
-		if($row = database::retrieve($query, 1, $spelling_t_style)) {
+		$query = "SELECT * FROM sm_spelling WHERE spelling_t_style =?;";
+		if($row = database::get_row(database::retrieve($query, [$spelling_t_style]))) {
 			return self::fromRow($row);
 		}
 		return false;
@@ -103,11 +103,10 @@ class spelling_model {
 		$spelling['spelling_searchkey']			= self::calcSearchkey($spelling_t_style);
 		$spelling['spelling_sortkey_sm']		= self::calcSortkeySm($spelling_t_style);
 
-		$query = "INSERT INTO {TABLE}spelling (spelling_id, spelling_t_style, spelling_t_style_recorded, " .
+		$query = "INSERT INTO sm_spelling (spelling_id, spelling_t_style, spelling_t_style_recorded, " .
 				"spelling_k_style, spelling_k_style_recorded, spelling_simple, spelling_sortkey, spelling_searchkey, " .
-				"spelling_sortkey_sm) VALUES (NULL, '%s', '0', '%s', '0', '%s', '%s', '%s', '%s');";
-		$spelling['spelling_id'] = database::retrieve($query, 2, $spelling['spelling_t_style'], $spelling['spelling_k_style'],
-				$spelling['spelling_simple'], $spelling['spelling_sortkey'], $spelling['spelling_searchkey'], $spelling['spelling_sortkey_sm']);
+				"spelling_sortkey_sm) VALUES (NULL, ?, '0', ?, '0', ?, ?, ?, ?);";
+		$spelling['spelling_id'] = database::insert($query, [$spelling['spelling_t_style'], $spelling['spelling_k_style'], $spelling['spelling_simple'], $spelling['spelling_sortkey'], $spelling['spelling_searchkey'], $spelling['spelling_sortkey_sm']]);
 		return $spelling;
 	}
 

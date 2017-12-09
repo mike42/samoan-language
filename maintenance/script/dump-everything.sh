@@ -1,4 +1,6 @@
 #!/bin/bash
+set -eu
+
 cd database-dumps
 
 echo "Exporting SQL .. "

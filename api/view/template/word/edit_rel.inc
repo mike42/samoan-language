@@ -1,7 +1,6 @@
 <style>
 .ui-autocomplete-loading {
-	background: white url('<?php echo self::$config[' webroot
-		']; ?>style/images/ui-anim_basic_16x16.gif') right center no-repeat;
+	background: white url('<?php echo self::$config['webroot']; ?>style/images/ui-anim_basic_16x16.gif') right center no-repeat;
 }
 
 .ui-autocomplete {

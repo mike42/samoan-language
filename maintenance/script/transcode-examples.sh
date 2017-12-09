@@ -1,4 +1,5 @@
 #!/bin/bash
+set -eu
 # This script converts new .ogg recordings to .mp3
 # Between these two formats, all normal browsers are supported.
 

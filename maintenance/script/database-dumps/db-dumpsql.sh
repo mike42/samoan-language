@@ -1,4 +1,6 @@
 #!/bin/bash
+set -eu
+
 # Silly trick to avoid using exec() command in PHP
 ./db-dumpsql.php --write-defaults
 bash -c "`./db-dumpsql.php --dump-cmd`"
