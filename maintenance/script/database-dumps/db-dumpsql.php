@@ -5,6 +5,9 @@
 	- Requires mysqldump, mkdir, gzip, md5sum (any respectable server has this!)
 	- .my.cnf must be writeable by the user that runs this script
 */
+require_once(dirname(__FILE__) . "/../../../api/core.php");
+set_error_handler('core::exceptions_error_handler');
+
 require_once(dirname(__FILE__) . "/../../../api/config.php");
 $db = $config['database'];
 
@@ -66,7 +69,9 @@ function erase_defaults($defaults_file = "") {
 
 function dump_cmd($db, $defaults_file = "", $destFull = "") {
 	/* Make directory and return command */
-	@mkdir(dirname($destFull));
+    if(!file_exists(dirname($destFull))) {
+        mkdir(dirname($destFull));
+    }
 
 	/* Construct command */
 	$host = $db['host'];
