@@ -15,6 +15,7 @@ if(count($argv) != 5) {
 
 	/* Insert user */
 	require_once(dirname(__FILE__) . "/../../api/core.php");
+	set_error_handler('core::exceptions_error_handler');
 	core::loadClass("user_model");
 	$id = user_model::insert($user_name, $user_email, $password, $role);
 

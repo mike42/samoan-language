@@ -2,6 +2,7 @@
 <?php
 /* This script will tidy up the database to clean up after word numberings and moves. */
 require_once(dirname(__FILE__) . "/../../api/core.php");
+set_error_handler('core::exceptions_error_handler');
 core::loadClass("database");
 
 /* Delete spellings which aren't used */

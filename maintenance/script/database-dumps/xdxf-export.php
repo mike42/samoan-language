@@ -2,6 +2,8 @@
 <?php
 /* Export XDXF version of the database */
 require_once(dirname(__FILE__) . "/../../../api/core.php");
+set_error_handler('core::exceptions_error_handler');
+
 core::loadClass("database");
 core::loadClass("listtype_model");
 core::loadClass("word_model");
