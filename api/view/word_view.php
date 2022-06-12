@@ -136,7 +136,7 @@ class word_view {
 	private static function getInnerItems($items, $relatives, $show_audio = true, $bold = true, $link_to = false, $key = 'rel_type_short') {
 		$ret = array();
 		foreach($items as $item) {
-			if(isset($relatives[$item]) && count($relatives[$item] > 0)) {
+			if(isset($relatives[$item]) && count($relatives[$item]) > 0) {
 				/* Items of this type */
 				$inner = array();
 				foreach($relatives[$item] as $relative) {
