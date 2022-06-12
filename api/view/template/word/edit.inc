@@ -12,7 +12,7 @@
 		<tr>
 			<th>Spelling:</th>
 			<td><a
-				href="<?php echo core::constructURL('word', 'view', array($data['id']), 'html'); ?>"><? echo core::escapeHTML($data['id']); ?>
+				href="<?php echo core::constructURL('word', 'view', array($data['id']), 'html'); ?>"><?php echo core::escapeHTML($data['id']); ?>
 			</a></td>
 			<td><a
 				href="<?php echo core::constructURL('word', 'edit', array($data['id'], 'move'), 'html'); ?>">[move]</a>

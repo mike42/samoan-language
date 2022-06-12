@@ -24,17 +24,17 @@ echo core::escapeHTML($data['example']['example_en'])."</dd></dl>";
 
 		<tr>
 			<th>Samoan</th>
-			<td><textarea name="example_str" rows=4 cols=60><? echo core::escapeHTML($data['example']['example_str']); ?></textarea></td>
+			<td><textarea name="example_str" rows=4 cols=60><?php echo core::escapeHTML($data['example']['example_str']); ?></textarea></td>
 		</tr>
 
 		<tr>
 			<th>English</th>
-			<td><textarea name="example_en" rows=4 cols=60><? echo core::escapeHTML($data['example']['example_en']); ?></textarea></td>
+			<td><textarea name="example_en" rows=4 cols=60><?php echo core::escapeHTML($data['example']['example_en']); ?></textarea></td>
 		</tr>
 
 		<tr>
-			<td colspan=2 style="text-align: right"><? $dest = core::constructURL('example', 'view', array($data['example']['example_id']), 'html'); ?>
-				<a href="<? echo $dest; ?>">[go back]</a> <? 	if($permissions['delete']) {
+			<td colspan=2 style="text-align: right"><?php $dest = core::constructURL('example', 'view', array($data['example']['example_id']), 'html'); ?>
+				<a href="<?php echo $dest; ?>">[go back]</a> <?php 	if($permissions['delete']) {
 					echo "<input type=\"button\" onClick=\"deleteExample()\" class=\"danger\" value=\"Delete\" />";
 				}
 				?> <input type="button" onClick="previewExample()" value="Preview" />

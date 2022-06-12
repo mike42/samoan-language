@@ -3,8 +3,8 @@
  * Core class -- Handles links and class-loading amongst other things.
  */
 class core {
-    static $alphabet_en        = array("a","e","f","g","h","i","k","l","m","n","o","p","r","s","t","u","v");
-    static $alphabet_sm        = array("a","e","i","o","u","f","g","l","m","n","p","s","t","v","h","k","r");
+    static array $alphabet_en = array("a", "e", "f", "g", "h", "i", "k", "l", "m", "n", "o", "p", "r", "s", "t", "u", "v");
+    static array $alphabet_sm = array("a", "e", "i", "o", "u", "f", "g", "l", "m", "n", "p", "s", "t", "v", "h", "k", "r");
     
     private static $config = null;
 
@@ -39,7 +39,7 @@ class core {
         }
     }
 
-    static function loadClass($className) {
+    static function loadClass(string $className) {
         if(!class_exists($className)) {
             core::__autoload($className);
         }
@@ -51,13 +51,13 @@ class core {
      * @param string $info
      * @param string $code HTTP error code- 404 or 500.
      */
-    static function fizzle($info = '', $code = '404') {
+    static function fizzle(string $info = '', string $code = '404') {
         if($code === '404') {
             header("HTTP/1.1 404 Not Found");
         } else if($code == '500') {
             header("HTTP/1.1 500 Internal Server Error");
         }
-        echo "<html>\n" . 
+        echo "<html>\n" .
             "\t<head>\n" .
             "\t\t<title>Uh oh!</title>\n" .
             "\t</head>\n" .
@@ -69,7 +69,7 @@ class core {
         exit();
     }
 
-    static function constructURL($controller, $action, $arg, $fmt) {
+    static function constructURL(string $controller, string $action, array $arg, string $fmt): string {
         $config = core::getConfig('core');
         $part = array();
 
@@ -100,13 +100,13 @@ class core {
         return $config['webroot'] . implode("/", $part) . $fmt_suff;
     }
 
-    static function redirect($to) {
+    static function redirect(string $to) {
         global $config;
         header('location: ' . $to);
         die();
     }
 
-    static private function alphanumeric($inp) {
+    static private function alphanumeric(string $inp): string {
         return preg_replace("#[^-a-zA-Z0-9]+#", "-", $inp);
     }
 
@@ -129,7 +129,8 @@ class core {
         }
     }
 
-    public static function escapeHTML($inp) {
+    public static function escapeHTML(string $inp): string
+    {
         if(!defined('ENT_HTML401')) {
             return htmlspecialchars($inp, null, 'UTF-8');
         } else {
@@ -137,11 +138,12 @@ class core {
         }
     }
 
-    public static function getAlphabet() {
+    public static function getAlphabet(): array
+    {
         return self::$alphabet_sm;
     }
 
-    public static function getPermissions($area) {
+    public static function getPermissions($area): array {
         core::loadClass('session');
         $permission = core::getConfig('session');
         return $permission[session::getRole()][$area];
