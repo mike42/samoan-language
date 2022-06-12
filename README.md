@@ -17,7 +17,7 @@ Setup
 -----
 First clone the repo with submodules:
 
-    git clone --recursive https://github.com/mike42/samoan
+    git clone --recursive https://github.com/mike42/samoan-language
 
 Then follow the instructions in maintenance/help.html for the configuration steps. 
 

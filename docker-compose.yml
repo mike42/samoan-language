@@ -1,0 +1,25 @@
+version: "3"
+services:
+  frontend:
+    image: frontend
+    build: ./
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./:/var/www/html/sm
+      - ./maintenance/docker/.htaccess:/var/www/html/.htaccess
+      - ./maintenance/docker/apache2.conf:/etc/apache2/apache2.conf
+      - ./maintenance/docker/config.php:/var/www/html/sm/api/config.php
+
+  mysql:
+    image: mysql:8
+    ports:
+      - "3306:3306"
+    volumes:
+      - "./maintenance/files/samoan-schema.sql:/docker-entrypoint-initdb.d/1.sql"
+    environment:
+      - MYSQL_ROOT_PASSWORD=test_root
+      - MYSQL_PASSWORD=test_password
+      - MYSQL_USER=samoan_language
+      - MYSQL_DATABASE=samoan_language
