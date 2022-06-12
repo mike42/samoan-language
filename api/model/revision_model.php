@@ -52,4 +52,4 @@ class revision_model {
 		$query = "UPDATE sm_revision SET revision_text_parsed =?, revision_parse_ts = CURRENT_TIMESTAMP, revision_parse_valid =1 WHERE revision_id =?";
 		database::retrieve($query, [$revision['revision_text_parsed'], (int)$revision['revision_id']]);
 	}
-} ?>
+}

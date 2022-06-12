@@ -44,4 +44,3 @@ class listlang_model {
 
 
 
-?>

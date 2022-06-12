@@ -396,4 +396,3 @@ class word_model {
 		return 0;
 	}
 }
-?>

@@ -121,4 +121,4 @@ class user_model {
 		return implode("", $val);
 	}
 }
-?>
+

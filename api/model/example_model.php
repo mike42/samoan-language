@@ -116,4 +116,4 @@ class example_model {
 		return true;
 	}
 }
-?>
+

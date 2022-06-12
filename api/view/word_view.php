@@ -225,4 +225,4 @@ class word_view {
 }
 
 
-?>
+

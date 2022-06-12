@@ -32,4 +32,4 @@ class page_view {
 		include(dirname(__FILE__)."/template/htmlLayout.php");
 	}
 }
-?>
+

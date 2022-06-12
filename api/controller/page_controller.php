@@ -107,4 +107,4 @@ class page_controller {
 		core::redirect($url);
 	}
 }
-?>
+

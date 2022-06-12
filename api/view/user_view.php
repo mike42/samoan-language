@@ -24,4 +24,3 @@ class user_view {
 
 }
 
-?>

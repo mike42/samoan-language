@@ -82,4 +82,4 @@ class def_model {
 		return database::retrieve($query, [(int)$def_id]);
 	}
 }
-?>
+

@@ -435,4 +435,4 @@ class word_controller {
 }
 
 
-?>
+

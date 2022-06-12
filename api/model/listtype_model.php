@@ -60,4 +60,4 @@ class listtype_model {
 	}
 }
 
-?>
+

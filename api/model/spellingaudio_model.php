@@ -39,4 +39,3 @@ class spellingaudio_model {
 		return false;
 	}
 }
-?>

@@ -63,4 +63,4 @@ class page_model {
 		database::retrieve($query, [(int)$id]);
 		return true;
 	}
-} ?>
+}

@@ -41,4 +41,4 @@ class letter_model {
 	}
 }
 
-?>
+

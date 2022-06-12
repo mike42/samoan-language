@@ -117,4 +117,3 @@ class spelling_model {
 
 
 
-?>

@@ -91,4 +91,4 @@ class example_controller {
 	}
 }
 
-?>
+
